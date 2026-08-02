@@ -22,7 +22,7 @@ body {
   width: 100%;
   display: flex;
   align-items: center;
-
+  justify-content: space-between; /* WICHTIG: trennt links/mitte/rechts */
   background: rgba(196, 0, 0, 0.55);
   backdrop-filter: blur(30px) saturate(180%);
   padding: 16px 45px;
@@ -30,17 +30,22 @@ body {
   z-index: 1000;
 }
 
-.top-bar img {
+/* LEFT SIDE (Logos) */
+.left-side {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.left-side img {
   width: 110px;
-  margin-right: 20px;
 }
 
-.top-bar .seasonpack {
+.left-side .seasonpack {
   width: 150px;
-  margin-left: 15px;
 }
 
-/* Navigation */
+/* CENTER NAVIGATION */
 .nav {
   display: flex;
   gap: 20px;
@@ -60,11 +65,7 @@ body {
   background: rgba(255,255,255,0.25);
 }
 
-/* LOGIN BUTTON RECHTS */
-.login {
-  margin-left: auto; /* Schiebt den Button ganz nach rechts */
-}
-
+/* RIGHT SIDE LOGIN */
 .login a {
   color: #fff;
   padding: 10px 18px;
@@ -89,9 +90,14 @@ body {
 <body>
 
   <div class="top-bar">
-    <img src="images/cpl_logo_lizard.png" alt="CPL Logo">
-    <img src="images/EAS_F125_2026_SeasonPack_Horizontal_Black.png" class="seasonpack" alt="Season Pack">
 
+    <!-- LEFT SIDE -->
+    <div class="left-side">
+      <img src="images/cpl_logo_lizard.png" alt="CPL Logo">
+      <img src="images/EAS_F125_2026_SeasonPack_Horizontal_Black.png" class="seasonpack" alt="Season Pack">
+    </div>
+
+    <!-- CENTER NAVIGATION -->
     <div class="nav">
       <a href="#kalendarz">Kalendarz</a>
       <a href="#sezony">Sezony</a>
@@ -101,9 +107,11 @@ body {
       <a href="#onas">O nas</a>
     </div>
 
+    <!-- RIGHT SIDE LOGIN -->
     <div class="login">
       <a href="#login">Zaloguj</a>
     </div>
+
   </div>
 
   <div class="spacer"></div>
