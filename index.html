@@ -63,7 +63,7 @@ body {
 /* LOGIN BUTTON RECHTS */
 .login {
   margin-left: auto;
-  padding-right: 80px;   /* größerer Abstand rechts */
+  padding-right: 80px;
 }
 
 .login a {
@@ -82,7 +82,7 @@ body {
 
 /* ---------------- GRAUE BOX ---------------- */
 .next-race-box {
-  margin-top: 140px; /* unter der roten Leiste */
+  margin-top: 140px;
   width: 100%;
   background: #e5e5e5;
   padding: 25px 45px;
@@ -102,12 +102,14 @@ body {
   align-items: center;
 }
 
-/* Kleiner Strich */
-.next-left .line {
-  width: 40px;
-  height: 3px;
+/* Vertikale Striche */
+.vline {
+  width: 3px;
+  height: 35px;
   background: #333;
   border-radius: 2px;
+  opacity: 0; /* unsichtbar am Anfang */
+  transition: opacity 0.5s ease;
 }
 
 /* Rechter Textblock */
@@ -115,7 +117,7 @@ body {
   font-size: 22px;
   font-weight: 600;
   color: #333;
-  padding-right: 80px; /* Abstand rechts */
+  padding-right: 80px;
 }
   </style>
 </head>
@@ -144,8 +146,15 @@ body {
   <div class="next-race-box">
     <div class="next-left">
       <span>Następny Wyścig</span>
-      <div class="line"></div>
+
+      <!-- Vertikaler Strich -->
+      <div class="vline" id="vline1"></div>
+
       <span>15. Sierpień</span>
+
+      <!-- Zweiter vertikaler Strich -->
+      <div class="vline" id="vline2"></div>
+
       <span>Włochy</span>
     </div>
 
@@ -153,6 +162,29 @@ body {
       Czas 20:00
     </div>
   </div>
+
+<script>
+/* ---------------- STRICHE NACH 10 SEKUNDEN ANZEIGEN ---------------- */
+let showLinesTimeout = setTimeout(() => {
+  document.getElementById("vline1").style.opacity = "1";
+  document.getElementById("vline2").style.opacity = "1";
+}, 10000);
+
+/* ---------------- STRICHE VERSTECKEN BEIM SCROLLEN ---------------- */
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 10) {
+    document.getElementById("vline1").style.opacity = "0";
+    document.getElementById("vline2").style.opacity = "0";
+  } else {
+    // Wenn man wieder oben ist → 10 Sekunden warten
+    clearTimeout(showLinesTimeout);
+    showLinesTimeout = setTimeout(() => {
+      document.getElementById("vline1").style.opacity = "1";
+      document.getElementById("vline2").style.opacity = "1";
+    }, 10000);
+  }
+});
+</script>
 
 </body>
 </html>
