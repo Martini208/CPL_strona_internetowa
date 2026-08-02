@@ -80,9 +80,42 @@ body {
   background: rgba(255,255,255,0.25);
 }
 
-/* Spacer */
-.spacer {
-  height: 140px;
+/* ---------------- GRAUE BOX ---------------- */
+.next-race-box {
+  margin-top: 140px; /* unter der roten Leiste */
+  width: 100%;
+  background: #e5e5e5;
+  padding: 25px 45px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+/* Linker Textblock */
+.next-left {
+  font-size: 22px;
+  font-weight: 600;
+  color: #333;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+/* Kleiner Strich */
+.next-left .line {
+  width: 40px;
+  height: 3px;
+  background: #333;
+  border-radius: 2px;
+}
+
+/* Rechter Textblock */
+.next-right {
+  font-size: 22px;
+  font-weight: 600;
+  color: #333;
+  padding-right: 80px; /* Abstand rechts */
 }
   </style>
 </head>
@@ -107,7 +140,19 @@ body {
     </div>
   </div>
 
-  <div class="spacer"></div>
+  <!-- 🔥 GRAUE BOX UNTER DER ROTEN LEISTE -->
+  <div class="next-race-box">
+    <div class="next-left">
+      <span>Następny Wyścig</span>
+      <div class="line"></div>
+      <span>15. Sierpień</span>
+      <span>Włochy</span>
+    </div>
+
+    <div class="next-right">
+      Czas 20:00
+    </div>
+  </div>
 
 </body>
 </html>
