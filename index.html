@@ -30,19 +30,14 @@ body {
   z-index: 1000;
 }
 
-/* LEFT: Logos + Navigation direkt daneben */
-.left-block {
-  display: flex;
-  align-items: center;
-  gap: 25px; /* Abstand zwischen Logos und Navigation */
-}
-
-.left-block img {
+.top-bar img {
   width: 110px;
+  margin-right: 20px;
 }
 
-.left-block .seasonpack {
+.top-bar .seasonpack {
   width: 150px;
+  margin-left: 15px;
 }
 
 /* Navigation */
@@ -52,3 +47,67 @@ body {
 }
 
 .nav a {
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 17px;
+  transition: 0.25s;
+}
+
+.nav a:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+/* LOGIN BUTTON RECHTS */
+.login {
+  margin-left: auto;      /* Schiebt den Button nach rechts */
+  padding-right: 40px;    /* Abstand zum rechten Rand */
+}
+
+.login a {
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 17px;
+  transition: 0.25s;
+}
+
+.login a:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+/* Spacer */
+.spacer {
+  height: 140px;
+}
+  </style>
+</head>
+
+<body>
+
+  <div class="top-bar">
+    <img src="images/cpl_logo_lizard.png" alt="CPL Logo">
+    <img src="images/EAS_F125_2026_SeasonPack_Horizontal_Black.png" class="seasonpack" alt="Season Pack">
+
+    <div class="nav">
+      <a href="#kalendarz">Kalendarz</a>
+      <a href="#sezony">Sezony</a>
+      <a href="#kierowcy">Kierowcy</a>
+      <a href="#zespoly">Zespoły</a>
+      <a href="#news">News</a>
+      <a href="#onas">O nas</a>
+    </div>
+
+    <div class="login">
+      <a href="#login">Zaloguj</a>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+</body>
+</html>
