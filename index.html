@@ -22,7 +22,7 @@ body {
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between; /* WICHTIG: trennt links/mitte/rechts */
+
   background: rgba(196, 0, 0, 0.55);
   backdrop-filter: blur(30px) saturate(180%);
   padding: 16px 45px;
@@ -30,91 +30,25 @@ body {
   z-index: 1000;
 }
 
-/* LEFT SIDE (Logos) */
-.left-side {
+/* LEFT: Logos + Navigation direkt daneben */
+.left-block {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 25px; /* Abstand zwischen Logos und Navigation */
 }
 
-.left-side img {
+.left-block img {
   width: 110px;
 }
 
-.left-side .seasonpack {
+.left-block .seasonpack {
   width: 150px;
 }
 
-/* CENTER NAVIGATION */
+/* Navigation */
 .nav {
   display: flex;
   gap: 20px;
 }
 
 .nav a {
-  color: #fff;
-  padding: 10px 18px;
-  border-radius: 12px;
-  font-weight: 600;
-  text-decoration: none;
-  font-size: 17px;
-  transition: 0.25s;
-}
-
-.nav a:hover {
-  background: rgba(255,255,255,0.25);
-}
-
-/* RIGHT SIDE LOGIN */
-.login a {
-  color: #fff;
-  padding: 10px 18px;
-  border-radius: 12px;
-  font-weight: 600;
-  text-decoration: none;
-  font-size: 17px;
-  transition: 0.25s;
-}
-
-.login a:hover {
-  background: rgba(255,255,255,0.25);
-}
-
-/* Spacer */
-.spacer {
-  height: 140px;
-}
-  </style>
-</head>
-
-<body>
-
-  <div class="top-bar">
-
-    <!-- LEFT SIDE -->
-    <div class="left-side">
-      <img src="images/cpl_logo_lizard.png" alt="CPL Logo">
-      <img src="images/EAS_F125_2026_SeasonPack_Horizontal_Black.png" class="seasonpack" alt="Season Pack">
-    </div>
-
-    <!-- CENTER NAVIGATION -->
-    <div class="nav">
-      <a href="#kalendarz">Kalendarz</a>
-      <a href="#sezony">Sezony</a>
-      <a href="#kierowcy">Kierowcy</a>
-      <a href="#zespoly">Zespoły</a>
-      <a href="#news">News</a>
-      <a href="#onas">O nas</a>
-    </div>
-
-    <!-- RIGHT SIDE LOGIN -->
-    <div class="login">
-      <a href="#login">Zaloguj</a>
-    </div>
-
-  </div>
-
-  <div class="spacer"></div>
-
-</body>
-</html>
