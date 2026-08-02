@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>F1 Logos</title>
+
+  <style>
+/* ---------------- GLOBAL APPLE STYLE ---------------- */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  background: #fafafa;
+  color: #111;
+  margin: 0;
+  padding: 0;
+}
+
+/* ---------------- TOP BAR (APPLE STYLE RED, MORE GLASS) ---------------- */
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+
+  background: rgba(196, 0, 0, 0.55);
+  backdrop-filter: blur(30px) saturate(180%);
+
+  padding: 16px 45px;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.25);
+  z-index: 1000;
+}
+
+.top-bar img {
+  width: 110px;      /* CPL kleiner */
+  margin-right: 20px;
+}
+
+.top-bar .seasonpack {
+  width: 150px;      /* SeasonPack kleiner */
+  margin-left: 15px;
+}
+
+/* Navigation im Apple‑Look aber rot */
+.nav {
+  display: flex;
+  gap: 20px;
+}
+
+.nav a {
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 17px;
+  transition: 0.25s;
+}
+
+.nav a:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+/* ---------------- SPACER ---------------- */
+.spacer {
+  height: 140px;
+}
+
+/* ---------------- SECTION TITLES ---------------- */
+.section-title {
+  font-size: 40px;
+  font-weight: 700;
+  margin: 60px 0 30px;
+  text-align: center;
+  letter-spacing: -0.5px;
+  color: #111;
+}
+
+/* ---------------- GRID (APPLE STYLE) ---------------- */
+.logo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 50px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px 40px;
+}
+
+/* ---------------- IMAGE STYLE ---------------- */
+.logo-grid img {
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  background: #fff;
+  padding: 25px;
+  border-radius: 22px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* ---------------- APPLE HOVER EFFECT ---------------- */
+.logo-grid img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+}
+
+/* ---------------- BOLID SECTION (bigger images + fewer per row) ---------------- */
+.logo-grid.bolid-section {
+  grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+}
+
+.logo-grid.bolid-section img {
+  width: 100%;
+  max-width: 650px;
+  height: auto;
+  padding: 30px;
+  border-radius: 25px;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+}
+  </style>
+</head>
+
+<body>
+
+  <div class="top-bar">
+    <img src="CPL.png" alt="CPL Logo">
+    <img src="EAS_F125_2026_SeasonPack_Horizontal_Black.png" class="seasonpack" alt="Season Pack">
+
+    <div class="nav">
+      <a href="#f1logo">F1 Logo</a>
+      <a href="#bolidy">F1 Bolidy</a>
+      <a href="#flagi">Flagi</a>
+      <a href="#tory">Tory</a>
+      <a href="#opony">Opony</a>
+      <a href="#piktogramy">Piktogramy</a>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- Abschnitt 1: LOGOS -->
+  <div id="f1logo" class="section-title">F1 Logo</div>
+  <div class="logo-grid logo-section">
+    <img src="Alpine.png" alt="Alpine">
+    <img src="Aston Martin.jpg" alt="Aston Martin">
+    <img src="Audi.jpg" alt="Audi">
+    <img src="Logo_Williams_F1.png" alt="Williams">
+    <img src="Mclaren.jpg" alt="McLaren">
+    <img src="Mercedes.jpg" alt="Mercedes">
+    <img src="Red-Bull-Logo.png" alt="Red Bull">
+    <img src="Scuderia_Ferrari_Logo.svg.png" alt="Ferrari">
+    <img src="Visa_cash.png" alt="Visa Cash">
+    <img src="cadillac-blk-logo.png" alt="Cadillac">
+    <img src="haas.png" alt="Haas">
+  </div>
+
+  <!-- Abschnitt 2: BOLIDEN -->
+  <div id="bolidy" class="section-title">F1 Bolidy</div>
+  <div class="logo-grid bolid-section">
+    <img src="Bolid_Alpine.png" alt="Bolid Alpine">
+    <img src="Bolid_Aston.png" alt="Bolid Aston Martin">
+    <img src="Bolid_Audi.png" alt="Bolid Audi">
+    <img src="Bolid_Williams.png" alt="Bolid Williams">
+    <img src="Bolid_Mclaren.png" alt="Bolid McLaren">
+    <img src="Bolid_Mercedes.png" alt="Bolid Mercedes">
+    <img src="Bolid_Red_Bull.png" alt="Bolid Red Bull">
+    <img src="Bolid_Ferrari.png" alt="Bolid Ferrari">
+    <img src="Bolid_Visa_Cash.png" alt="Bolid Visa Cash">
+    <img src="Bolid_Cadillac.png" alt="Bolid Cadillac">
+    <img src="Bolid_Haas.png" alt="Bolid Haas">
+  </div>
+
+ <!-- Abschnitt 3: FLAGI -->
+<div id="flagi" class="section-title">Flagi</div>
+<div class="logo-grid logo-section">
+    <img src="Catalonia.png" alt="Catalonia">
+    <img src="Emilia-Romagna.png" alt="Emilia Romagna">
+    <img src="Flag_of_the_United_Arab_Emirates.svg.png" alt="VAE">
+    <img src="Miami.png" alt="Miami">
+    <img src="aserbaidschan.png" alt="Aserbaidschan">
+    <img src="australien (1).png" alt="Australien">
+    <img src="bahrain.png" alt="Bahrain">
+    <img src="belgien.png" alt="Belgien">
+    <img src="china.png" alt="China">
+    <img src="f_Las_Vegas.png" alt="Las Vegas">
+    <img src="flagge (1).png" alt="Flagge 1">
+    <img src="flagge (2).png" alt="Flagge 2">
+    <img src="flagge.png" alt="Flagge">
+    <img src="italien.png" alt="Italien">
+    <img src="japan (1).png" alt="Japan">
+    <img src="kanada.png" alt="Kanada">
+    <img src="katar.png" alt="Katar">
+    <img src="osterreich.png" alt="Österreich">
+    <img src="saudi-arabien.png" alt="Saudi-Arabien">
+    <img src="singapur.png" alt="Singapur">
+    <img src="spanien.png" alt="Spanien">
+    <img src="ungarn.png" alt="Ungarn">
+    <img src="vereinigte-staaten.png" alt="USA">
+    <img src="vereinigtes-konigreich.png" alt="UK">
+    <img src="welt.png" alt="Welt">
+    <img src="Schweiz.png" alt="Schweiz">
+    <img src="Frankreich.png" alt="Frankreich">
+</div>
+
+
+<!-- Abschnitt 4: TORY -->
+<div id="tory" class="section-title">Tory</div>
+<div class="logo-grid logo-section">
+    <img src="2026trackaustindetailed.png" alt="Austin">
+    <img src="2026trackbakudetailed.png" alt="Baku">
+    <img src="2026trackcatalunyadetailed (1).png" alt="Catalunya">
+    <img src="2026trackhungaroringdetailed.png" alt="Hungaroring">
+    <img src="2026trackinterlagosdetailed.png" alt="Interlagos">
+    <img src="2026tracklasvegasdetailed.png" alt="Las Vegas">
+    <img src="2026trackmontecarlodetailed.png" alt="Monte Carlo">
+    <img src="2026trackspielbergedetailed.png" alt="Spielberg">
+    <img src="2026tracksyamarincircuitdetailed.png" alt="Yas Marina">
+    <img src="2026trackmelbournedetailed.png" alt="Melbourne">
+    <img src="2026trackmexicocitydetailed.png" alt="Mexico City">
+    <img src="2026trackmiamidetailed.png" alt="Miami">
+    <img src="2026trackmontrealdetailed.png" alt="Montreal">
+    <img src="2026trackmonzadetailed.png" alt="Monza">
+    <img src="2026tracksakhirdetailed (1).png" alt="Sakhir">
+    <img src="2026trackshanghaidetailed (1).png" alt="Shanghai">
+    <img src="2026tracksilverstonedetailed (1).png" alt="Silverstone">
+    <img src="2026tracksingaporedetailed.png" alt="Singapur">
+    <img src="2026trackspafrancorchampsdetailed.png" alt="Spa Francorchamps">
+    <img src="2026tracksuzukadetailed (1).png" alt="Suzuka">
+    <img src="2026trackzandvoortdetailed.png" alt="Zandvoort">
+    <img src="Qatar_Circuit.png" alt="Katar Circuit">
+    <img src="Emilia_Romagna_Circuit.png" alt="Emilia Romagna Circuit">
+    <img src="2026trackmontrealdetailed (2).png" alt="Montreal Detailed 2">
+    <img src="2026trackmadringdetailed (1).png" alt="Madring Detailed">
+</div>
+
+
+  <!-- Abschnitt 5: OPONY -->
+<div id="opony" class="section-title">Opony</div>
+<div class="logo-grid logo-section">
+    <img src="softy.PNG" alt="Soft">
+    <img src="Medy.PNG" alt="Medium">
+    <img src="Hardy.PNG" alt="Hard">
+    <img src="Intery.PNG" alt="Intermediate">
+    <img src="Wetty.PNG" alt="Wet">
+</div>
+
+  <!-- Abschnitt 6: PIKTOGRAMY -->
+<div id="piktogramy" class="section-title">Piktogramy</div>
+<div class="logo-grid logo-section">
+    <img src="wolken-und-sonne.png" alt="Wolken und Sonne">
+    <img src="wolkig.png" alt="Wolkig">
+    <img src="regen.png" alt="Regen">
+    <img src="sonnig.png" alt="Sonnig">
+</div>
+
+</body>
+</html>
