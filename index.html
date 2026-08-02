@@ -82,7 +82,9 @@ body {
 
 /* ---------------- GRAUE BOX ---------------- */
 .next-race-box {
-  margin-top: 140px;
+  position: fixed;
+  top: 90px; /* direkt unter dem roten Block */
+  left: 0;
   width: 100%;
   background: #e5e5e5;
   padding: 25px 45px;
@@ -90,6 +92,9 @@ body {
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  opacity: 0;               /* unsichtbar am Anfang */
+  transition: opacity 0.8s; /* weiches Einblenden */
+  z-index: 900;
 }
 
 /* Linker Textblock */
@@ -108,8 +113,6 @@ body {
   height: 35px;
   background: #333;
   border-radius: 2px;
-  opacity: 0; /* unsichtbar am Anfang */
-  transition: opacity 0.5s ease;
 }
 
 /* Rechter Textblock */
@@ -143,18 +146,12 @@ body {
   </div>
 
   <!-- 🔥 GRAUE BOX UNTER DER ROTEN LEISTE -->
-  <div class="next-race-box">
+  <div class="next-race-box" id="nextBox">
     <div class="next-left">
       <span>Następny Wyścig</span>
-
-      <!-- Vertikaler Strich -->
-      <div class="vline" id="vline1"></div>
-
+      <div class="vline"></div>
       <span>15. Sierpień</span>
-
-      <!-- Zweiter vertikaler Strich -->
-      <div class="vline" id="vline2"></div>
-
+      <div class="vline"></div>
       <span>Włochy</span>
     </div>
 
@@ -164,23 +161,21 @@ body {
   </div>
 
 <script>
-/* ---------------- STRICHE NACH 10 SEKUNDEN ANZEIGEN ---------------- */
-let showLinesTimeout = setTimeout(() => {
-  document.getElementById("vline1").style.opacity = "1";
-  document.getElementById("vline2").style.opacity = "1";
+/* ---------------- BOX NACH 10 SEKUNDEN ANZEIGEN ---------------- */
+let box = document.getElementById("nextBox");
+
+let showTimeout = setTimeout(() => {
+  box.style.opacity = "1";
 }, 10000);
 
-/* ---------------- STRICHE VERSTECKEN BEIM SCROLLEN ---------------- */
+/* ---------------- BOX VERSTECKEN BEIM SCROLLEN ---------------- */
 window.addEventListener("scroll", () => {
   if (window.scrollY > 10) {
-    document.getElementById("vline1").style.opacity = "0";
-    document.getElementById("vline2").style.opacity = "0";
+    box.style.opacity = "0";
   } else {
-    // Wenn man wieder oben ist → 10 Sekunden warten
-    clearTimeout(showLinesTimeout);
-    showLinesTimeout = setTimeout(() => {
-      document.getElementById("vline1").style.opacity = "1";
-      document.getElementById("vline2").style.opacity = "1";
+    clearTimeout(showTimeout);
+    showTimeout = setTimeout(() => {
+      box.style.opacity = "1";
     }, 10000);
   }
 });
