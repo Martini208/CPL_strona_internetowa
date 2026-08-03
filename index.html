@@ -97,52 +97,23 @@ body {
   z-index: 900;
 }
 
-.next-left {
-  font-size: 22px;
-  font-weight: 600;
-  color: #333;
-  display: flex;
-  gap: 18px;
-  align-items: center;
-}
-
-.vline {
-  width: 3px;
-  height: 35px;
-  background: #333;
-  border-radius: 2px;
-}
-
-.next-right {
-  font-size: 22px;
-  font-weight: 600;
-  color: #333;
-  padding-right: 80px;
-}
-
-/* ---------------- VIDEO HERO (95% Höhe) ---------------- */
+/* ---------------- VIDEO HERO (normaler Flow) ---------------- */
 .hero-video {
-  position: fixed;
-  top: 140px;
-  left: 0;
+  margin-top: 140px; /* unter der Top-Bar */
   width: 100%;
   height: 95vh;
   overflow: hidden;
-  z-index: 800;
-  transition: transform 0.6s ease;
 }
 
 .hero-video iframe {
   width: 100%;
   height: 100%;
   border: none;
-  pointer-events: none;
 }
 
-/* ---------------- NEWS SECTION (direkt hinter Video) ---------------- */
+/* ---------------- NEWS SECTION ---------------- */
 .news-section {
-  margin-top: 140px; /* sitzt direkt unter dem Video */
-  padding: 40px 45px; /* kompakter Apple-Style */
+  padding: 40px 45px;
   background: #fff;
 }
 
@@ -152,7 +123,7 @@ body {
   font-weight: 700;
   margin-bottom: 30px;
   letter-spacing: -1px;
-  color: #c40000; /* ROT */
+  color: #c40000;
 }
 
 .news-section p {
@@ -218,22 +189,9 @@ body {
 /* ---------------- BOX NACH 10 SEKUNDEN ANZEIGEN ---------------- */
 let box = document.getElementById("nextBox");
 
-let showTimeout = setTimeout(() => {
+setTimeout(() => {
   box.style.opacity = "1";
 }, 10000);
-
-/* ---------------- VIDEO NACH OBEN SCHIEBEN ---------------- */
-let hero = document.getElementById("heroVideo");
-
-window.addEventListener("scroll", () => {
-  let scrollY = window.scrollY;
-
-  if (scrollY > 5) {
-    hero.style.transform = "translateY(-100%)";
-  } else {
-    hero.style.transform = "translateY(0)";
-  }
-});
 </script>
 
 </body>
