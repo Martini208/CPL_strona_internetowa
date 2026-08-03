@@ -83,7 +83,7 @@ body {
 /* ---------------- GRAUE BOX ---------------- */
 .next-race-box {
   position: fixed;
-  top: 90px; /* direkt unter dem roten Block */
+  top: 90px;
   left: 0;
   width: 100%;
   background: #e5e5e5;
@@ -92,12 +92,11 @@ body {
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-  opacity: 0;               /* unsichtbar am Anfang */
-  transition: opacity 0.8s; /* weiches Einblenden */
+  opacity: 0;
+  transition: opacity 0.8s;
   z-index: 900;
 }
 
-/* Linker Textblock */
 .next-left {
   font-size: 22px;
   font-weight: 600;
@@ -107,7 +106,6 @@ body {
   align-items: center;
 }
 
-/* Vertikale Striche */
 .vline {
   width: 3px;
   height: 35px;
@@ -115,12 +113,26 @@ body {
   border-radius: 2px;
 }
 
-/* Rechter Textblock */
 .next-right {
   font-size: 22px;
   font-weight: 600;
   color: #333;
   padding-right: 80px;
+}
+
+/* ---------------- VIDEO BOX ---------------- */
+.video-container {
+  margin-top: 180px; /* Abstand unter der grauen Box */
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.video-container iframe {
+  width: 80%;
+  height: 450px;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
 }
   </style>
 </head>
@@ -145,7 +157,7 @@ body {
     </div>
   </div>
 
-  <!-- 🔥 GRAUE BOX UNTER DER ROTEN LEISTE -->
+  <!-- 🔥 GRAUE BOX -->
   <div class="next-race-box" id="nextBox">
     <div class="next-left">
       <span>Następny Wyścig</span>
@@ -160,15 +172,23 @@ body {
     </div>
   </div>
 
+  <!-- 🔥 VIDEO UNTER DER BOX -->
+  <div class="video-container">
+    <iframe 
+      src="https://www.youtube.com/embed/WepEUEu1Hv0?autoplay=1&mute=1&loop=1&playlist=WepEUEu1Hv0&controls=0&modestbranding=1&rel=0"
+      frameborder="0"
+      allow="autoplay; encrypted-media"
+      allowfullscreen>
+    </iframe>
+  </div>
+
 <script>
-/* ---------------- BOX NACH 10 SEKUNDEN ANZEIGEN ---------------- */
 let box = document.getElementById("nextBox");
 
 let showTimeout = setTimeout(() => {
   box.style.opacity = "1";
 }, 10000);
 
-/* ---------------- BOX VERSTECKEN BEIM SCROLLEN ---------------- */
 window.addEventListener("scroll", () => {
   if (window.scrollY > 10) {
     box.style.opacity = "0";
