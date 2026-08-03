@@ -82,9 +82,8 @@ body {
 
 /* ---------------- GRAUE BOX ---------------- */
 .next-race-box {
-  position: fixed;
-  top: 90px;
-  left: 0;
+  position: relative;   /* statt fixed */
+  margin-top: 90px;     /* Abstand unter der Top-Bar */
   width: 100%;
   background: #e5e5e5;
   padding: 25px 45px;
@@ -92,10 +91,10 @@ body {
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-  opacity: 0;
-  transition: opacity 0.8s;
+  opacity: 1;           /* sofort sichtbar */
   z-index: 900;
 }
+
 
 /* ---------------- VIDEO HERO (normaler Flow) ---------------- */
 .hero-video {
