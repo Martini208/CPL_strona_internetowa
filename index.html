@@ -120,19 +120,24 @@ body {
   padding-right: 80px;
 }
 
-/* ---------------- VIDEO BOX ---------------- */
-.video-container {
-  margin-top: 180px; /* Abstand unter der grauen Box */
+/* ---------------- FULLSCREEN VIDEO HERO ---------------- */
+.hero-video {
+  position: fixed;
+  top: 140px; /* direkt unter der grauen Box */
+  left: 0;
   width: 100%;
-  display: flex;
-  justify-content: center;
+  height: 100vh; /* ganze Bildschirmhöhe */
+  overflow: hidden;
+  z-index: 800;
+  opacity: 1;
+  transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
-.video-container iframe {
-  width: 80%;
-  height: 450px;
-  border-radius: 12px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+.hero-video iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  pointer-events: none; /* verhindert Klicks auf YouTube */
 }
   </style>
 </head>
@@ -172,23 +177,24 @@ body {
     </div>
   </div>
 
-  <!-- 🔥 VIDEO UNTER DER BOX -->
-  <div class="video-container">
+  <!-- 🔥 FULLSCREEN VIDEO HERO -->
+  <div class="hero-video" id="heroVideo">
     <iframe 
-      src="https://www.youtube.com/embed/WepEUEu1Hv0?autoplay=1&mute=1&loop=1&playlist=WepEUEu1Hv0&controls=0&modestbranding=1&rel=0"
-      frameborder="0"
+      src="https://www.youtube.com/embed/WepEUEu1Hv0?autoplay=1&mute=1&loop=1&playlist=WepEUEu1Hv0&controls=0&modestbranding=1&rel=0&showinfo=0"
       allow="autoplay; encrypted-media"
       allowfullscreen>
     </iframe>
   </div>
 
 <script>
+/* ---------------- BOX NACH 10 SEKUNDEN ANZEIGEN ---------------- */
 let box = document.getElementById("nextBox");
 
 let showTimeout = setTimeout(() => {
   box.style.opacity = "1";
 }, 10000);
 
+/* ---------------- BOX VERSTECKEN BEIM SCROLLEN ---------------- */
 window.addEventListener("scroll", () => {
   if (window.scrollY > 10) {
     box.style.opacity = "0";
@@ -197,6 +203,19 @@ window.addEventListener("scroll", () => {
     showTimeout = setTimeout(() => {
       box.style.opacity = "1";
     }, 10000);
+  }
+});
+
+/* ---------------- VIDEO BEIM SCROLLEN AUSBLENDEN ---------------- */
+let hero = document.getElementById("heroVideo");
+
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 50) {
+    hero.style.opacity = "0";
+    hero.style.transform = "translateY(-50px)";
+  } else {
+    hero.style.opacity = "1";
+    hero.style.transform = "translateY(0)";
   }
 });
 </script>
