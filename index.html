@@ -80,20 +80,20 @@ body {
   background: rgba(255,255,255,0.25);
 }
 
-/* ---------------- GRAUE BOX ---------------- */
-.next-race-box {
-  position: relative;   /* statt fixed */
-  margin-top: 90px;     /* Abstand unter der Top-Bar */
-  width: 100%;
-  background: #e5e5e5;
-  padding: 25px 45px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-  opacity: 1;           /* sofort sichtbar */
-  z-index: 900;
-}
+  <!-- GRAUE BOX -->
+  <div class="next-race-box" id="nextBox">
+    <div class="next-left">
+      <span>Następny Wyścig</span>
+      <div class="vline"></div>
+      <span>15. Sierpień</span>
+      <div class="vline"></div>
+      <span>Włochy</span>
+    </div>
+
+    <div class="next-right">
+      Czas 20:00
+    </div>
+  </div>
 
 
 /* ---------------- VIDEO HERO (normaler Flow) ---------------- */
