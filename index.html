@@ -139,31 +139,20 @@ body {
   pointer-events: none;
 }
 
-/* ---------------- NEWS HEADER (rechts oben, rot, Apple Style) ---------------- */
-.news-header {
-  position: absolute;
-  top: calc(95vh + 150px);
-  right: 45px;
-  font-size: 42px;
-  font-weight: 700;
-  color: #c40000;
-  opacity: 0;
-  transition: opacity 0.6s ease;
-  letter-spacing: -1px;
-}
-
 /* ---------------- NEWS SECTION (Apple Style) ---------------- */
 .news-section {
-  margin-top: calc(95vh + 200px);
+  margin-top: calc(95vh + 160px);
   padding: 80px 45px;
   background: #fff;
 }
 
+/* NEWS-TITEL LINKS OBEN, ROT, APPLE STYLE */
 .news-section h1 {
   font-size: 40px;
   font-weight: 700;
   margin-bottom: 30px;
   letter-spacing: -1px;
+  color: #c40000; /* ROT */
 }
 
 .news-section p {
@@ -219,9 +208,6 @@ body {
     </iframe>
   </div>
 
-  <!-- NEWS HEADER -->
-  <div class="news-header" id="newsHeader">News</div>
-
   <!-- NEWS SECTION -->
   <div class="news-section" id="news">
     <h1>News</h1>
@@ -238,17 +224,14 @@ let showTimeout = setTimeout(() => {
 
 /* ---------------- VIDEO NACH OBEN SCHIEBEN ---------------- */
 let hero = document.getElementById("heroVideo");
-let newsHeader = document.getElementById("newsHeader");
 
 window.addEventListener("scroll", () => {
   let scrollY = window.scrollY;
 
   if (scrollY > 5) {
     hero.style.transform = "translateY(-100%)";
-    newsHeader.style.opacity = "1"; /* 🔥 News erscheint */
   } else {
     hero.style.transform = "translateY(0)";
-    newsHeader.style.opacity = "0"; /* 🔥 News verschwindet */
   }
 });
 </script>
