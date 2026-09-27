@@ -26,7 +26,7 @@ body.light-mode {
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family: 'Titillium Web', Arial, sans-serif;
+    font-family: Arial, sans-serif;
 }
 
 body{
@@ -188,42 +188,50 @@ nav a:hover {
 /* F1 Style Next Race Bar */
 
 .f1-race-bar-section {
-    padding: 20px 10%;
+    padding: 60px 10% 20px 10%;
 }
 
 .f1-race-bar {
-    background: #15151e;
-    color: #ffffff;
-    border-bottom: 3px solid #e10600;
-    border-radius: 6px;
-    padding: 12px 25px;
+    background: var(--card-bg);
+    color: var(--text-color);
+    border-right: 6px solid #ff3131; /* Rote Linie auf der rechten Seite */
+    border-radius: 12px;
+    padding: 16px 25px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     font-size: 14px;
+    transition: background 0.3s ease;
 }
 
 .f1-race-info {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
 }
 
 .f1-race-meta {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
-    color: #38b6ff;
+    color: #ff3131; /* Text jetzt in Rot */
     letter-spacing: 1px;
 }
 
 .f1-race-title {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 800;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     letter-spacing: 0.5px;
+}
+
+.f1-flag-img {
+    height: 20px;
+    width: auto;
+    border-radius: 2px;
+    object-fit: contain;
 }
 
 .f1-race-timer-container {
@@ -242,13 +250,13 @@ nav a:hover {
 
 .f1-timer-digits {
     font-family: monospace, monospace;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
-    color: #ffffff;
+    color: var(--text-color);
     background: rgba(255, 255, 255, 0.08);
-    padding: 6px 14px;
-    border-radius: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
     letter-spacing: 1px;
 }
 
@@ -415,11 +423,14 @@ footer{
 
 <!-- F1 Style Next Race Bar Section -->
 <div class="f1-race-bar-section" id="kalendarz">
+    <h2>Następny wyścig</h2>
+    
     <div class="f1-race-bar">
         <div class="f1-race-info">
             <span class="f1-race-meta">R16 | 12 OCT 2026</span>
             <div class="f1-race-title">
-                🇮🇹 Grand Prix Monzy
+                <img src="https://martini208.github.io/CPL-/italien.png" alt="Italien Flagge" class="f1-flag-img">
+                Grand Prix Monzy
             </div>
         </div>
         <div class="f1-race-timer-container">
@@ -467,7 +478,7 @@ footer{
 
         <div class="news-card">
             <h3>Sezon rozpoczęty!</h3>
-            <p>Nowy sezon CPL oficjalnie wystartował. Czekają nas wielkie emocje na torze.</p>
+            <p>Nowy sezon CPL officially wystartował. Czekają nas wielkie emocje na torze.</p>
         </div>
 
         <div class="news-card">
