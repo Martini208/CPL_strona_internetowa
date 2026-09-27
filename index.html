@@ -1,198 +1,325 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>CPL_strona_internetowa/</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPL F1 League</title>
 
-  <style>
-/* ---------------- GLOBAL APPLE STYLE ---------------- */
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-  background: #fafafa;
-  color: #111;
-  margin: 0;
-  padding: 0;
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
 }
 
-/* ---------------- TOP BAR ---------------- */
-.top-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  align-items: center;
-
-  background: rgba(196, 0, 0, 0.55);
-  backdrop-filter: blur(30px) saturate(180%);
-  padding: 16px 45px;
-  box-shadow: 0 12px 35px rgba(0,0,0,0.25);
-  z-index: 1000;
-}
-
-.top-bar img {
-  width: 110px;
-  margin-right: 20px;
-}
-
-.top-bar .seasonpack {
-  width: 150px;
-  margin-left: 15px;
+body{
+    background:#0d0d0d;
+    color:white;
 }
 
 /* Navigation */
-.nav {
-  display: flex;
-  gap: 20px;
+
+nav{
+    position:fixed;
+    top:0;
+    width:100%;
+    background:white;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px 50px;
+    z-index:1000;
+    box-shadow:0 2px 10px rgba(0,0,0,0.2);
 }
 
-.nav a {
-  color: #fff;
-  padding: 10px 18px;
-  border-radius: 12px;
-  font-weight: 600;
-  text-decoration: none;
-  font-size: 17px;
-  transition: 0.25s;
+.logo{
+    color:#ff3131;
+    font-size:32px;
+    font-weight:bold;
 }
 
-.nav a:hover {
-  background: rgba(255,255,255,0.25);
+nav ul{
+    display:flex;
+    list-style:none;
+    gap:30px;
 }
 
-/* LOGIN BUTTON RECHTS */
-.login {
-  margin-left: auto;
-  padding-right: 80px;
+nav a{
+    text-decoration:none;
+    color:#111;
+    font-weight:bold;
+    transition:0.3s;
 }
 
-.login a {
-  color: #fff;
-  padding: 10px 18px;
-  border-radius: 12px;
-  font-weight: 600;
-  text-decoration: none;
-  font-size: 17px;
-  transition: 0.25s;
+nav a:hover{
+    color:#ff3131;
 }
 
-.login a:hover {
-  background: rgba(255,255,255,0.25);
+/* Hero */
+
+.hero{
+    position:relative;
+    height:100vh;
+    overflow:hidden;
 }
 
- /* ---------------- GRAUE BOX ---------------- */
-.next-race-box {
-  position: relative;   /* statt fixed */
-  margin-top: 90px;     /* Abstand unter der Top-Bar */
-  width: 100%;
-  background: #e5e5e5;
-  padding: 25px 45px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-  opacity: 1;           /* sofort sichtbar */
-  z-index: 900;
+.hero iframe{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
 }
 
-
-
-/* ---------------- VIDEO HERO (normaler Flow) ---------------- */
-.hero-video {
-  margin-top: 140px; /* unter der Top-Bar */
-  width: 100%;
-  height: 95vh;
-  overflow: hidden;
+.overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.55);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
 }
 
-.hero-video iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
+.overlay h1{
+    font-size:80px;
+    color:white;
+    text-shadow:0 0 15px rgba(255,49,49,.5);
 }
 
-/* ---------------- NEWS SECTION ---------------- */
-.news-section {
-  padding: 40px 45px;
-  background: #fff;
+.overlay p{
+    font-size:24px;
+    color:#ff3131;
+    margin-top:10px;
 }
 
-/* NEWS-TITEL LINKS OBEN, ROT, APPLE STYLE */
-.news-section h1 {
-  font-size: 40px;
-  font-weight: 700;
-  margin-bottom: 30px;
-  letter-spacing: -1px;
-  color: #c40000;
+.buttons{
+    margin-top:30px;
 }
 
-.news-section p {
-  font-size: 22px;
-  line-height: 1.7;
-  color: #444;
-  max-width: 900px;
+.btn{
+    display:inline-block;
+    padding:15px 30px;
+    margin:10px;
+    border-radius:8px;
+    font-weight:bold;
+    text-decoration:none;
 }
-  </style>
+
+.btn-red{
+    background:#ff3131;
+    color:white;
+}
+
+.btn-white{
+    background:white;
+    color:black;
+}
+
+/* Bereiche */
+
+section{
+    padding:80px 10%;
+}
+
+h2{
+    text-align:center;
+    color:#ff3131;
+    margin-bottom:40px;
+    font-size:40px;
+}
+
+/* Rennen */
+
+.race-card{
+    background:#181818;
+    border-left:6px solid #ff3131;
+    padding:30px;
+    border-radius:15px;
+    text-align:center;
+}
+
+/* Tabelle */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#ff3131;
+    padding:15px;
+}
+
+td{
+    background:#181818;
+    padding:15px;
+    text-align:center;
+    border-bottom:1px solid #333;
+}
+
+/* News */
+
+.news-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:25px;
+}
+
+.news-card{
+    background:#181818;
+    padding:25px;
+    border-radius:15px;
+    transition:.3s;
+}
+
+.news-card:hover{
+    transform:translateY(-5px);
+}
+
+.news-card h3{
+    color:#ff3131;
+    margin-bottom:10px;
+}
+
+/* Footer */
+
+footer{
+    background:black;
+    text-align:center;
+    padding:40px;
+    margin-top:50px;
+}
+
+/* Handy */
+
+@media(max-width:768px){
+
+    nav{
+        flex-direction:column;
+        gap:20px;
+    }
+
+    nav ul{
+        flex-wrap:wrap;
+        justify-content:center;
+    }
+
+    .overlay h1{
+        font-size:45px;
+    }
+
+    .buttons{
+        display:flex;
+        flex-direction:column;
+    }
+}
+</style>
+
 </head>
-
 <body>
 
-  <div class="top-bar">
-    <img src="images/cpl_logo_lizard.png" alt="CPL Logo">
-    <img src="images/EAS_F125_2026_SeasonPack_Horizontal_Black.png" class="seasonpack" alt="Season Pack">
+<nav>
+    <div class="logo">CPL</div>
 
-    <div class="nav">
-      <a href="#kalendarz">Kalendarz</a>
-      <a href="#sezony">Sezony</a>
-      <a href="#kierowcy">Kierowcy</a>
-      <a href="#zespoly">Zespoły</a>
-      <a href="#news">News</a>
-      <a href="#onas">O nas</a>
-    </div>
+    <ul>
+        <li>#Home</a></li>
+        <li>#Kalender</a></li>
+        <li>#Fahrer</a></li>
+        <li>#Teams</a></li>
+        <li>#Wertungen</a></li>
+        <li>#News</a></li>
+        <li>#Regelwerk</a></li>
+        <li>#Kontakt</a></li>
+    </ul>
+</nav>
 
-    <div class="login">
-      <a href="#login">Zaloguj</a>
-    </div>
-  </div>
+<section class="hero">
 
-  <!-- GRAUE BOX -->
-  <div class="next-race-box" id="nextBox">
-    <div class="next-left">
-      <span>Następny Wyścig</span>
-      <div class="vline"></div>
-      <span>15. Sierpień</span>
-      <div class="vline"></div>
-      <span>Włochy</span>
-    </div>
-
-    <div class="next-right">
-      Czas 20:00
-    </div>
-  </div>
-
-  <!-- VIDEO HERO -->
-  <div class="hero-video" id="heroVideo">
-    <iframe 
-      src="https://www.youtube.com/embed/WepEUEu1Hv0?autoplay=1&mute=1&loop=1&playlist=WepEUEu1Hv0&controls=0&modestbranding=1&rel=0&showinfo=0"
-      allow="autoplay; encrypted-media"
-      allowfullscreen>
+    https://www.youtube.com/embed/WepEUEu1Hv0?autoplay=1&mute=1&controls=0&loop=1&playlist=WepEUEu1Hv0
     </iframe>
-  </div>
 
-  <!-- NEWS SECTION -->
-  <div class="news-section" id="news">
-    <h1>News</h1>
-    <p>Hier erscheinen später alle wichtigen CPL‑News: Fahrerwechsel, Rennberichte, Teamupdates, neue Saisondaten und vieles mehr.</p>
-  </div>
+    <div class="overlay">
+        <h1>CPL F1 LEAGUE</h1>
+        <p>EST. 2016 | F1 26</p>
 
-<script>
-/* ---------------- BOX NACH 10 SEKUNDEN ANZEIGEN ---------------- */
-let box = document.getElementById("nextBox");
+        <div class="buttons">
+            #Fahrerbewerbung</a>
+            #Discord</a>
+        </div>
+    </div>
 
-setTimeout(() => {
-  box.style.opacity = "1";
-}, 10000);
-</script>
+</section>
+
+<section>
+    <h2>Nächstes Rennen</h2>
+
+    <div class="race-card">
+        <h3>🇮🇹 Monza Grand Prix</h3>
+        <p>12.10.2026</p>
+        <p>20:00 Uhr</p>
+    </div>
+</section>
+
+<section>
+    <h2>Fahrerwertung</h2>
+
+    <table>
+        <tr>
+            <th>Pos</th>
+            <th>Fahrer</th>
+            <th>Punkte</th>
+        </tr>
+
+        <tr>
+            <td>1</td>
+            <td>Max Speed</td>
+            <td>215</td>
+        </tr>
+
+        <tr>
+            <td>2</td>
+            <td>FastDriver</td>
+            <td>201</td>
+        </tr>
+
+        <tr>
+            <td>3</td>
+            <td>CPL Racer</td>
+            <td>194</td>
+        </tr>
+    </table>
+</section>
+
+<section>
+    <h2>Aktuelle News</h2>
+
+    <div class="news-grid">
+
+        <div class="news-card">
+            <h3>Saison gestartet</h3>
+            <p>Die neue CPL Saison hat offiziell begonnen.</p>
+        </div>
+
+        <div class="news-card">
+            <h3>Monza Vorschau</h3>
+            <p>Alle Informationen zum nächsten Rennen.</p>
+        </div>
+
+        <div class="news-card">
+            <h3>Transfermarkt</h3>
+            <p>Neue Fahrer wechseln die Teams.</p>
+        </div>
+
+    </div>
+</section>
+
+<footer>
+    <h3>CPL F1 League</h3>
+    <p>© 2026 CPL Racing League</p>
+</footer>
 
 </body>
 </html>
