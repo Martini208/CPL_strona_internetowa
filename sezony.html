@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sezony - Übersicht</title>
+
+  <!-- SheetJS zum Auslesen von Excel-Dateien (.xlsx) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --card-hover: #334155;
+      --accent-color: #3b82f6;
+      --text-color: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: #475569;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    /* Header / Navigations-Box ganz oben */
+    .header-box {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      padding: 25px;
+      border-radius: 12px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-bottom: 30px;
+    }
+
+    .header-box:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+    }
+
+    .header-box h1 {
+      margin: 0;
+      font-size: 2em;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Excel Upload Bereich */
+    .upload-section {
+      background-color: var(--card-bg);
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px dashed var(--border-color);
+    }
+
+    .upload-section input[type="file"] {
+      color: var(--text-color);
+    }
+
+    /* Saison Boxen */
+    .season-card {
+      background-color: var(--card-bg);
+      border-radius: 10px;
+      margin-bottom: 15px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      transition: border-color 0.2s;
+    }
+
+    .season-header {
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      background-color: var(--card-bg);
+      transition: background-color 0.2s;
+    }
+
+    .season-header:hover {
+      background-color: var(--card-hover);
+    }
+
+    .season-title {
+      font-size: 1.4em;
+      font-weight: bold;
+      color: var(--accent-color);
+    }
+
+    .arrow-icon {
+      font-size: 1.2em;
+      transition: transform 0.3s ease;
+    }
+
+    /* Ausfahrbarer Inhalt (Accordion Animation) */
+    .season-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease-out, padding 0.3s ease;
+      background-color: #0f172a;
+      padding: 0 20px;
+    }
+
+    .season-card.open .season-content {
+      max-height: 1000px; /* Reicht für lange Tabellen */
+      padding: 20px;
+    }
+
+    .season-card.open .arrow-icon {
+      transform: rotate(180deg);
+    }
+
+    /* Tabs innerhalb der ausgefahrenen Box */
+    .tab-buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      padding: 8px 16px;
+      cursor: pointer;
+      font-size: 1em;
+      border-radius: 5px;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background-color: var(--accent-color);
+      color: white;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Tabellen Style */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    th {
+      background-color: var(--card-bg);
+      color: var(--accent-color);
+    }
+
+    tr:hover {
+      background-color: rgba(255, 255, 255, 0.03);
+    }
+
+    .pos-1 { color: #f59e0b; font-weight: bold; } /* Gold */
+    .pos-2 { color: #94a3b8; font-weight: bold; } /* Silber */
+    .pos-3 { color: #b45309; font-weight: bold; } /* Bronze */
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Klickbare Box oben -->
+    <div class="header-box" onclick="location.href='sezony.html'">
+      <h1>🏎️ Sezony - Saison Übersicht</h1>
+      <p style="margin: 5px 0 0 0; opacity: 0.9;">Klicke hier, um die Übersicht zu aktualisieren</p>
+    </div>
+
+    <!-- Excel-Datei Laden (optional dynamisch) -->
+    <div class="upload-section">
+      <span><strong>Excel-Datei laden (.xlsx):</strong></span>
+      <input type="file" id="excelFileInput" accept=".xlsx, .xls" />
+    </div>
+
+    <!-- Liste der Saisons (wird per JS befüllt) -->
+    <div id="seasonsContainer"></div>
+
+  </div>
+
+  <script>
+    // Beispieldaten, falls keine Excel geladen ist
+    let seasonsData = [
+      {
+        name: "Saison 2025",
+        fahrer: [
+          { pos: 1, name: "Max Verstappen", team: "Red Bull", punkte: 410 },
+          { pos: 2, name: "Lando Norris", team: "McLaren", punkte: 340 },
+          { pos: 3, name: "Charles Leclerc", team: "Ferrari", punkte: 325 }
+        ],
+        rennen: [
+          { nr: 1, grandPrix: "Bahrain GP", sieger: "Max Verstappen", pole: "Max Verstappen" },
+          { nr: 2, grandPrix: "Saudi-Arabien GP", sieger: "Sergio Pérez", pole: "Charles Leclerc" },
+          { nr: 3, grandPrix: "Australien GP", sieger: "Carlos Sainz", pole: "Max Verstappen" }
+        ],
+        teams: [
+          { pos: 1, team: "Red Bull Racing", punkte: 560 },
+          { pos: 2, team: "McLaren", punkte: 520 },
+          { pos: 3, team: "Ferrari", punkte: 490 }
+        ]
+      },
+      {
+        name: "Saison 2024",
+        fahrer: [
+          { pos: 1, name: "Max Verstappen", team: "Red Bull", punkte: 575 },
+          { pos: 2, name: "Sergio Pérez", team: "Red Bull", punkte: 285 }
+        ],
+        rennen: [
+          { nr: 1, grandPrix: "Abu Dhabi GP", sieger: "Max Verstappen", pole: "Max Verstappen" }
+        ],
+        teams: [
+          { pos: 1, team: "Red Bull Racing", punkte: 860 }
+        ]
+      }
+    ];
+
+    // Rendert alle Saisons auf der Seite
+    function renderSeasons(data) {
+      const container = document.getElementById('seasonsContainer');
+      container.innerHTML = '';
+
+      data.forEach((season, index) => {
+        const card = document.createElement('div');
+        card.className = 'season-card';
+
+        card.innerHTML = `
+          <div class="season-header" onclick="toggleSeason(this)">
+            <span class="season-title">${season.name}</span>
+            <span class="arrow-icon">▼</span>
+          </div>
+          <div class="season-content">
+            <div class="tab-buttons">
+              <button class="tab-btn active" onclick="switchTab(event, 'fahrer-${index}')">Fahrer-Wertung</button>
+              <button class="tab-btn" onclick="switchTab(event, 'rennen-${index}')">Rennen</button>
+              <button class="tab-btn" onclick="switchTab(event, 'teams-${index}')">Team-Wertung</button>
+            </div>
+
+            <!-- Tab: Fahrer -->
+            <div id="fahrer-${index}" class="tab-content active">
+              <table>
+                <thead>
+                  <tr><th>Pos</th><th>Fahrer</th><th>Team</th><th>Punkte</th></tr>
+                </thead>
+                <tbody>
+                  ${season.fahrer.map(f => `
+                    <tr>
+                      <td class="pos-${f.pos}">${f.pos}</td>
+                      <td>${f.name}</td>
+                      <td>${f.team}</td>
+                      <td><strong>${f.punkte}</strong></td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Tab: Rennen -->
+            <div id="rennen-${index}" class="tab-content">
+              <table>
+                <thead>
+                  <tr><th>#</th><th>Grand Prix</th><th>Sieger</th><th>Pole Position</th></tr>
+                </thead>
+                <tbody>
+                  ${season.rennen.map(r => `
+                    <tr>
+                      <td>${r.nr}</td>
+                      <td>${r.grandPrix}</td>
+                      <td>${r.sieger}</td>
+                      <td>${r.pole}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Tab: Teams -->
+            <div id="teams-${index}" class="tab-content">
+              <table>
+                <thead>
+                  <tr><th>Pos</th><th>Team</th><th>Punkte</th></tr>
+                </thead>
+                <tbody>
+                  ${season.teams.map(t => `
+                    <tr>
+                      <td class="pos-${t.pos}">${t.pos}</td>
+                      <td>${t.team}</td>
+                      <td><strong>${t.punkte}</strong></td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    // Funktion zum Aus- und Einfahren der Saisons
+    function toggleSeason(headerElement) {
+      const card = headerElement.parentElement;
+      card.classList.toggle('open');
+    }
+
+    // Funktion zum Wechseln der Tabs (Fahrer / Rennen / Teams)
+    function switchTab(event, tabId) {
+      event.stopPropagation();
+      const parentContent = event.target.closest('.season-content');
+      
+      // Buttons zurücksetzen
+      parentContent.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      // Inhalte ausblenden
+      parentContent.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      
+      // Gewählten Tab anzeigen
+      document.getElementById(tabId).classList.add('active');
+    }
+
+    // Excel Datei einlesen
+    document.getElementById('excelFileInput').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+
+        // Hier kannst du die Excel Tabellenblätter (Sheets) entsprechend deiner Struktur auslesen
+        console.log("Excel Blätter geladen:", workbook.SheetNames);
+        alert("Excel-Datei erfolgreich geladen! (Passe das Parsing im JS-Code an deine Spalten an)");
+      };
+      reader.readAsArrayBuffer(file);
+    });
+
+    // Erstmaliges Rendern der Standard-Daten
+    renderSeasons(seasonsData);
+  </script>
+</body>
+</html>
