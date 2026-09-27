@@ -47,7 +47,7 @@ nav{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:20px 35px; /* Minimal kleiner gemacht */
+    padding:20px 35px;
     z-index:1000;
     box-shadow:0 4px 15px rgba(0,0,0,0.4);
 }
@@ -59,13 +59,13 @@ nav{
 }
 
 .cpl-logo-img {
-    height: 52px; /* Proportional angepasst */
+    height: 52px;
     border-radius: 4px;
     object-fit: contain;
 }
 
 .f1-season-logo-img {
-    height: 44px; /* Proportional angepasst */
+    height: 44px;
     object-fit: contain;
 }
 
@@ -321,14 +321,110 @@ td{
     margin-bottom:10px;
 }
 
-/* Footer */
+/* Footer Styles */
 
-footer{
-    background:black;
-    color: white;
-    text-align:center;
-    padding:40px;
-    margin-top:50px;
+footer {
+    background: #080808;
+    color: #e0e0e0;
+    padding: 60px 10% 20px 10%;
+    margin-top: 80px;
+    border-top: 1px solid var(--border-color);
+}
+
+.footer-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.footer-col h3, .footer-col h4 {
+    color: #ff3131;
+    font-size: 18px;
+    margin-bottom: 18px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.footer-col p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #a0a0a0;
+}
+
+.footer-col ul {
+    list-style: none;
+}
+
+.footer-col ul li {
+    margin-bottom: 10px;
+}
+
+.footer-col ul li a {
+    color: #a0a0a0;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s ease;
+}
+
+.footer-col ul li a:hover {
+    color: #ff3131;
+}
+
+/* Social Icons Links */
+
+.social-links {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.social-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    background: #1a1a1a;
+    color: #ffffff;
+    border-radius: 50%;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    border: 1px solid var(--border-color);
+    transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+
+.social-btn:hover {
+    background: #ff3131;
+    border-color: #ff3131;
+    transform: translateY(-3px);
+}
+
+/* Bottom Bar */
+
+.footer-bottom {
+    border-top: 1px solid #1f1f1f;
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    font-size: 13px;
+    color: #777777;
+}
+
+.footer-bottom-links a {
+    color: #777777;
+    text-decoration: none;
+    margin-left: 15px;
+    transition: color 0.2s ease;
+}
+
+.footer-bottom-links a:hover {
+    color: #ffffff;
 }
 
 /* Mobile responsive */
@@ -367,6 +463,15 @@ footer{
 
     .f1-race-title {
         justify-content: center;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-bottom-links a {
+        margin: 0 8px;
     }
 }
 </style>
@@ -496,9 +601,57 @@ footer{
     </div>
 </section>
 
+<!-- Erweiterter Footer -->
 <footer>
-    <h3>CPL F1 League</h3>
-    <p>© 2026 CPL Racing League. Wszelkie prawa zastrzeżone.</p>
+    <div class="footer-container">
+        <!-- Spalte 1: Info -->
+        <div class="footer-col">
+            <h3>CPL F1 League</h3>
+            <p>Oficjalna liga simracingowa F1. Dołącz do rywalizacji i ścigaj się z najlepszymi kierowcami na torze!</p>
+        </div>
+
+        <!-- Spalte 2: Szybkie Linki -->
+        <div class="footer-col">
+            <h4>Nawigacja</h4>
+            <ul>
+                <li><a href="#kalendarz">Kalendarz Wyścigów</a></li>
+                <li><a href="#kierowcy">Klasyfikacja Kierowców</a></li>
+                <li><a href="#zespoly">Klasyfikacja Zespołów</a></li>
+                <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSfLSj3z30_t1cdEPyULm26suCN8jpB8NOT9JsXNYE8ikeVUZg/viewform" target="_blank">Dołącz do ligi</a></li>
+            </ul>
+        </div>
+
+        <!-- Spalte 3: Kontakt & Pomoc -->
+        <div class="footer-col">
+            <h4>Kontakt & Support</h4>
+            <ul>
+                <li><a href="https://discord.gg/szt7rHnFSj" target="_blank">Discord Support</a></li>
+                <li><a href="mailto:contact@cpl-league.com">E-mail: contact@cpl-league.com</a></li>
+                <li><a href="#regulamin">Regulamin Ligi</a></li>
+            </ul>
+        </div>
+
+        <!-- Spalte 4: Social Media -->
+        <div class="footer-col">
+            <h4>Social Media</h4>
+            <p style="margin-bottom: 12px;">Zaobserwuj nas w sieci:</p>
+            <div class="social-links">
+                <a href="https://youtube.com" target="_blank" class="social-btn" title="YouTube">YT</a>
+                <a href="https://instagram.com" target="_blank" class="social-btn" title="Instagram">IG</a>
+                <a href="https://facebook.com" target="_blank" class="social-btn" title="Facebook">FB</a>
+                <a href="https://tiktok.com" target="_blank" class="social-btn" title="TikTok">TT</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>© 2026 CPL Racing League. Wszelkie prawa zastrzeżone.</p>
+        <div class="footer-bottom-links">
+            <a href="#polityka-prywatnosci">Polityka Prywatności</a>
+            <a href="#regulamin">Regulamin</a>
+            <a href="#kontakt">Kontakt</a>
+        </div>
+    </div>
 </footer>
 
 <script>
