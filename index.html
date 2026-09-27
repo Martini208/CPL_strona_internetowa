@@ -11,7 +11,7 @@
     --text-color: #ffffff;
     --card-bg: #181818;
     --border-color: #333333;
-    --nav-bg: #d96b6c; /* Korallrot */
+    --nav-bg: rgba(217, 107, 108, 0.85); /* Korallrot mit Transparenz */
 }
 
 /* Light Mode Styles */
@@ -42,12 +42,14 @@ nav{
     top:0;
     width:100%;
     background: var(--nav-bg);
+    backdrop-filter: blur(8px); /* Optional: Stilechter Unschärfe-Effekt für durchscheinenden Inhalt */
+    -webkit-backdrop-filter: blur(8px);
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:10px 30px;
+    padding:18px 35px; /* Etwas größer/höher gemacht */
     z-index:1000;
-    box-shadow:0 2px 10px rgba(0,0,0,0.3);
+    box-shadow:0 4px 15px rgba(0,0,0,0.4);
 }
 
 .nav-left {
@@ -57,13 +59,13 @@ nav{
 }
 
 .cpl-logo-img {
-    height: 45px;
+    height: 50px; /* Leicht vergrößert für die größere Nav-Bar */
     border-radius: 4px;
     object-fit: contain;
 }
 
 .f1-season-logo-img {
-    height: 38px;
+    height: 42px; /* Leicht vergrößert für die größere Nav-Bar */
     object-fit: contain;
 }
 
@@ -78,8 +80,8 @@ nav a {
     text-decoration:none;
     color:white;
     font-weight:bold;
-    font-size:15px;
-    padding: 8px 16px;
+    font-size:16px;
+    padding: 10px 18px;
     border-radius: 8px;
     transition: background 0.2s ease, opacity 0.2s ease;
     display: inline-block;
@@ -99,7 +101,7 @@ nav a:hover {
     background: transparent;
     border: none;
     color: white;
-    font-size: 18px;
+    font-size: 20px;
     padding: 8px 12px;
     border-radius: 8px;
     cursor: pointer;
