@@ -101,9 +101,9 @@ nav a:hover {
     gap: 8px;
 }
 
-/* Theme Toggle Button (Sonne / Mond) - jetzt im Normalzustand transparent */
+/* Theme Toggle Button (Sonne / Mond) */
 .theme-toggle-btn {
-    background: transparent; /* Standardmäßig transparent */
+    background: transparent;
     border: none;
     color: white;
     font-size: 18px;
@@ -116,7 +116,6 @@ nav a:hover {
     justify-content: center;
 }
 
-/* Erst beim Drüberfahren erscheint die leicht weiße Box */
 .theme-toggle-btn:hover {
     background: rgba(255, 255, 255, 0.25);
 }
@@ -175,6 +174,12 @@ nav a:hover {
     border-radius:8px;
     font-weight:bold;
     text-decoration:none;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.btn:hover{
+    transform: scale(1.05);
+    opacity: 0.9;
 }
 
 .btn-red{
@@ -182,9 +187,10 @@ nav a:hover {
     color:white;
 }
 
-.btn-white{
-    background:white;
-    color:black;
+/* Discord Button in offiziellem Discord-Violett */
+.btn-discord{
+    background:#5865F2;
+    color:white;
 }
 
 /* Bereiche */
@@ -343,8 +349,8 @@ footer{
         <p>EST. 2016 | F1 26</p>
 
         <div class="buttons">
-            <a href="#rekrutacja" class="btn btn-red">Zgłoszenie kierowcy</a>
-            <a href="#discord" class="btn btn-white">Discord</a>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfLSj3z30_t1cdEPyULm26suCN8jpB8NOT9JsXNYE8ikeVUZg/viewform" target="_blank" class="btn btn-red">Zapisz się!</a>
+            <a href="https://discord.gg/szt7rHnFSj" target="_blank" class="btn btn-discord">Discord</a>
         </div>
     </div>
 
