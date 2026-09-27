@@ -28,27 +28,27 @@ body.light-mode {
     font-family: Arial, sans-serif;
 }
 
-body {
+body{
     background: var(--bg-color);
     color: var(--text-color);
     transition: background 0.3s ease, color 0.3s ease;
     padding-top: 110px;
 }
 
-/* Navigation */
-
+/* Navigation - 1:1 Kopie der Hauptseite */
 nav {
     position: fixed;
     top: 0;
+    left: 0;
     width: 100%;
-    min-height: 90px; /* Feste Mindesthöhe wie auf der Hauptseite */
+    height: 90px;
     background: var(--nav-bg);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 35px; /* Exaktes Padding der Hauptseite */
+    padding: 0 35px;
     z-index: 1000;
     box-shadow: 0 4px 15px rgba(0,0,0,0.4);
 }
@@ -61,27 +61,31 @@ nav {
 
 .cpl-logo-img {
     height: 52px;
+    width: auto;
     border-radius: 4px;
     object-fit: contain;
 }
 
 .f1-season-logo-img {
     height: 44px;
+    width: auto;
     object-fit: contain;
 }
 
-nav ul{
-    display:flex;
-    list-style:none;
-    gap:8px;
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 8px;
     align-items: center;
+    margin: 0;
+    padding: 0;
 }
 
 nav a {
-    text-decoration:none;
-    color:white;
-    font-weight:bold;
-    font-size:16px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
     padding: 8px 16px;
     border-radius: 8px;
     transition: background 0.2s ease, opacity 0.2s ease;
@@ -116,11 +120,10 @@ nav a:hover, nav a.active {
     background: rgba(255, 255, 255, 0.25);
 }
 
-/* Container Layout */
-
+/* Container Layout - Vergrößert */
 .calendar-page-container {
-    padding: 20px 10% 80px 10%;
-    max-width: 1200px;
+    padding: 20px 5% 80px 5%;
+    max-width: 1400px;
     margin: 0 auto;
 }
 
@@ -135,12 +138,11 @@ nav a:hover, nav a.active {
     text-transform: uppercase;
 }
 
-/* Interaktiver Kalender Box */
-
+/* Interaktiver Kalender Box - Größer */
 .interactive-calendar {
     background: var(--card-bg);
     border-radius: 15px;
-    padding: 25px;
+    padding: 30px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     margin-bottom: 40px;
     border: 1px solid var(--border-color);
@@ -154,7 +156,7 @@ nav a:hover, nav a.active {
 }
 
 .calendar-header h2 {
-    font-size: 26px;
+    font-size: 28px;
     color: var(--text-color);
     text-transform: capitalize;
 }
@@ -163,7 +165,7 @@ nav a:hover, nav a.active {
     background: #ff3131;
     color: white;
     border: none;
-    padding: 10px 18px;
+    padding: 12px 22px;
     border-radius: 8px;
     font-size: 16px;
     font-weight: bold;
@@ -181,28 +183,30 @@ nav a:hover, nav a.active {
     grid-template-columns: repeat(7, 1fr);
     text-align: center;
     font-weight: bold;
+    font-size: 18px;
     color: #ff3131;
-    padding-bottom: 12px;
+    padding-bottom: 15px;
     border-bottom: 1px solid var(--border-color);
 }
 
 .calendar-days {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 8px;
-    margin-top: 12px;
+    gap: 12px;
+    margin-top: 15px;
 }
 
+/* Vergrößerte Kalenderzellen */
 .day-cell {
-    min-height: 70px;
+    min-height: 105px;
     background: rgba(255, 255, 255, 0.03);
-    border-radius: 8px;
-    padding: 8px;
+    border-radius: 12px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    font-size: 14px;
-    border: 1px solid transparent;
+    font-size: 18px;
+    border: 2px solid transparent;
 }
 
 .day-cell.empty {
@@ -217,38 +221,59 @@ nav a:hover, nav a.active {
     font-weight: bold;
 }
 
-/* Event Markierungen im Kalender */
+/* --- FARBSTILE FÜR DIE RENNEN --- */
 
-.day-cell.has-race {
+/* Vergangene Rennen -> ROT */
+.day-cell.past-race {
     border: 2px solid #ff3131;
     background: rgba(255, 49, 49, 0.15);
     cursor: pointer;
-    transition: transform 0.2s ease;
+}
+.day-cell.past-race .race-indicator {
+    background: #ff3131;
+}
+
+/* Nächstes / Aktuelles Rennen -> GRÜN */
+.day-cell.next-race {
+    border: 2px solid #2ecc71;
+    background: rgba(46, 204, 113, 0.15);
+    cursor: pointer;
+}
+.day-cell.next-race .race-indicator {
+    background: #2ecc71;
+}
+
+/* Zukünftige Rennen -> BLAU */
+.day-cell.future-race {
+    border: 2px solid #3498db;
+    background: rgba(52, 152, 219, 0.15);
+    cursor: pointer;
+}
+.day-cell.future-race .race-indicator {
+    background: #3498db;
 }
 
 .day-cell.has-race:hover {
-    transform: scale(1.05);
+    transform: scale(1.03);
 }
 
 .race-indicator {
-    background: #ff3131;
     color: white;
-    font-size: 10px;
+    font-size: 13px;
     font-weight: bold;
-    padding: 2px 4px;
-    border-radius: 4px;
+    padding: 6px 8px;
+    border-radius: 6px;
     text-align: center;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-/* Event Liste unter dem Kalender */
-
+/* Event Liste */
 .events-section-title {
     color: #ff3131;
     margin-bottom: 20px;
-    font-size: 24px;
+    font-size: 26px;
 }
 
 .events-list {
@@ -267,6 +292,14 @@ nav a:hover, nav a.active {
     align-items: center;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     transition: transform 0.2s;
+}
+
+.event-card.next-card {
+    border-left-color: #2ecc71;
+}
+
+.event-card.future-card {
+    border-left-color: #3498db;
 }
 
 .event-card:hover {
@@ -297,11 +330,10 @@ nav a:hover, nav a.active {
 
 .event-date {
     font-weight: bold;
-    color: #ff3131;
+    font-size: 16px;
 }
 
 /* Footer */
-
 footer {
     background: #080808;
     color: #e0e0e0;
@@ -355,11 +387,11 @@ footer {
 .footer-bottom-links a:hover { color: #fff; }
 
 @media(max-width:900px){
-    nav{ flex-direction:column; gap:15px; padding:15px; }
+    nav{ flex-direction:column; height: auto; gap:15px; padding:15px; }
     .nav-left { flex-direction: column; }
     nav ul{ flex-wrap:wrap; justify-content:center; }
-    .day-cell { min-height: 50px; font-size: 12px; padding: 4px; }
-    .race-indicator { font-size: 8px; }
+    .day-cell { min-height: 70px; font-size: 13px; padding: 5px; }
+    .race-indicator { font-size: 10px; padding: 3px; }
 }
 </style>
 
@@ -368,8 +400,8 @@ footer {
 
 <nav>
     <div class="nav-left">
-        <a href="index.html"><img class="cpl-logo-img" src="images/cpl_logo_lizard.png" alt="CPL Logo"></a>
         <img class="f1-season-logo-img" src="images/EAS_F125_2026_SeasonPack_Horizontal_Black.png" alt="EA Sports F1 25 2026 Season Pack">
+        <a href="index.html"><img class="cpl-logo-img" src="images/cpl_logo_lizard.png" alt="CPL Logo"></a>
         <ul>
             <li><a href="kalendarz.html" class="active">Kalendarz</a></li>
             <li><a href="index.html#sezony">Sezony</a></li>
@@ -396,7 +428,7 @@ footer {
     <div class="interactive-calendar">
         <div class="calendar-header">
             <button class="cal-btn" id="prev-month">&lt; Poprzedni</button>
-            <h2 id="month-year-display">Październik 2026</h2>
+            <h2 id="month-year-display">Wrzesień 2026</h2>
             <button class="cal-btn" id="next-month">Następny &gt;</button>
         </div>
 
@@ -415,7 +447,7 @@ footer {
         </div>
     </div>
 
-    <!-- Liste der Events im gewählten Monat -->
+    <!-- Liste der Events -->
     <h2 class="events-section-title">Wyścigi w tym miesiącu</h2>
     <div class="events-list" id="month-events-list">
         <!-- Dynamisch generiert durch JavaScript -->
@@ -473,7 +505,7 @@ footer {
         themeToggleBtn.textContent = document.body.classList.contains('light-mode') ? '🌙' : '☀️';
     });
 
-    // Renn-Kalender Daten (Beispiel-Rennen für 2026)
+    // Renn-Kalender Daten
     const raceEvents = [
         { date: "2026-03-15", round: "Runda 1", name: "GP Bahrajnu", circuit: "Bahrain International Circuit", flag: "https://flagcdn.com/w80/bh.png" },
         { date: "2026-03-29", round: "Runda 2", name: "GP Arabii Saudyjskiej", circuit: "Jeddah Corniche Circuit", flag: "https://flagcdn.com/w80/sa.png" },
@@ -484,14 +516,26 @@ footer {
         { date: "2026-07-05", round: "Runda 7", name: "GP Wielkiej Brytanii", circuit: "Silverstone Circuit", flag: "https://flagcdn.com/w80/gb.png" },
         { date: "2026-08-30", round: "Runda 8", name: "GP Belgii", circuit: "Circuit de Spa-Francorchamps", flag: "https://flagcdn.com/w80/be.png" },
         { date: "2026-09-06", round: "Runda 9", name: "GP Holandii", circuit: "Circuit Zandvoort", flag: "https://flagcdn.com/w80/nl.png" },
-        { date: "2026-10-12", round: "Runda 16", name: "GP Monzy", circuit: "Autodromo Nazionale Monza", flag: "https://martini208.github.io/CPL-/italien.png" },
-        { date: "2026-10-26", round: "Runda 17", name: "GP Singapuru", circuit: "Marina Bay Street Circuit", flag: "https://flagcdn.com/w80/sg.png" },
-        { date: "2026-11-09", round: "Runda 18", name: "GP Austin", circuit: "Circuit of the Americas", flag: "https://flagcdn.com/w80/us.png" },
-        { date: "2026-11-23", round: "Runda 19", name: "GP Abu Zabi", circuit: "Yas Marina Circuit", flag: "https://flagcdn.com/w80/ae.png" }
+        { date: "2026-09-27", round: "Runda 10", name: "GP Monzy", circuit: "Autodromo Nazionale Monza", flag: "https://martini208.github.io/CPL-/italien.png" },
+        { date: "2026-10-11", round: "Runda 11", name: "GP Singapuru", circuit: "Marina Bay Street Circuit", flag: "https://flagcdn.com/w80/sg.png" },
+        { date: "2026-10-25", round: "Runda 12", name: "GP Austin", circuit: "Circuit of the Americas", flag: "https://flagcdn.com/w80/us.png" },
+        { date: "2026-11-08", round: "Runda 13", name: "GP Meksyku", circuit: "Autódromo Hermanos Rodríguez", flag: "https://flagcdn.com/w80/mx.png" },
+        { date: "2026-11-22", round: "Runda 14", name: "GP Abu Zabi", circuit: "Yas Marina Circuit", flag: "https://flagcdn.com/w80/ae.png" }
     ];
 
-    // Aktueller Monat & Jahr initialisieren (Standard: Październik 2026)
-    let currentDate = new Date(2026, 9, 1); // Monat 9 = Oktober (0-basiert)
+    // Nächstes Rennen ermitteln
+    const todayStr = new Date().toISOString().split('T')[0];
+    let nextRaceDate = null;
+    
+    // Sortiere alle zukünftigen oder heutigen Rennen
+    const sortedRaces = [...raceEvents].sort((a,b) => a.date.localeCompare(b.date));
+    const upcoming = sortedRaces.filter(r => r.date >= todayStr);
+    if(upcoming.length > 0) {
+        nextRaceDate = upcoming[0].date;
+    }
+
+    // Aktuelles Datum für Kalenderanzeige (Standard: heute)
+    let currentDate = new Date();
 
     const monthNamesPl = [
         "Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", 
@@ -510,14 +554,10 @@ footer {
         daysContainer.innerHTML = "";
         eventsListContainer.innerHTML = "";
 
-        // Erster Tag des Monats (0 = Niedziela, 1 = Poniedziałek...)
         const firstDayIndex = new Date(year, month, 1).getDay();
-        // Umwandlung zu Poniedziałek = 0 ... Niedziela = 6
         const adjustedFirstDay = (firstDayIndex === 0) ? 6 : firstDayIndex - 1;
-
         const totalDays = new Date(year, month + 1, 0).getDate();
 
-        // Leere Zellen vor Monatsbeginn
         for (let i = 0; i < adjustedFirstDay; i++) {
             const emptyCell = document.createElement("div");
             emptyCell.classList.add("day-cell", "empty");
@@ -526,14 +566,13 @@ footer {
 
         let monthRaces = [];
 
-        // Tage des Monats Rendern
         for (let day = 1; day <= totalDays; day++) {
             const dayCell = document.createElement("div");
             dayCell.classList.add("day-cell");
 
             const dayOfWeek = (adjustedFirstDay + day - 1) % 7;
             if (dayOfWeek === 5 || dayOfWeek === 6) {
-                dayCell.classList.add("weekend"); // Sobota / Niedziela
+                dayCell.classList.add("weekend");
             }
 
             const dayNumDiv = document.createElement("div");
@@ -541,7 +580,6 @@ footer {
             dayNumDiv.textContent = day;
             dayCell.appendChild(dayNumDiv);
 
-            // Prüfen ob an diesem Tag ein Rennen stattfindet
             const formattedMonth = String(month + 1).padStart(2, '0');
             const formattedDay = String(day).padStart(2, '0');
             const dateString = `${year}-${formattedMonth}-${formattedDay}`;
@@ -550,6 +588,22 @@ footer {
 
             if (race) {
                 dayCell.classList.add("has-race");
+
+                // Farb-Klassifizierung
+                if (dateString === nextRaceDate) {
+                    dayCell.classList.add("next-race"); // GRÜN (Nächstes Rennen)
+                    race.statusClass = "next-card";
+                    race.colorCode = "#2ecc71";
+                } else if (dateString < todayStr) {
+                    dayCell.classList.add("past-race"); // ROT (Vergangene Rennen)
+                    race.statusClass = "";
+                    race.colorCode = "#ff3131";
+                } else {
+                    dayCell.classList.add("future-race"); // BLAU (Zukünftige Rennen)
+                    race.statusClass = "future-card";
+                    race.colorCode = "#3498db";
+                }
+
                 const badge = document.createElement("div");
                 badge.classList.add("race-indicator");
                 badge.textContent = race.name;
@@ -561,13 +615,14 @@ footer {
             daysContainer.appendChild(dayCell);
         }
 
-        // Event-Liste für den gewählten Monat auffüllen
         if (monthRaces.length === 0) {
             eventsListContainer.innerHTML = "<p style='color:#888;'>Brak wyścigów w tym miesiącu.</p>";
         } else {
             monthRaces.forEach(race => {
                 const eventCard = document.createElement("div");
                 eventCard.classList.add("event-card");
+                if (race.statusClass) eventCard.classList.add(race.statusClass);
+
                 eventCard.innerHTML = `
                     <div class="event-info">
                         <img src="${race.flag}" alt="${race.name}" class="event-flag">
@@ -576,14 +631,13 @@ footer {
                             <p>${race.circuit}</p>
                         </div>
                     </div>
-                    <div class="event-date">${race.date.split('-').reverse().join('.')}</div>
+                    <div class="event-date" style="color: ${race.colorCode}">${race.date.split('-').reverse().join('.')}</div>
                 `;
                 eventsListContainer.appendChild(eventCard);
             });
         }
     }
 
-    // Event Listener für Navigation buttons
     document.getElementById("prev-month").addEventListener("click", () => {
         currentDate.setMonth(currentDate.getMonth() - 1);
         renderCalendar();
@@ -594,7 +648,6 @@ footer {
         renderCalendar();
     });
 
-    // Initiales Rendern
     renderCalendar();
 </script>
 
