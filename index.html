@@ -101,9 +101,9 @@ nav a:hover {
     gap: 8px;
 }
 
-/* Theme Toggle Button (Sonne / Mond) */
+/* Theme Toggle Button (Sonne / Mond) - jetzt im Normalzustand transparent */
 .theme-toggle-btn {
-    background: rgba(255, 255, 255, 0.2);
+    background: transparent; /* Standardmäßig transparent */
     border: none;
     color: white;
     font-size: 18px;
@@ -116,9 +116,9 @@ nav a:hover {
     justify-content: center;
 }
 
+/* Erst beim Drüberfahren erscheint die leicht weiße Box */
 .theme-toggle-btn:hover {
-    background: rgba(255, 255, 255, 0.35);
-    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.25);
 }
 
 /* Hero */
