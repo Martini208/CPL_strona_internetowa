@@ -32,16 +32,16 @@ body{
     background: var(--bg-color);
     color: var(--text-color);
     transition: background 0.3s ease, color 0.3s ease;
-    padding-top: 85px;
+    padding-top: 80px;
 }
 
-/* Navigation - EXAKT wie auf der Hauptseite */
+/* Navigation - Exakte 1:1 Kopie der Hauptseite ohne Button-Hintergrund */
 nav {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 70px;
+    height: 65px;
     background: var(--nav-bg);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
@@ -60,14 +60,14 @@ nav {
 }
 
 .f1-season-logo-img {
-    height: 48px;
+    height: 45px;
     width: auto;
     object-fit: contain;
     display: block;
 }
 
 .cpl-logo-img {
-    height: 48px;
+    height: 45px;
     width: auto;
     border-radius: 6px;
     object-fit: contain;
@@ -90,9 +90,9 @@ nav a {
     font-size: 16px;
     padding: 6px 10px;
     border-radius: 6px;
-    transition: opacity 0.2s ease, background 0.2s ease;
+    transition: opacity 0.2s ease;
     display: inline-block;
-    background: transparent; /* Kein störender Hintergrund mehr */
+    background: transparent !important; /* Entfernt den grauen Kasten */
 }
 
 nav a:hover {
@@ -122,31 +122,35 @@ nav a:hover {
     transform: scale(1.1);
 }
 
-/* Container Layout - Minimal kleiner als vorher */
+/* Container Layout - Kompakter & Kleiner */
 .calendar-page-container {
-    padding: 20px 5% 60px 5%;
-    max-width: 1200px; /* Von 1400px leicht verkleinert */
+    padding: 15px 5% 50px 5%;
+    max-width: 1000px; /* Weiter verkleinert auf 1000px */
     margin: 0 auto;
 }
 
 .page-title {
     text-align: center;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 
 .page-title h1 {
-    font-size: 38px;
+    font-size: 32px;
     color: #ff3131;
     text-transform: uppercase;
 }
 
-/* Interaktiver Kalender Box - Nur etwas kleiner */
+.page-title p {
+    font-size: 14px;
+}
+
+/* Interaktiver Kalender Box - Kompakter */
 .interactive-calendar {
     background: var(--card-bg);
     border-radius: 12px;
-    padding: 22px;
+    padding: 18px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    margin-bottom: 35px;
+    margin-bottom: 30px;
     border: 1px solid var(--border-color);
 }
 
@@ -154,11 +158,11 @@ nav a:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .calendar-header h2 {
-    font-size: 24px;
+    font-size: 20px;
     color: var(--text-color);
     text-transform: capitalize;
 }
@@ -167,9 +171,9 @@ nav a:hover {
     background: #ff3131;
     color: white;
     border: none;
-    padding: 10px 18px;
+    padding: 8px 14px;
     border-radius: 6px;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: bold;
     cursor: pointer;
     transition: background 0.2s, transform 0.2s;
@@ -185,29 +189,29 @@ nav a:hover {
     grid-template-columns: repeat(7, 1fr);
     text-align: center;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 14px;
     color: #ff3131;
-    padding-bottom: 12px;
+    padding-bottom: 8px;
     border-bottom: 1px solid var(--border-color);
 }
 
 .calendar-days {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 10px;
-    margin-top: 12px;
+    gap: 8px;
+    margin-top: 10px;
 }
 
-/* Kalenderzellen - Etwas schmaler/kompakter */
+/* Kalenderzellen - Noch etwas kleiner */
 .day-cell {
-    min-height: 85px; /* Leicht verkleinert von 105px auf 85px */
+    min-height: 70px; /* Von 85px auf 70px verkleinert */
     background: rgba(255, 255, 255, 0.03);
-    border-radius: 10px;
-    padding: 8px;
+    border-radius: 8px;
+    padding: 6px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    font-size: 16px;
+    font-size: 14px;
     border: 2px solid transparent;
 }
 
@@ -223,37 +227,27 @@ nav a:hover {
     font-weight: bold;
 }
 
-/* --- FARBSTILE FÜR DIE RENNEN --- */
-
-/* Vergangene Rennen -> ROT */
+/* Farb-Markierungen */
 .day-cell.past-race {
     border: 2px solid #ff3131;
     background: rgba(255, 49, 49, 0.15);
     cursor: pointer;
 }
-.day-cell.past-race .race-indicator {
-    background: #ff3131;
-}
+.day-cell.past-race .race-indicator { background: #ff3131; }
 
-/* Nächstes / Aktuelles Rennen -> GRÜN */
 .day-cell.next-race {
     border: 2px solid #2ecc71;
     background: rgba(46, 204, 113, 0.15);
     cursor: pointer;
 }
-.day-cell.next-race .race-indicator {
-    background: #2ecc71;
-}
+.day-cell.next-race .race-indicator { background: #2ecc71; }
 
-/* Zukünftige Rennen -> BLAU */
 .day-cell.future-race {
     border: 2px solid #3498db;
     background: rgba(52, 152, 219, 0.15);
     cursor: pointer;
 }
-.day-cell.future-race .race-indicator {
-    background: #3498db;
-}
+.day-cell.future-race .race-indicator { background: #3498db; }
 
 .day-cell.has-race:hover {
     transform: scale(1.02);
@@ -261,10 +255,10 @@ nav a:hover {
 
 .race-indicator {
     color: white;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: bold;
-    padding: 5px 6px;
-    border-radius: 5px;
+    padding: 3px 4px;
+    border-radius: 4px;
     text-align: center;
     white-space: nowrap;
     overflow: hidden;
@@ -274,21 +268,21 @@ nav a:hover {
 /* Event Liste */
 .events-section-title {
     color: #ff3131;
-    margin-bottom: 18px;
-    font-size: 24px;
+    margin-bottom: 14px;
+    font-size: 20px;
 }
 
 .events-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
 }
 
 .event-card {
     background: var(--card-bg);
     border-left: 5px solid #ff3131;
     border-radius: 8px;
-    padding: 14px 18px;
+    padding: 12px 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -296,104 +290,87 @@ nav a:hover {
     transition: transform 0.2s;
 }
 
-.event-card.next-card {
-    border-left-color: #2ecc71;
-}
+.event-card.next-card { border-left-color: #2ecc71; }
+.event-card.future-card { border-left-color: #3498db; }
 
-.event-card.future-card {
-    border-left-color: #3498db;
-}
-
-.event-card:hover {
-    transform: translateX(4px);
-}
+.event-card:hover { transform: translateX(4px); }
 
 .event-info {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
 }
 
 .event-flag {
-    width: 36px;
-    height: 22px;
+    width: 32px;
+    height: 20px;
     border-radius: 3px;
     object-fit: cover;
 }
 
-.event-title h3 {
-    font-size: 17px;
-}
-
-.event-title p {
-    font-size: 13px;
-    color: #888;
-}
-
-.event-date {
-    font-weight: bold;
-    font-size: 15px;
-}
+.event-title h3 { font-size: 15px; }
+.event-title p { font-size: 12px; color: #888; }
+.event-date { font-weight: bold; font-size: 14px; }
 
 /* Footer */
 footer {
     background: #080808;
     color: #e0e0e0;
-    padding: 50px 10% 20px 10%;
+    padding: 40px 10% 20px 10%;
     border-top: 1px solid var(--border-color);
 }
 
 .footer-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 40px;
-    margin-bottom: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    margin-bottom: 25px;
 }
 
 .footer-col h3, .footer-col h4 {
     color: #ff3131;
-    font-size: 18px;
-    margin-bottom: 18px;
+    font-size: 16px;
+    margin-bottom: 14px;
     text-transform: uppercase;
 }
 
 .footer-col p, .footer-col ul li a {
-    font-size: 14px;
+    font-size: 13px;
     color: #a0a0a0;
     text-decoration: none;
 }
 
 .footer-col ul { list-style: none; }
-.footer-col ul li { margin-bottom: 10px; }
+.footer-col ul li { margin-bottom: 8px; }
 .footer-col ul li a:hover { color: #ff3131; }
 
-.social-links { display: flex; gap: 12px; margin-top: 10px; }
+.social-links { display: flex; gap: 10px; margin-top: 8px; }
 .social-btn {
     display: inline-flex; align-items: center; justify-content: center;
-    width: 40px; height: 40px; background: #1a1a1a; color: white;
+    width: 36px; height: 36px; background: #1a1a1a; color: white;
     border-radius: 50%; border: 1px solid var(--border-color);
     text-decoration: none;
 }
-.social-btn svg { width: 18px; height: 18px; fill: currentColor; }
+.social-btn svg { width: 16px; height: 16px; fill: currentColor; }
 .social-btn:hover { background: #ff3131; border-color: #ff3131; }
 
 .footer-bottom {
     border-top: 1px solid #1f1f1f;
-    padding-top: 20px;
-    display: flex; flex-direction: column; align-items: center; gap: 12px;
-    font-size: 13px; color: #777; text-align: center;
+    padding-top: 15px;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    font-size: 12px; color: #777; text-align: center;
 }
 
-.footer-bottom-links { display: flex; gap: 20px; }
+.footer-bottom-links { display: flex; gap: 15px; }
 .footer-bottom-links a { color: #777; text-decoration: none; }
 .footer-bottom-links a:hover { color: #fff; }
 
 @media(max-width:900px){
-    nav{ flex-direction:column; height: auto; gap:12px; padding:12px; }
+    nav{ flex-direction:column; height: auto; gap:10px; padding:10px; }
     .nav-left { flex-direction: column; }
     nav ul{ flex-wrap:wrap; justify-content:center; }
-    .day-cell { min-height: 65px; font-size: 12px; padding: 4px; }
-    .race-indicator { font-size: 10px; padding: 3px; }
+    .day-cell { min-height: 55px; font-size: 11px; padding: 4px; }
+    .race-indicator { font-size: 9px; padding: 2px; }
 }
 </style>
 
@@ -525,7 +502,6 @@ footer {
         { date: "2026-11-22", round: "Runda 14", name: "GP Abu Zabi", circuit: "Yas Marina Circuit", flag: "https://flagcdn.com/w80/ae.png" }
     ];
 
-    // Nächstes Rennen ermitteln
     const todayStr = new Date().toISOString().split('T')[0];
     let nextRaceDate = null;
     
