@@ -28,7 +28,7 @@ body.light-mode {
     font-family: Arial, sans-serif;
 }
 
-/* Flexbox Layout für Sticky Footer am Bildschirmende */
+/* Flexbox Layout für Sticky Footer ganz unten */
 body {
     background: var(--bg-color);
     color: var(--text-color);
@@ -39,7 +39,7 @@ body {
     flex-direction: column;
 }
 
-/* Navigation - Exakte Kopie der Hauptseite */
+/* Navigation - Exakte Kopie */
 nav {
     position: fixed;
     top: 0;
@@ -126,7 +126,7 @@ nav a:hover {
     transform: scale(1.1);
 }
 
-/* Page Container - Dehnt sich aus, um den Footer nach unten zu drücken */
+/* Container */
 .sezony-page-container {
     padding: 20px 5% 50px 5%;
     max-width: 1200px;
@@ -151,7 +151,7 @@ nav a:hover {
     margin-top: 5px;
 }
 
-/* Saison Boxen */
+/* Saison Boxen & Akkordeon */
 .sezony-list {
     display: flex;
     flex-direction: column;
@@ -179,7 +179,6 @@ nav a:hover {
     cursor: pointer;
     background: var(--card-bg);
     user-select: none;
-    transition: background 0.2s;
 }
 
 .sezon-header:hover {
@@ -213,33 +212,76 @@ nav a:hover {
     transition: transform 0.3s ease;
 }
 
-/* Ausfahrbarer Inhalt */
+/* Der ausfahrbare Inhalt */
 .sezon-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s ease-out, padding 0.3s ease;
-    padding: 0 28px;
-    background: rgba(0, 0, 0, 0.15);
-    border-top: 1px solid transparent;
+    display: none;
+    padding: 24px 28px;
+    background: rgba(0, 0, 0, 0.2);
+    border-top: 1px solid var(--border-color);
 }
 
 .sezon-card.open .sezon-content {
-    max-height: 600px;
-    padding: 24px 28px;
-    border-top-color: var(--border-color);
+    display: block;
 }
 
 .sezon-card.open .arrow-icon {
     transform: rotate(180deg);
 }
 
-.sezon-info-placeholder {
-    color: #a0a0a0;
-    font-style: italic;
-    font-size: 15px;
+/* Tabs innerhalb der geöffneten Box */
+.tab-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
 }
 
-/* Footer - Ist durch Flexbox immer am unteren Bildschirmrand */
+.tab-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.tab-btn.active, .tab-btn:hover {
+    background: #ff3131;
+    border-color: #ff3131;
+    color: white;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+/* Tabellen */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.data-table th, .data-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.data-table th {
+    color: #ff3131;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+/* Footer */
 footer {
     background: #080808;
     color: #e0e0e0;
@@ -325,16 +367,14 @@ footer {
 </nav>
 
 <div class="sezony-page-container">
-    <!-- Rote Box Überschrift -->
     <div class="page-title">
         <h1>Archiwum Sezonów</h1>
         <p>Wybierz sezon, aby zobaczyć szczegółowe wyniki, klasyfikacje i statystyki wyścigów</p>
     </div>
 
-    <!-- Saison Boxen Liste -->
     <div class="sezony-list">
 
-        <!-- Sezon 20 -->
+        <!-- SEZON 20 -->
         <div class="sezon-card">
             <div class="sezon-header" onclick="toggleSezon(this)">
                 <div class="sezon-title-group">
@@ -344,11 +384,24 @@ footer {
                 <span class="arrow-icon">▼</span>
             </div>
             <div class="sezon-content">
-                <p class="sezon-info-placeholder">Tutaj zostaną dodane tabele i wyniki dla Sezonu 20...</p>
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="switchTab(this, 'kierowcy-20')">Kierowcy</button>
+                    <button class="tab-btn" onclick="switchTab(this, 'wyscigi-20')">Wyścigi</button>
+                    <button class="tab-btn" onclick="switchTab(this, 'zespoly-20')">Zespoły</button>
+                </div>
+                <div id="kierowcy-20" class="tab-pane active">
+                    <p style="color:#aaa; font-style:italic;">Dane dla Sezonu 20 zostaną wkrótce załadowane z pliku Excel.</p>
+                </div>
+                <div id="wyscigi-20" class="tab-pane">
+                    <p style="color:#aaa; font-style:italic;">Brak informacji o wyścigach.</p>
+                </div>
+                <div id="zespoly-20" class="tab-pane">
+                    <p style="color:#aaa; font-style:italic;">Brak informacji o zespołach.</p>
+                </div>
             </div>
         </div>
 
-        <!-- Sezon 19 -->
+        <!-- SEZON 19 -->
         <div class="sezon-card">
             <div class="sezon-header" onclick="toggleSezon(this)">
                 <div class="sezon-title-group">
@@ -358,11 +411,24 @@ footer {
                 <span class="arrow-icon">▼</span>
             </div>
             <div class="sezon-content">
-                <p class="sezon-info-placeholder">Tutaj zostaną dodane tabele i wyniki dla Sezonu 19...</p>
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="switchTab(this, 'kierowcy-19')">Kierowcy</button>
+                    <button class="tab-btn" onclick="switchTab(this, 'wyscigi-19')">Wyścigi</button>
+                    <button class="tab-btn" onclick="switchTab(this, 'zespoly-19')">Zespoły</button>
+                </div>
+                <div id="kierowcy-19" class="tab-pane active">
+                    <p style="color:#aaa; font-style:italic;">Dane dla Sezonu 19 zostaną wkrótce załadowane z pliku Excel.</p>
+                </div>
+                <div id="wyscigi-19" class="tab-pane">
+                    <p style="color:#aaa; font-style:italic;">Brak informacji o wyścigach.</p>
+                </div>
+                <div id="zespoly-19" class="tab-pane">
+                    <p style="color:#aaa; font-style:italic;">Brak informacji o zespołach.</p>
+                </div>
             </div>
         </div>
 
-        <!-- Sezon 18 -->
+        <!-- SEZON 18 -->
         <div class="sezon-card">
             <div class="sezon-header" onclick="toggleSezon(this)">
                 <div class="sezon-title-group">
@@ -372,21 +438,20 @@ footer {
                 <span class="arrow-icon">▼</span>
             </div>
             <div class="sezon-content">
-                <p class="sezon-info-placeholder">Tutaj zostaną dodane tabele i wyniki dla Sezonu 18...</p>
-            </div>
-        </div>
-
-        <!-- Sezon 17 -->
-        <div class="sezon-card">
-            <div class="sezon-header" onclick="toggleSezon(this)">
-                <div class="sezon-title-group">
-                    <h2>Sezon 17</h2>
-                    <span class="sezon-badge" style="background:#555;">Zakończony</span>
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="switchTab(this, 'kierowcy-18')">Kierowcy</button>
+                    <button class="tab-btn" onclick="switchTab(this, 'wyscigi-18')">Wyścigi</button>
+                    <button class="tab-btn" onclick="switchTab(this, 'zespoly-18')">Zespoły</button>
                 </div>
-                <span class="arrow-icon">▼</span>
-            </div>
-            <div class="sezon-content">
-                <p class="sezon-info-placeholder">Tutaj zostaną dodane tabele i wyniki dla Sezonu 17...</p>
+                <div id="kierowcy-18" class="tab-pane active">
+                    <p style="color:#aaa; font-style:italic;">Dane dla Sezonu 18 zostaną wkrótce załadowane z pliku Excel.</p>
+                </div>
+                <div id="wyscigi-18" class="tab-pane">
+                    <p style="color:#aaa; font-style:italic;">Brak informacji o wyścigach.</p>
+                </div>
+                <div id="zespoly-18" class="tab-pane">
+                    <p style="color:#aaa; font-style:italic;">Brak informacji o zespołach.</p>
+                </div>
             </div>
         </div>
 
@@ -438,12 +503,32 @@ footer {
 </footer>
 
 <script>
-    // Theme Toggle Funktion
+    // Theme Toggle
     const themeToggleBtn = document.getElementById('theme-toggle');
     themeToggleBtn.addEventListener('click', () => {
         document.body.classList.toggle('light-mode');
         themeToggleBtn.textContent = document.body.classList.contains('light-mode') ? '🌙' : '☀️';
     });
 
-    // Ausklapp-Funktion für die Saison Boxen
+    // Akkordeon Öffnen / Schließen
     function toggleSezon(headerElement) {
+        const card = headerElement.parentElement;
+        card.classList.toggle('open');
+    }
+
+    // Tabs Umschalten
+    function switchTab(btn, targetId) {
+        const parentContent = btn.closest('.sezon-content');
+        
+        // Buttons im aktuellen Container zurücksetzen
+        parentContent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        // Tab Panes im aktuellen Container ausblenden
+        parentContent.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+        document.getElementById(targetId).classList.add('active');
+    }
+</script>
+
+</body>
+</html>
