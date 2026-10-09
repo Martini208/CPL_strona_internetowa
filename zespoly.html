@@ -129,7 +129,7 @@ nav a:hover {
 /* Page Container */
 .zespoly-page-container {
     padding: 20px 5% 50px 5%;
-    max-width: 1300px;
+    max-width: 1400px;
     width: 100%;
     margin: 0 auto;
     flex: 1 0 auto;
@@ -177,11 +177,11 @@ nav a:hover {
     box-shadow: 0 4px 20px rgba(255, 49, 49, 0.25);
 }
 
-/* F1 Official Style Teams Grid */
+/* Teams Grid Nebeneinander (2 Spalten auf Desktop) */
 .teams-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(550px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
 }
 
 /* Team Card Design */
@@ -190,19 +190,18 @@ nav a:hover {
     overflow: hidden;
     position: relative;
     padding: 24px 28px;
-    min-height: 250px;
+    min-height: 260px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     box-shadow: 0 10px 25px rgba(0,0,0,0.5);
     transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
-    cursor: pointer;
     border: 1px solid rgba(255,255,255,0.1);
 }
 
 .f1-team-card:hover {
-    transform: translateY(-7px) scale(1.01);
-    box-shadow: 0 18px 35px rgba(0,0,0,0.7);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.7);
 }
 
 .team-card-top {
@@ -213,7 +212,7 @@ nav a:hover {
 }
 
 .team-info h2 {
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 800;
     color: #ffffff;
     text-shadow: 0 2px 4px rgba(0,0,0,0.5);
@@ -223,17 +222,15 @@ nav a:hover {
 
 .team-drivers-list {
     display: flex;
-    gap: 20px;
+    gap: 10px;
     flex-wrap: wrap;
 }
 
+/* Nur Namen ohne Bilder */
 .driver-pill {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(0, 0, 0, 0.35);
+    background: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(6px);
-    padding: 6px 12px;
+    padding: 6px 14px;
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.15);
     font-size: 13px;
@@ -241,20 +238,9 @@ nav a:hover {
     color: #ffffff;
 }
 
-.driver-pill-icon {
-    width: 22px;
-    height: 22px;
-    background: rgba(255,255,255,0.2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-}
-
 .team-logo-badge {
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
     background: rgba(0, 0, 0, 0.4);
     border-radius: 50%;
     display: flex;
@@ -265,36 +251,68 @@ nav a:hover {
 }
 
 .team-logo-badge img {
-    width: 26px;
-    height: 26px;
+    width: 24px;
+    height: 24px;
     object-fit: contain;
+}
+
+/* Auto & Stats Unterer Bereich */
+.team-card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 15px;
+    z-index: 2;
+}
+
+/* Stats Boxen */
+.team-stats {
+    display: flex;
+    gap: 15px;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(6px);
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.stat-box {
+    text-align: center;
+}
+
+.stat-box span {
+    display: block;
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.stat-box strong {
+    font-size: 15px;
+    color: #ffffff;
 }
 
 /* Auto Grafikbereich */
 .team-car-container {
-    position: relative;
-    width: 100%;
-    height: 120px;
-    margin-top: 10px;
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
-    z-index: 2;
 }
 
 .team-car-img {
-    max-height: 110px;
+    max-height: 85px;
     width: auto;
     object-fit: contain;
-    filter: drop-shadow(0 10px 12px rgba(0,0,0,0.6));
-    transition: transform 0.4s ease;
+    filter: drop-shadow(0 8px 10px rgba(0,0,0,0.6));
+    transition: transform 0.3s ease;
 }
 
 .f1-team-card:hover .team-car-img {
-    transform: translateX(-10px) scale(1.05);
+    transform: translateX(-5px) scale(1.03);
 }
 
-/* Background Effect Overlay */
+/* Background Pattern */
 .team-card-bg-pattern {
     position: absolute;
     inset: 0;
@@ -304,7 +322,7 @@ nav a:hover {
     pointer-events: none;
 }
 
-/* Footer - Exakte Kopie der anderen Seiten */
+/* Footer */
 footer {
     background: #080808;
     color: #e0e0e0;
@@ -359,11 +377,16 @@ footer {
 .footer-bottom-links a { color: #777; text-decoration: none; }
 .footer-bottom-links a:hover { color: #fff; }
 
+@media(max-width:1024px){
+    .teams-grid { grid-template-columns: 1fr; }
+}
+
 @media(max-width:900px){
     nav{ flex-direction:column; height: auto; gap:10px; padding:10px; }
     .nav-left { flex-direction: column; }
     nav ul{ flex-wrap:wrap; justify-content:center; }
-    .teams-grid { grid-template-columns: 1fr; }
+    .team-card-bottom { flex-direction: column-reverse; align-items: flex-start; gap: 15px; }
+    .team-car-container { width: 100%; justify-content: center; }
 }
 </style>
 
@@ -401,7 +424,7 @@ footer {
         <input type="text" id="teamSearch" class="search-input" placeholder="Szukaj zespołu lub kierowcy...">
     </div>
 
-    <!-- Grid im F1 Official Look -->
+    <!-- Grid Nebeneinander -->
     <div class="teams-grid" id="teamsGrid"></div>
 </div>
 
@@ -457,12 +480,13 @@ footer {
         themeToggleBtn.textContent = document.body.classList.contains('light-mode') ? '🌙' : '☀️';
     });
 
-    // F1 Teams Data im offiziellen F1 2026 Style
+    // F1 Teams Data mit Punkty, Podia und Wygrane
     const teamsData = [
         { 
             name: "Mercedes", 
             driver1: "George RUSSELL", 
             driver2: "Kimi ANTONELLI", 
+            points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #00A19C 0%, #004D49 100%)", 
             logo: "https://media.formula1.com/image/upload/v1677244984/content/dam/fom-website/teams/2023/mercedes-logo.png.transform/2col/image.png",
             carImg: "https://media.formula1.com/d_team_car_fallback_image.png/content/dam/fom-website/teams/2024/mercedes.png.transform/4col/image.png" 
@@ -471,6 +495,7 @@ footer {
             name: "Ferrari", 
             driver1: "Charles LECLERC", 
             driver2: "Lewis HAMILTON", 
+            points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #E80020 0%, #800010 100%)", 
             logo: "https://media.formula1.com/image/upload/v1677244984/content/dam/fom-website/teams/2023/ferrari-logo.png.transform/2col/image.png",
             carImg: "https://media.formula1.com/d_team_car_fallback_image.png/content/dam/fom-website/teams/2024/ferrari.png.transform/4col/image.png" 
@@ -479,6 +504,7 @@ footer {
             name: "McLaren", 
             driver1: "Lando NORRIS", 
             driver2: "Oscar PIASTRI", 
+            points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #FF8000 0%, #B35900 100%)", 
             logo: "https://media.formula1.com/image/upload/v1677244984/content/dam/fom-website/teams/2023/mclaren-logo.png.transform/2col/image.png",
             carImg: "https://media.formula1.com/d_team_car_fallback_image.png/content/dam/fom-website/teams/2024/mclaren.png.transform/4col/image.png" 
@@ -487,6 +513,7 @@ footer {
             name: "Red Bull Racing", 
             driver1: "Max VERSTAPPEN", 
             driver2: "Isack HADJAR", 
+            points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #1E41B0 0%, #0D1C4E 100%)", 
             logo: "https://media.formula1.com/image/upload/v1677244985/content/dam/fom-website/teams/2023/red-bull-racing-logo.png.transform/2col/image.png",
             carImg: "https://media.formula1.com/d_team_car_fallback_image.png/content/dam/fom-website/teams/2024/red-bull-racing.png.transform/4col/image.png" 
@@ -495,6 +522,7 @@ footer {
             name: "Racing Bulls", 
             driver1: "Liam LAWSON", 
             driver2: "Arvid LINDBLAD", 
+            points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #2B4562 0%, #152231 100%)", 
             logo: "https://media.formula1.com/image/upload/v1677244984/content/dam/fom-website/teams/2023/alphatauri-logo.png.transform/2col/image.png",
             carImg: "https://media.formula1.com/d_team_car_fallback_image.png/content/dam/fom-website/teams/2024/rb.png.transform/4col/image.png" 
@@ -503,6 +531,7 @@ footer {
             name: "Alpine", 
             driver1: "Pierre GASLY", 
             driver2: "Franco COLAPINTO", 
+            points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #0082C6 0%, #004163 100%)", 
             logo: "https://media.formula1.com/image/upload/v1677244984/content/dam/fom-website/teams/2023/alpine-logo.png.transform/2col/image.png",
             carImg: "https://media.formula1.com/d_team_car_fallback_image.png/content/dam/fom-website/teams/2024/alpine.png.transform/4col/image.png" 
@@ -511,6 +540,7 @@ footer {
             name: "Aston Martin", 
             driver1: "Fernando ALONSO", 
             driver2: "Lance STROLL", 
+            points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #00594F 0%, #002B27 100%)", 
             logo: "https://media.formula1.com/image/upload/v1677244984/content/dam/fom-website/teams/2023/aston-martin-logo.png.transform/2col/image.png",
             carImg: "https://media.formula1.com/d_team_car_fallback_image.png/content/dam/fom-website/teams/2024/aston-martin.png.transform/4col/image.png" 
@@ -519,6 +549,7 @@ footer {
             name: "Williams", 
             driver1: "Carlos SAINZ", 
             driver2: "Alexander ALBON", 
+            points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #00A0DE 0%, #004C6A 100%)", 
             logo: "https://media.formula1.com/image/upload/v1677244984/content/dam/fom-website/teams/2023/williams-logo.png.transform/2col/image.png",
             carImg: "https://media.formula1.com/d_team_car_fallback_image.png/content/dam/fom-website/teams/2024/williams.png.transform/4col/image.png" 
@@ -527,6 +558,7 @@ footer {
             name: "Haas F1 Team", 
             driver1: "Esteban OCON", 
             driver2: "Oliver BEARMAN", 
+            points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #B6BABD 0%, #525558 100%)", 
             logo: "https://media.formula1.com/image/upload/v1677244984/content/dam/fom-website/teams/2023/haas-f1-team-logo.png.transform/2col/image.png",
             carImg: "https://media.formula1.com/d_team_car_fallback_image.png/content/dam/fom-website/teams/2024/haas.png.transform/4col/image.png" 
@@ -535,6 +567,7 @@ footer {
             name: "Audi Revolut F1", 
             driver1: "Nico HÜLKENBERG", 
             driver2: "Gabriel BORTOLETO", 
+            points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #52E252 0%, #1D631D 100%)", 
             logo: "https://media.formula1.com/image/upload/v1677244984/content/dam/fom-website/teams/2023/alfa-romeo-logo.png.transform/2col/image.png",
             carImg: "https://media.formula1.com/d_team_car_fallback_image.png/content/dam/fom-website/teams/2024/kick-sauber.png.transform/4col/image.png" 
@@ -564,14 +597,8 @@ footer {
                     <div class="team-info">
                         <h2>${team.name}</h2>
                         <div class="team-drivers-list">
-                            <div class="driver-pill">
-                                <div class="driver-pill-icon">🏎️</div>
-                                <span>${team.driver1}</span>
-                            </div>
-                            <div class="driver-pill">
-                                <div class="driver-pill-icon">🏎️</div>
-                                <span>${team.driver2}</span>
-                            </div>
+                            <span class="driver-pill">${team.driver1}</span>
+                            <span class="driver-pill">${team.driver2}</span>
                         </div>
                     </div>
                     <div class="team-logo-badge">
@@ -579,8 +606,24 @@ footer {
                     </div>
                 </div>
 
-                <div class="team-car-container">
-                    <img class="team-car-img" src="${team.carImg}" alt="${team.name} Bolid">
+                <div class="team-card-bottom">
+                    <div class="team-stats">
+                        <div class="stat-box">
+                            <span>Punkty</span>
+                            <strong>${team.points}</strong>
+                        </div>
+                        <div class="stat-box">
+                            <span>Podia</span>
+                            <strong>${team.podiums}</strong>
+                        </div>
+                        <div class="stat-box">
+                            <span>Wygrane</span>
+                            <strong>${team.wins}</strong>
+                        </div>
+                    </div>
+                    <div class="team-car-container">
+                        <img class="team-car-img" src="${team.carImg}" alt="${team.name} Bolid">
+                    </div>
                 </div>
             `;
             teamsGrid.appendChild(card);
