@@ -28,11 +28,15 @@ body.light-mode {
     font-family: Arial, sans-serif;
 }
 
-body{
+/* Flexbox Layout für Sticky Footer am Bildschirmende */
+body {
     background: var(--bg-color);
     color: var(--text-color);
     transition: background 0.3s ease, color 0.3s ease;
     padding-top: 80px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Navigation - Exakte Kopie der Hauptseite */
@@ -122,11 +126,13 @@ nav a:hover {
     transform: scale(1.1);
 }
 
-/* Page Container & Rote Box Header */
+/* Page Container - Dehnt sich aus, um den Footer nach unten zu drücken */
 .sezony-page-container {
     padding: 20px 5% 50px 5%;
     max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
+    flex: 1 0 auto;
 }
 
 .page-title {
@@ -233,12 +239,14 @@ nav a:hover {
     font-size: 15px;
 }
 
-/* Footer - Exakte Kopie */
+/* Footer - Ist durch Flexbox immer am unteren Bildschirmrand */
 footer {
     background: #080808;
     color: #e0e0e0;
     padding: 40px 10% 20px 10%;
     border-top: 1px solid var(--border-color);
+    margin-top: auto;
+    width: 100%;
 }
 
 .footer-container {
@@ -439,10 +447,3 @@ footer {
 
     // Ausklapp-Funktion für die Saison Boxen
     function toggleSezon(headerElement) {
-        const card = headerElement.parentElement;
-        card.classList.toggle('open');
-    }
-</script>
-
-</body>
-</html>
