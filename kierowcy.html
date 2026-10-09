@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kierowcy - CPL F1 League</title>
-    
+
 <style>
 :root {
     --bg-color: #0d0d0d;
@@ -137,7 +137,7 @@ nav a:hover {
 
 .page-title {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 
 .page-title h1 {
@@ -149,6 +149,32 @@ nav a:hover {
 .page-title p {
     font-size: 15px;
     margin-top: 5px;
+}
+
+/* Suchbereich */
+.search-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 35px;
+}
+
+.search-input {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 14px 20px;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-input:focus {
+    border-color: #ff3131;
+    box-shadow: 0 4px 20px rgba(255, 49, 49, 0.25);
 }
 
 /* Drivers Grid */
@@ -324,6 +350,11 @@ footer {
         <p>Poznaj wszystkich kierowców rywalizujących w obecnym sezonie</p>
     </div>
 
+    <!-- Suchfeld für Namen, Nummern und Teams -->
+    <div class="search-container">
+        <input type="text" id="driverSearch" class="search-input" placeholder="Szukaj kierowcy, numeru lub zespołu...">
+    </div>
+
     <!-- Grid für Fahrerkarten -->
     <div class="drivers-grid" id="driversGrid"></div>
 </div>
@@ -380,7 +411,7 @@ footer {
         themeToggleBtn.textContent = document.body.classList.contains('light-mode') ? '🌙' : '☀️';
     });
 
-    // Alle Fahrer aus dem Bild für die aktuelle Saison
+    // Alle 22 Fahrer aus der Liste der aktuellen Saison
     const driversData = [
         { name: "Lando Norris", team: "McLaren", number: "1", points: 0, podiums: 0, wins: 0, color: "#FF8000" },
         { name: "Oscar Piastri", team: "McLaren", number: "81", points: 0, podiums: 0, wins: 0, color: "#FF8000" },
@@ -417,9 +448,15 @@ footer {
     ];
 
     const driversGrid = document.getElementById('driversGrid');
+    const driverSearch = document.getElementById('driverSearch');
 
     function renderDrivers(drivers) {
         driversGrid.innerHTML = '';
+
+        if (drivers.length === 0) {
+            driversGrid.innerHTML = '<p style="color:#888; grid-column: 1/-1; text-align:center;">Brak wyników spełniających kryteria wyszukiwania.</p>';
+            return;
+        }
 
         drivers.forEach(driver => {
             const card = document.createElement('div');
@@ -451,6 +488,19 @@ footer {
             driversGrid.appendChild(card);
         });
     }
+
+    // Live-Filter Suchfunktion
+    driverSearch.addEventListener('input', () => {
+        const query = driverSearch.value.toLowerCase().trim();
+
+        const filteredDrivers = driversData.filter(driver => {
+            return driver.name.toLowerCase().includes(query) ||
+                   driver.team.toLowerCase().includes(query) ||
+                   driver.number.toString().includes(query);
+        });
+
+        renderDrivers(filteredDrivers);
+    });
 
     // Initiales Rendern aller Fahrer
     renderDrivers(driversData);
