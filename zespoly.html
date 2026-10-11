@@ -236,17 +236,16 @@ nav a:hover {
     color: #ffffff;
 }
 
-/* Logo Badge Kreis Design */
+/* Transparenter Logo-Badge ohne grauen Hintergrund */
 .team-logo-badge {
     width: 44px;
     height: 44px;
-    background: rgba(0, 0, 0, 0.35);
+    background: rgba(0, 0, 0, 0.25);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(255,255,255,0.25);
-    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     flex-shrink: 0;
     overflow: hidden;
     padding: 6px;
@@ -257,8 +256,9 @@ nav a:hover {
     height: 100%;
     object-fit: contain;
     border-radius: 50%;
-    mix-blend-mode: multiply; /* Blendet weiße/helle Hintergründe nahtlos aus */
-    filter: brightness(1.1) contrast(1.1);
+    /* Entfernt dunkle/graue Kasten-Hintergründe und färbt das Logo sauber weiß/hell */
+    filter: brightness(0) invert(1);
+    opacity: 0.9;
 }
 
 .team-card-bottom {
