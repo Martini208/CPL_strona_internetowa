@@ -236,7 +236,7 @@ nav a:hover {
     color: #ffffff;
 }
 
-/* Logo Kreis Badge */
+/* Äußerer halbtransparenter Kreis */
 .team-logo-badge {
     width: 46px;
     height: 46px;
@@ -248,17 +248,20 @@ nav a:hover {
     border: 1px solid rgba(255, 255, 255, 0.25);
     backdrop-filter: blur(4px);
     flex-shrink: 0;
-    overflow: hidden;
-    padding: 6px;
+    padding: 7px;
 }
 
-.team-logo-badge img {
+/* Schablonen-Maskierung: Schneidet jeden Kasten/Hintergrund ab und färbt das Logo reinweiß */
+.team-logo-mask {
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    border-radius: 50%;
-    /* Blendet den schwarzen Bildhintergrund nahtlos aus und stellt das Logo frei */
-    mix-blend-mode: screen;
+    background-color: #ffffff;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
 }
 
 .team-card-bottom {
@@ -606,7 +609,7 @@ footer {
                         </div>
                     </div>
                     <div class="team-logo-badge">
-                        <img src="${team.logo}" alt="${team.name} Logo" onerror="this.style.display='none'">
+                        <div class="team-logo-mask" style="-webkit-mask-image: url('${team.logo}'); mask-image: url('${team.logo}');"></div>
                     </div>
                 </div>
                 <div class="team-card-bottom">
