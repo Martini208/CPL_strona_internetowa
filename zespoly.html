@@ -236,19 +236,20 @@ nav a:hover {
     color: #ffffff;
 }
 
-/* Transparenter Logo-Badge ohne grauen Hintergrund */
+/* Kreis Design für Logos */
 .team-logo-badge {
     width: 44px;
     height: 44px;
-    background: rgba(0, 0, 0, 0.25);
+    background: rgba(0, 0, 0, 0.35);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(4px);
     flex-shrink: 0;
     overflow: hidden;
-    padding: 6px;
+    padding: 5px;
 }
 
 .team-logo-badge img {
@@ -256,9 +257,16 @@ nav a:hover {
     height: 100%;
     object-fit: contain;
     border-radius: 50%;
-    /* Entfernt dunkle/graue Kasten-Hintergründe und färbt das Logo sauber weiß/hell */
-    filter: brightness(0) invert(1);
-    opacity: 0.9;
+}
+
+/* Spezifische Einpassung: Blendet schwarze/dunkle Bildränder aus */
+.team-logo-badge img.blend-screen {
+    mix-blend-mode: screen;
+}
+
+/* Spezifische Einpassung: Blendet weiße/helle Bildränder aus */
+.team-logo-badge img.blend-multiply {
+    mix-blend-mode: multiply;
 }
 
 .team-card-bottom {
@@ -485,6 +493,7 @@ footer {
             points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #13ca9d 0%, #089a77 100%)", 
             logo: "https://martini208.github.io/CPL-/Mercedes.jpg",
+            logoBlend: "blend-screen",
             carImg: "https://martini208.github.io/CPL-/Bolid_Mercedes.png" 
         },
         { 
@@ -494,6 +503,7 @@ footer {
             points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #d30623 0%, #a10018 100%)", 
             logo: "https://martini208.github.io/CPL-/Scuderia_Ferrari_Logo.svg.png",
+            logoBlend: "",
             carImg: "https://martini208.github.io/CPL-/Bolid_Ferrari.png" 
         },
         { 
@@ -503,6 +513,7 @@ footer {
             points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #e67300 0%, #bd5900 100%)", 
             logo: "https://martini208.github.io/CPL-/Mclaren.jpg",
+            logoBlend: "blend-screen",
             carImg: "https://martini208.github.io/CPL-/Bolid_Mclaren.png" 
         },
         { 
@@ -512,6 +523,7 @@ footer {
             points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #2c63c6 0%, #173d87 100%)", 
             logo: "https://martini208.github.io/CPL-/Red-Bull-Logo.png",
+            logoBlend: "",
             carImg: "https://martini208.github.io/CPL-/Bolid_Red_Bull.png" 
         },
         { 
@@ -521,6 +533,7 @@ footer {
             points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #4872f2 0%, #2948b8 100%)", 
             logo: "https://martini208.github.io/CPL-/Visa_cash.png",
+            logoBlend: "",
             carImg: "https://martini208.github.io/CPL-/Bolid_Visa_Cash.png" 
         },
         { 
@@ -530,6 +543,7 @@ footer {
             points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #0093c9 0%, #006087 100%)", 
             logo: "https://martini208.github.io/CPL-/Alpine.png",
+            logoBlend: "",
             carImg: "https://martini208.github.io/CPL-/Bolid_Alpine.png" 
         },
         { 
@@ -539,6 +553,7 @@ footer {
             points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #d3d7db 0%, #9ba1a6 100%)", 
             logo: "https://martini208.github.io/CPL-/haas.png",
+            logoBlend: "",
             carImg: "https://martini208.github.io/CPL-/Bolid_Haas.png" 
         },
         { 
@@ -548,6 +563,7 @@ footer {
             points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #e93309 0%, #b32100 100%)", 
             logo: "https://martini208.github.io/CPL-/Audi.jpg",
+            logoBlend: "blend-screen",
             carImg: "https://martini208.github.io/CPL-/Bolid_Audi.png" 
         },
         { 
@@ -557,6 +573,7 @@ footer {
             points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #1852c0 0%, #0d317b 100%)", 
             logo: "https://martini208.github.io/CPL-/Logo_Williams_F1.png",
+            logoBlend: "",
             carImg: "https://martini208.github.io/CPL-/Bolid_Williams.png" 
         },
         { 
@@ -566,6 +583,7 @@ footer {
             points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #228b61 0%, #11573c 100%)", 
             logo: "https://martini208.github.io/CPL-/Aston%20Martin.jpg",
+            logoBlend: "blend-screen",
             carImg: "https://martini208.github.io/CPL-/Bolid_Aston.png" 
         },
         { 
@@ -575,6 +593,7 @@ footer {
             points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #bbbdbf 0%, #838689 100%)", 
             logo: "https://martini208.github.io/CPL-/cadillac-formula-1-team-logo-png_seeklogo-618218.png",
+            logoBlend: "",
             carImg: "https://martini208.github.io/CPL-/Bolid_Cadillac.png" 
         }
     ];
@@ -606,7 +625,7 @@ footer {
                         </div>
                     </div>
                     <div class="team-logo-badge">
-                        <img src="${team.logo}" alt="${team.name} Logo" onerror="this.style.display='none'">
+                        <img class="${team.logoBlend}" src="${team.logo}" alt="${team.name} Logo" onerror="this.style.display='none'">
                     </div>
                 </div>
                 <div class="team-card-bottom">
