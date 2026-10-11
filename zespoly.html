@@ -190,7 +190,7 @@ nav a:hover {
     overflow: hidden;
     position: relative;
     padding: 22px 24px;
-    min-height: 230px;
+    min-height: 250px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -263,7 +263,7 @@ nav a:hover {
     align-items: flex-end;
     margin-top: 15px;
     z-index: 2;
-    gap: 10px;
+    gap: 15px;
 }
 
 /* Stats Boxen */
@@ -295,17 +295,18 @@ nav a:hover {
     color: #ffffff;
 }
 
-/* Auto Grafikbereich */
+/* Auto Grafikbereich - Größer skaliert & optimal eingepasst */
 .team-car-container {
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
-    max-width: 55%;
+    max-width: 60%;
+    overflow: hidden;
 }
 
 .team-car-img {
-    max-height: 55px;
-    max-width: 220px;
+    max-height: 80px;
+    max-width: 280px;
     width: 100%;
     object-fit: contain;
     filter: drop-shadow(0 6px 8px rgba(0,0,0,0.6));
