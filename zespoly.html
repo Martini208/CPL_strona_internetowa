@@ -647,9 +647,16 @@ footer {
             teamSearch.addEventListener('input', () => {
                 const query = teamSearch.value.toLowerCase().trim();
                 const filteredTeams = teamsData.filter(team => {
-                    return team.name.toLowerCase().includes(query) ||
-                           team.driver1.toLowerCase().includes(query) ||
-                           team.driver2.toLowerCase().includes(query);
+                    // Prüft, ob Teamname oder einzelne Namensteile (Vor-/Nachname) mit dem Suchbegriff beginnen
+                    const nameStarts = team.name.toLowerCase().startsWith(query);
+                    
+                    const d1Parts = team.driver1.toLowerCase().split(' ');
+                    const d1Starts = d1Parts.some(part => part.startsWith(query));
+
+                    const d2Parts = team.driver2.toLowerCase().split(' ');
+                    const d2Starts = d2Parts.some(part => part.startsWith(query));
+
+                    return nameStarts || d1Starts || d2Starts;
                 });
                 renderTeams(filteredTeams);
             });
