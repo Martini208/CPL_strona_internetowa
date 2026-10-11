@@ -480,7 +480,7 @@ footer {
         themeToggleBtn.textContent = document.body.classList.contains('light-mode') ? '🌙' : '☀️';
     });
 
-    // F1 Teams Data mit Punkty, Podia und Wygrane
+    // F1 Teams Data mit deinen eigenen Boliden-URLs
     const teamsData = [
         { 
             name: "Mercedes", 
@@ -489,7 +489,7 @@ footer {
             points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #00A19C 0%, #004D49 100%)", 
             logo: "https://media.formula1.com/image/upload/v1677244984/content/dam/fom-website/teams/2023/mercedes-logo.png.transform/2col/image.png",
-            carImg: "https://media.formula1.com/d_team_car_fallback_image.png/content/dam/fom-website/teams/2024/mercedes.png.transform/4col/image.png" 
+            carImg: "https://martini208.github.io/CPL-/Bolid_Mercedes.png" 
         },
         { 
             name: "Ferrari", 
@@ -498,7 +498,7 @@ footer {
             points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #E80020 0%, #800010 100%)", 
             logo: "https://media.formula1.com/image/upload/v1677244984/content/dam/fom-website/teams/2023/ferrari-logo.png.transform/2col/image.png",
-            carImg: "https://media.formula1.com/d_team_car_fallback_image.png/content/dam/fom-website/teams/2024/ferrari.png.transform/4col/image.png" 
+            carImg: "https://martini208.github.io/CPL-/Bolid_Ferrari.png" 
         },
         { 
             name: "McLaren", 
@@ -507,7 +507,7 @@ footer {
             points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #FF8000 0%, #B35900 100%)", 
             logo: "https://media.formula1.com/image/upload/v1677244984/content/dam/fom-website/teams/2023/mclaren-logo.png.transform/2col/image.png",
-            carImg: "https://media.formula1.com/d_team_car_fallback_image.png/content/dam/fom-website/teams/2024/mclaren.png.transform/4col/image.png" 
+            carImg: "https://martini208.github.io/CPL-/Bolid_Mclaren.png" 
         },
         { 
             name: "Red Bull Racing", 
@@ -516,7 +516,7 @@ footer {
             points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #1E41B0 0%, #0D1C4E 100%)", 
             logo: "https://media.formula1.com/image/upload/v1677244985/content/dam/fom-website/teams/2023/red-bull-racing-logo.png.transform/2col/image.png",
-            carImg: "https://media.formula1.com/d_team_car_fallback_image.png/content/dam/fom-website/teams/2024/red-bull-racing.png.transform/4col/image.png" 
+            carImg: "https://martini208.github.io/CPL-/Bolid_Red_Bull.png" 
         },
         { 
             name: "Racing Bulls", 
@@ -525,7 +525,7 @@ footer {
             points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #2B4562 0%, #152231 100%)", 
             logo: "https://media.formula1.com/image/upload/v1677244984/content/dam/fom-website/teams/2023/alphatauri-logo.png.transform/2col/image.png",
-            carImg: "https://media.formula1.com/d_team_car_fallback_image.png/content/dam/fom-website/teams/2024/rb.png.transform/4col/image.png" 
+            carImg: "https://martini208.github.io/CPL-/Bolid_Visa_Cash.png" 
         },
         { 
             name: "Alpine", 
@@ -534,7 +534,7 @@ footer {
             points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #0082C6 0%, #004163 100%)", 
             logo: "https://media.formula1.com/image/upload/v1677244984/content/dam/fom-website/teams/2023/alpine-logo.png.transform/2col/image.png",
-            carImg: "https://media.formula1.com/d_team_car_fallback_image.png/content/dam/fom-website/teams/2024/alpine.png.transform/4col/image.png" 
+            carImg: "https://martini208.github.io/CPL-/Bolid_Alpine.png" 
         },
         { 
             name: "Aston Martin", 
@@ -543,7 +543,7 @@ footer {
             points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #00594F 0%, #002B27 100%)", 
             logo: "https://media.formula1.com/image/upload/v1677244984/content/dam/fom-website/teams/2023/aston-martin-logo.png.transform/2col/image.png",
-            carImg: "https://media.formula1.com/d_team_car_fallback_image.png/content/dam/fom-website/teams/2024/aston-martin.png.transform/4col/image.png" 
+            carImg: "https://martini208.github.io/CPL-/Bolid_Aston.png" 
         },
         { 
             name: "Williams", 
@@ -552,7 +552,7 @@ footer {
             points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #00A0DE 0%, #004C6A 100%)", 
             logo: "https://media.formula1.com/image/upload/v1677244984/content/dam/fom-website/teams/2023/williams-logo.png.transform/2col/image.png",
-            carImg: "https://media.formula1.com/d_team_car_fallback_image.png/content/dam/fom-website/teams/2024/williams.png.transform/4col/image.png" 
+            carImg: "https://martini208.github.io/CPL-/Bolid_Williams.png" 
         },
         { 
             name: "Haas F1 Team", 
@@ -561,7 +561,7 @@ footer {
             points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #B6BABD 0%, #525558 100%)", 
             logo: "https://media.formula1.com/image/upload/v1677244984/content/dam/fom-website/teams/2023/haas-f1-team-logo.png.transform/2col/image.png",
-            carImg: "https://media.formula1.com/d_team_car_fallback_image.png/content/dam/fom-website/teams/2024/haas.png.transform/4col/image.png" 
+            carImg: "https://martini208.github.io/CPL-/Bolid_Haas.png" 
         },
         { 
             name: "Audi Revolut F1", 
@@ -570,7 +570,16 @@ footer {
             points: 0, podiums: 0, wins: 0,
             bgGradient: "linear-gradient(135deg, #52E252 0%, #1D631D 100%)", 
             logo: "https://media.formula1.com/image/upload/v1677244984/content/dam/fom-website/teams/2023/alfa-romeo-logo.png.transform/2col/image.png",
-            carImg: "https://media.formula1.com/d_team_car_fallback_image.png/content/dam/fom-website/teams/2024/kick-sauber.png.transform/4col/image.png" 
+            carImg: "https://martini208.github.io/CPL-/Bolid_Audi.png" 
+        },
+        { 
+            name: "Cadillac", 
+            driver1: "Sergio PÉRÈZ", 
+            driver2: "Valtteri BOTTAS", 
+            points: 0, podiums: 0, wins: 0,
+            bgGradient: "linear-gradient(135deg, #D1AB61 0%, #5B4823 100%)", 
+            logo: "https://media.formula1.com/image/upload/v1677244984/content/dam/fom-website/teams/2023/haas-f1-team-logo.png.transform/2col/image.png",
+            carImg: "https://martini208.github.io/CPL-/Bolid_Cadillac.png" 
         }
     ];
 
