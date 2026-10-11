@@ -21,14 +21,13 @@ body.light-mode {
     --border-color: #e0e0e0;
 }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     font-family: Arial, sans-serif;
 }
 
-/* Sticky Footer Layout */
 body {
     background: var(--bg-color);
     color: var(--text-color);
@@ -126,7 +125,7 @@ nav a:hover {
     transform: scale(1.1);
 }
 
-/* Page Container */
+/* Container */
 .zespoly-page-container {
     padding: 20px 5% 50px 5%;
     max-width: 1400px;
@@ -151,7 +150,7 @@ nav a:hover {
     margin-top: 5px;
 }
 
-/* Suchbereich */
+/* Suche */
 .search-container {
     display: flex;
     justify-content: center;
@@ -177,7 +176,7 @@ nav a:hover {
     box-shadow: 0 4px 20px rgba(255, 49, 49, 0.25);
 }
 
-/* Teams Grid Nebeneinander (2 Spalten auf Desktop) */
+/* Grid Layout (2-Spaltig) */
 .teams-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -195,7 +194,7 @@ nav a:hover {
     flex-direction: column;
     justify-content: space-between;
     box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     border: 1px solid rgba(255,255,255,0.1);
 }
 
@@ -217,7 +216,6 @@ nav a:hover {
     color: #ffffff;
     text-shadow: 0 2px 4px rgba(0,0,0,0.5);
     margin-bottom: 12px;
-    letter-spacing: -0.5px;
 }
 
 .team-drivers-list {
@@ -226,7 +224,6 @@ nav a:hover {
     flex-wrap: wrap;
 }
 
-/* Nur Namen ohne Bilder */
 .driver-pill {
     background: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(6px);
@@ -256,7 +253,6 @@ nav a:hover {
     object-fit: contain;
 }
 
-/* Auto & Stats Unterer Bereich */
 .team-card-bottom {
     display: flex;
     justify-content: space-between;
@@ -266,7 +262,7 @@ nav a:hover {
     gap: 15px;
 }
 
-/* Stats Boxen */
+/* Stats */
 .team-stats {
     display: flex;
     gap: 12px;
@@ -295,21 +291,19 @@ nav a:hover {
     color: #ffffff;
 }
 
-/* Auto Grafikbereich - Ohne Kasten/Schatten-Rand */
+/* Boliden-Bilder */
 .team-car-container {
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
     max-width: 60%;
-    overflow: hidden;
 }
 
 .team-car-img {
-    max-height: 80px;
-    max-width: 280px;
+    max-height: 75px;
+    max-width: 260px;
     width: 100%;
     object-fit: contain;
-    filter: none; /* Schatten/Kasten-Rand entfernt */
     transition: transform 0.3s ease;
 }
 
@@ -317,7 +311,6 @@ nav a:hover {
     transform: translateX(-4px) scale(1.04);
 }
 
-/* Background Pattern */
 .team-card-bg-pattern {
     position: absolute;
     inset: 0;
@@ -394,7 +387,6 @@ footer {
     .team-car-container { max-width: 100%; width: 100%; justify-content: center; }
 }
 </style>
-
 </head>
 <body>
 
@@ -424,12 +416,10 @@ footer {
         <p>Znajdź aktualne zespoły Formuły 1 i ich kierowców w Sezonie 2026</p>
     </div>
 
-    <!-- Suchfeld -->
     <div class="search-container">
         <input type="text" id="teamSearch" class="search-input" placeholder="Szukaj zespołu lub kierowcy...">
     </div>
 
-    <!-- Grid Nebeneinander -->
     <div class="teams-grid" id="teamsGrid"></div>
 </div>
 
@@ -472,3 +462,54 @@ footer {
         <div class="footer-bottom-links">
             <a href="index.html#polityka-prywatnosci">Polityka Prywatności</a>
             <a href="index.html#regulamin">Regulamin</a>
+            <a href="index.html#kontakt">Kontakt</a>
+        </div>
+    </div>
+</footer>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                document.body.classList.toggle('light-mode');
+                themeToggleBtn.textContent = document.body.classList.contains('light-mode') ? '🌙' : '☀️';
+            });
+        }
+
+        const teamsData = [
+            { 
+                name: "Mercedes", 
+                driver1: "George RUSSELL", 
+                driver2: "Kimi ANTONELLI", 
+                points: 0, podiums: 0, wins: 0,
+                bgGradient: "linear-gradient(135deg, #00A19C 0%, #004D49 100%)", 
+                logo: "https://media.formula1.com/image/upload/v1677244984/content/dam/fom-website/teams/2023/mercedes-logo.png.transform/2col/image.png",
+                carImg: "https://martini208.github.io/CPL-/Bolid_Mercedes.png" 
+            },
+            { 
+                name: "Ferrari", 
+                driver1: "Charles LECLERC", 
+                driver2: "Lewis HAMILTON", 
+                points: 0, podiums: 0, wins: 0,
+                bgGradient: "linear-gradient(135deg, #E80020 0%, #800010 100%)", 
+                logo: "https://media.formula1.com/image/upload/v1677244984/content/dam/fom-website/teams/2023/ferrari-logo.png.transform/2col/image.png",
+                carImg: "https://martini208.github.io/CPL-/Bolid_Ferrari.png" 
+            },
+            { 
+                name: "McLaren", 
+                driver1: "Lando NORRIS", 
+                driver2: "Oscar PIASTRI", 
+                points: 0, podiums: 0, wins: 0,
+                bgGradient: "linear-gradient(135deg, #FF8000 0%, #B35900 100%)", 
+                logo: "https://media.formula1.com/image/upload/v1677244984/content/dam/fom-website/teams/2023/mclaren-logo.png.transform/2col/image.png",
+                carImg: "https://martini208.github.io/CPL-/Bolid_Mclaren.png" 
+            },
+            { 
+                name: "Red Bull Racing", 
+                driver1: "Max VERSTAPPEN", 
+                driver2: "Isack HADJAR", 
+                points: 0, podiums: 0, wins: 0,
+                bgGradient: "linear-gradient(135deg, #1E41B0 0%, #0D1C4E 100%)", 
+                logo: "https://media.formula1.com/image/upload/v1677244985/content/dam/fom-website/teams/2023/red-bull-racing-logo.png.transform/2col/image.png",
+                carImg: "
