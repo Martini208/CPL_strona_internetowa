@@ -215,7 +215,7 @@ nav a:hover {
     font-size: 26px;
     font-weight: 800;
     color: #ffffff;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.4);
     margin-bottom: 12px;
 }
 
@@ -226,11 +226,11 @@ nav a:hover {
 }
 
 .driver-pill {
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.35);
     backdrop-filter: blur(6px);
     padding: 5px 12px;
     border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     font-size: 13px;
     font-weight: bold;
     color: #ffffff;
@@ -239,12 +239,12 @@ nav a:hover {
 .team-logo-badge {
     width: 42px;
     height: 42px;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.35);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.25);
     backdrop-filter: blur(4px);
     flex-shrink: 0;
 }
@@ -272,7 +272,7 @@ nav a:hover {
     backdrop-filter: blur(6px);
     padding: 8px 14px;
     border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     flex-shrink: 0;
 }
 
@@ -283,7 +283,7 @@ nav a:hover {
 .stat-box span {
     display: block;
     font-size: 10px;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.75);
     text-transform: uppercase;
     font-weight: bold;
 }
@@ -317,7 +317,7 @@ nav a:hover {
 .team-card-bg-pattern {
     position: absolute;
     inset: 0;
-    background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
     background-size: 12px 12px;
     opacity: 0.3;
     pointer-events: none;
@@ -471,13 +471,14 @@ footer {
 </footer>
 
 <script>
+    // F1 Teams Data mit exakten Farbverläufen aus deinem Referenzbild
     const teamsData = [
         { 
             name: "Mercedes", 
             driver1: "George RUSSELL", 
             driver2: "Kimi ANTONELLI", 
             points: 0, podiums: 0, wins: 0,
-            bgGradient: "linear-gradient(135deg, #00A19C 0%, #004D49 100%)", 
+            bgGradient: "linear-gradient(135deg, #13ca9d 0%, #089a77 100%)", 
             logo: "https://images.fineartamerica.com/images/artworkimages/mediumlarge/3/mercedes-amg-petronas-formula-one-team-logo-transparent.png",
             carImg: "https://martini208.github.io/CPL-/Bolid_Mercedes.png" 
         },
@@ -486,7 +487,7 @@ footer {
             driver1: "Charles LECLERC", 
             driver2: "Lewis HAMILTON", 
             points: 0, podiums: 0, wins: 0,
-            bgGradient: "linear-gradient(135deg, #E80020 0%, #800010 100%)", 
+            bgGradient: "linear-gradient(135deg, #d30623 0%, #a10018 100%)", 
             logo: "https://upload.wikimedia.org/wikipedia/de/c/c0/Scuderia_Ferrari_Logo.svg",
             carImg: "https://martini208.github.io/CPL-/Bolid_Ferrari.png" 
         },
@@ -495,7 +496,7 @@ footer {
             driver1: "Lando NORRIS", 
             driver2: "Oscar PIASTRI", 
             points: 0, podiums: 0, wins: 0,
-            bgGradient: "linear-gradient(135deg, #FF8000 0%, #B35900 100%)", 
+            bgGradient: "linear-gradient(135deg, #e67300 0%, #bd5900 100%)", 
             logo: "https://upload.wikimedia.org/wikipedia/en/6/66/McLaren_Racing_logo.svg",
             carImg: "https://martini208.github.io/CPL-/Bolid_Mclaren.png" 
         },
@@ -504,7 +505,7 @@ footer {
             driver1: "Max VERSTAPPEN", 
             driver2: "Isack HADJAR", 
             points: 0, podiums: 0, wins: 0,
-            bgGradient: "linear-gradient(135deg, #1E41B0 0%, #0D1C4E 100%)", 
+            bgGradient: "linear-gradient(135deg, #2c63c6 0%, #173d87 100%)", 
             logo: "https://upload.wikimedia.org/wikipedia/en/c/c4/Red_Bull_Racing_logo.svg",
             carImg: "https://martini208.github.io/CPL-/Bolid_Red_Bull.png" 
         },
@@ -513,7 +514,7 @@ footer {
             driver1: "Liam LAWSON", 
             driver2: "Arvid LINDBLAD", 
             points: 0, podiums: 0, wins: 0,
-            bgGradient: "linear-gradient(135deg, #2B4562 0%, #152231 100%)", 
+            bgGradient: "linear-gradient(135deg, #4872f2 0%, #2948b8 100%)", 
             logo: "https://upload.wikimedia.org/wikipedia/commons/2/2b/RB_Formula_One_Team_logo.svg",
             carImg: "https://martini208.github.io/CPL-/Bolid_Visa_Cash.png" 
         },
@@ -522,52 +523,52 @@ footer {
             driver1: "Pierre GASLY", 
             driver2: "Franco COLAPINTO", 
             points: 0, podiums: 0, wins: 0,
-            bgGradient: "linear-gradient(135deg, #0082C6 0%, #004163 100%)", 
+            bgGradient: "linear-gradient(135deg, #0093c9 0%, #006087 100%)", 
             logo: "https://upload.wikimedia.org/wikipedia/commons/7/7e/Alpine_F1_Team_Logo.svg",
             carImg: "https://martini208.github.io/CPL-/Bolid_Alpine.png" 
-        },
-        { 
-            name: "Aston Martin", 
-            driver1: "Fernando ALONSO", 
-            driver2: "Lance STROLL", 
-            points: 0, podiums: 0, wins: 0,
-            bgGradient: "linear-gradient(135deg, #00594F 0%, #002B27 100%)", 
-            logo: "https://upload.wikimedia.org/wikipedia/en/c/bd/Aston_Martin_Aramco_Cognizant_F1_Team_Logo.svg",
-            carImg: "https://martini208.github.io/CPL-/Bolid_Aston.png" 
-        },
-        { 
-            name: "Williams", 
-            driver1: "Carlos SAINZ", 
-            driver2: "Alexander ALBON", 
-            points: 0, podiums: 0, wins: 0,
-            bgGradient: "linear-gradient(135deg, #00A0DE 0%, #004C6A 100%)", 
-            logo: "https://upload.wikimedia.org/wikipedia/commons/8/82/Williams_Racing_2020_Logo.svg",
-            carImg: "https://martini208.github.io/CPL-/Bolid_Williams.png" 
         },
         { 
             name: "Haas F1 Team", 
             driver1: "Esteban OCON", 
             driver2: "Oliver BEARMAN", 
             points: 0, podiums: 0, wins: 0,
-            bgGradient: "linear-gradient(135deg, #B6BABD 0%, #525558 100%)", 
+            bgGradient: "linear-gradient(135deg, #d3d7db 0%, #9ba1a6 100%)", 
             logo: "https://upload.wikimedia.org/wikipedia/commons/d/d4/Haas_F1_Team_logo.svg",
             carImg: "https://martini208.github.io/CPL-/Bolid_Haas.png" 
         },
         { 
-            name: "Audi Revolut F1", 
+            name: "Audi", 
             driver1: "Nico HÜLKENBERG", 
             driver2: "Gabriel BORTOLETO", 
             points: 0, podiums: 0, wins: 0,
-            bgGradient: "linear-gradient(135deg, #52E252 0%, #1D631D 100%)", 
+            bgGradient: "linear-gradient(135deg, #e93309 0%, #b32100 100%)", 
             logo: "https://upload.wikimedia.org/wikipedia/commons/9/92/Audi-Logo_2016.svg",
             carImg: "https://martini208.github.io/CPL-/Bolid_Audi.png" 
+        },
+        { 
+            name: "Williams", 
+            driver1: "Carlos SAINZ", 
+            driver2: "Alexander ALBON", 
+            points: 0, podiums: 0, wins: 0,
+            bgGradient: "linear-gradient(135deg, #1852c0 0%, #0d317b 100%)", 
+            logo: "https://upload.wikimedia.org/wikipedia/commons/8/82/Williams_Racing_2020_Logo.svg",
+            carImg: "https://martini208.github.io/CPL-/Bolid_Williams.png" 
+        },
+        { 
+            name: "Aston Martin", 
+            driver1: "Fernando ALONSO", 
+            driver2: "Lance STROLL", 
+            points: 0, podiums: 0, wins: 0,
+            bgGradient: "linear-gradient(135deg, #228b61 0%, #11573c 100%)", 
+            logo: "https://upload.wikimedia.org/wikipedia/en/c/bd/Aston_Martin_Aramco_Cognizant_F1_Team_Logo.svg",
+            carImg: "https://martini208.github.io/CPL-/Bolid_Aston.png" 
         },
         { 
             name: "Cadillac", 
             driver1: "Sergio PÉRÈZ", 
             driver2: "Valtteri BOTTAS", 
             points: 0, podiums: 0, wins: 0,
-            bgGradient: "linear-gradient(135deg, #D1AB61 0%, #5B4823 100%)", 
+            bgGradient: "linear-gradient(135deg, #bbbdbf 0%, #838689 100%)", 
             logo: "https://upload.wikimedia.org/wikipedia/commons/a/a2/Cadillac_logo.svg",
             carImg: "https://martini208.github.io/CPL-/Bolid_Cadillac.png" 
         }
@@ -652,7 +653,6 @@ footer {
         renderTeams(teamsData);
     }
 
-    // Ausführung garantieren
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initPage);
     } else {
