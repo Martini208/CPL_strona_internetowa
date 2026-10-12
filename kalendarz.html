@@ -117,7 +117,6 @@ nav a:hover {
     gap: 15px;
 }
 
-/* Alle 5 Social-Media-Icons in der Navigationsleiste */
 .nav-socials {
     display: flex;
     align-items: center;
@@ -326,7 +325,7 @@ nav a:hover {
     text-overflow: ellipsis;
 }
 
-/* Event Liste */
+/* Event Liste im ursprünglichen Design */
 .events-section-title {
     color: #ff3131;
     margin-bottom: 16px;
@@ -366,10 +365,11 @@ nav a:hover {
     height: 24px;
     border-radius: 3px;
     object-fit: cover;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
 .event-title h3 { font-size: 16px; }
-.event-title p { font-size: 13px; color: #888; }
+.event-title p { font-size: 13px; color: #aaa; margin-top: 3px; }
 .event-date { font-weight: bold; font-size: 15px; }
 
 /* Footer */
@@ -437,7 +437,6 @@ footer {
     </div>
     
     <div class="nav-right">
-        <!-- Alle 5 Social Icons vollständig in der Navigationsleiste -->
         <div class="nav-socials">
             <a href="https://discord.com/invite/szt7rHnFSj" target="_blank" class="nav-social-icon" title="Discord">
                 <svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
@@ -544,12 +543,44 @@ footer {
 
     let allRacesData = [];
     let activeSplit = "All"; // "All", "Split 1", "Split 2"
-    let currentDate = new Date(2026, 9, 1); // Startet im Październik 2026
+    let currentDate = new Date(2026, 9, 1); // Październik 2026
 
     const monthNamesPl = [
         "Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", 
         "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"
     ];
+
+    // Zuordnung von Ländernamen/Strecken zu Flaggen-Ländercodes
+    const countryToFlagCode = {
+        'australia': 'au',
+        'singapur': 'sg',
+        'chiny': 'cn',
+        'austria': 'at',
+        'emilia romagna': 'it',
+        'włochy': 'it',
+        'wlochy': 'it',
+        'hiszpania': 'es',
+        'monako': 'mc',
+        'kanada': 'ca',
+        'wielka brytania': 'gb',
+        'wegry': 'hu',
+        'węgry': 'hu',
+        'belgia': 'be',
+        'holandia': 'nl',
+        'azerbejdżan': 'az',
+        'azerbejdzan': 'az',
+        'usa': 'us',
+        'stany zjednoczone': 'us',
+        'meksyk': 'mx',
+        'brazylia': 'br',
+        'las vegas': 'us',
+        'katar': 'qa',
+        'abu dhabi': 'ae',
+        'arabia saudyjska': 'sa',
+        'bahrajn': 'bh',
+        'japonia': 'jp',
+        'miami': 'us'
+    };
 
     const themeToggleBtn = document.getElementById('theme-toggle');
     themeToggleBtn.addEventListener('click', () => {
@@ -578,7 +609,6 @@ footer {
         return result;
     }
 
-    // Wandelt jedes Datum zuverlässig in YYYY-MM-DD um (unterstützt 2.12.2026 und 02.12.2026)
     function toISODate(dStr) {
         if (!dStr) return '';
         const p = dStr.trim().split('.');
@@ -589,6 +619,22 @@ footer {
             return `${year}-${month}-${day}`;
         }
         return '';
+    }
+
+    // Hilfsfunktion zur dynamischen Ermittlung der Flaggen-URL
+    function getFlagUrl(race) {
+        let rawCode = race.Flaga || race.Flag || race.Kraj || '';
+        rawCode = rawCode.trim().toLowerCase();
+
+        if (countryToFlagCode[rawCode]) {
+            return `https://flagcdn.com/w80/${countryToFlagCode[rawCode]}.png`;
+        }
+
+        if (rawCode.length === 2) {
+            return `https://flagcdn.com/w80/${rawCode}.png`;
+        }
+
+        return 'https://flagcdn.com/w80/un.png';
     }
 
     async function fetchCalendarData() {
@@ -627,12 +673,12 @@ footer {
 
         const todayStr = new Date().toISOString().split('T')[0];
 
-        // Bestimme das nächste anstehende Rennen aus allen Rennen
+        // Global nächstes Rennen finden
         const sortedAll = [...allRacesData].sort((a,b) => toISODate(a.Data).localeCompare(toISODate(b.Data)));
         const upcoming = sortedAll.filter(r => toISODate(r.Data) >= todayStr);
         const nextRaceObject = upcoming.length > 0 ? upcoming[0] : null;
 
-        // Filter anwenden (Alle vs. Split 1 vs. Split 2)
+        // Filtere nach ausgewähltem Split-Tab
         const filteredRaces = allRacesData.filter(r => {
             if (activeSplit === "All") return true;
             return r.Split && r.Split.trim().toLowerCase() === activeSplit.toLowerCase();
@@ -658,7 +704,6 @@ footer {
             const formattedDay = String(day).padStart(2, '0');
             const isoDateString = `${year}-${formattedMonth}-${formattedDay}`;
 
-            // VERBESSERT: Vergleicht das Datum exakt per ISO-Standard
             const racesOnDay = filteredRaces.filter(e => toISODate(e.Data) === isoDateString);
 
             if (racesOnDay.length > 0) {
@@ -671,13 +716,11 @@ footer {
 
                 racesOnDay.forEach(race => {
                     let raceColor = "#3498db";
-                    let isNext = false;
 
                     if (nextRaceObject && race.Runda === nextRaceObject.Runda && race.Split === nextRaceObject.Split) {
                         dayStatus = "next-race";
                         race.statusClass = "next-card";
                         race.colorCode = "#2ecc71";
-                        isNext = true;
                     } else if (isoDateString < todayStr) {
                         if (dayStatus !== "next-race") dayStatus = "past-race";
                         race.statusClass = "";
@@ -691,7 +734,11 @@ footer {
                     const badge = document.createElement("div");
                     badge.classList.add("race-indicator");
 
-                    badge.textContent = activeSplit === "All" ? `${race.Split}: GP ${race.Kraj || ''}` : `GP ${race.Kraj || 'Wyścig'}`;
+                    // Nummerischer Split (z.B. "1: GP Australia" oder "2: GP Australia")
+                    let splitNum = race.Split ? race.Split.replace(/\D/g, '') : '';
+                    if (!splitNum) splitNum = '1';
+
+                    badge.textContent = activeSplit === "All" ? `${splitNum}: GP ${race.Kraj || ''}` : `GP ${race.Kraj || 'Wyścig'}`;
                     badgeList.appendChild(badge);
 
                     monthRaces.push(race);
@@ -708,8 +755,15 @@ footer {
             eventsListContainer.innerHTML = "<p style='color:#888;'>Brak wyścigów w tym miesiącu dla wybranego filtru.</p>";
         } else {
             monthRaces.forEach(race => {
-                const flagCode = race.Flaga ? race.Flaga.trim().toLowerCase() : 'un';
-                const flagUrl = `https://flagcdn.com/w80/${flagCode}.png`;
+                const flagUrl = getFlagUrl(race);
+
+                // Strecke und Format aus Google Sheets (Tor / Circuit und Format)
+                const trackName = race.Tor || race.Circuit || race.Kraj || '';
+                const formatInfo = race.Format || race.FormatWyścigu || '';
+                const subTitleText = formatInfo ? `${trackName} (${formatInfo})` : trackName;
+
+                // Split Identifikator
+                let splitDisplay = race.Split ? ` (${race.Split.replace(/\D/g, '')})` : '';
 
                 const eventCard = document.createElement("div");
                 eventCard.classList.add("event-card");
@@ -717,13 +771,13 @@ footer {
 
                 eventCard.innerHTML = `
                     <div class="event-info">
-                        <img src="${flagUrl}" alt="${race.Kraj}" class="event-flag" onerror="this.src='https://flagcdn.com/w80/un.png'">
+                        <img src="${flagUrl}" alt="${race.Kraj || ''}" class="event-flag" onerror="this.src='https://flagcdn.com/w80/un.png'">
                         <div class="event-title">
-                            <h3>Runda ${race.Runda} - GP ${race.Kraj} (${race.Split})</h3>
-                            <p>${race.Tor || ''} (${race.Format || ''})</p>
+                            <h3>Runda ${race.Runda} - GP ${race.Kraj || ''}${splitDisplay}</h3>
+                            <p>${subTitleText}</p>
                         </div>
                     </div>
-                    <div class="event-date" style="color: ${race.colorCode || '#ff3131'}">${race.Data} (${race.Czas || ''})</div>
+                    <div class="event-date" style="color: ${race.colorCode || '#ff3131'}">${race.Data} (${race.Czas || '20:00'})</div>
                 `;
                 eventsListContainer.appendChild(eventCard);
             });
