@@ -31,7 +31,7 @@ body{
     background: var(--bg-color);
     color: var(--text-color);
     transition: background 0.3s ease, color 0.3s ease;
-    padding-top: 80px; /* Perfekter Abstand für die größere Nav-Leiste */
+    padding-top: 80px;
 }
 
 /* Navigation - Exakte 1:1 Kopie der Hauptseite (Rote Box mit Transparenz) */
@@ -40,9 +40,9 @@ nav {
     top: 0;
     left: 0;
     width: 100%;
-    height: 80px; /* Größere Box */
+    height: 80px;
     background: linear-gradient(135deg, rgba(180, 40, 50, 0.60) 0%, rgba(100, 15, 25, 0.70) 100%);
-    backdrop-filter: blur(15px); /* Starker Milchglas-Effekt */
+    backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     display: flex;
     justify-content: space-between;
@@ -96,7 +96,6 @@ nav a:hover {
     color: #ffffff;
 }
 
-/* Spezieller "Zapisy" Button in der Nav */
 .nav-zapisy-btn {
     background: #ff3131 !important;
     color: white !important;
@@ -118,7 +117,6 @@ nav a:hover {
     gap: 15px;
 }
 
-/* Social Media Icons in der Leiste (Vergrößert & Deutlich sichtbar) */
 .nav-socials {
     display: flex;
     align-items: center;
@@ -192,6 +190,33 @@ nav a:hover {
 
 .page-title p {
     font-size: 15px;
+}
+
+/* Split Selection Tabs */
+.split-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.split-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 10px 24px;
+    border-radius: 30px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.split-btn.active, .split-btn:hover {
+    background: #ff3131;
+    border-color: #ff3131;
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(255, 49, 49, 0.4);
 }
 
 /* Interaktiver Kalender Box */
@@ -280,31 +305,19 @@ nav a:hover {
 .day-cell.past-race {
     border: 2px solid #ff3131;
     background: rgba(255, 49, 49, 0.15);
-    cursor: pointer;
 }
-.day-cell.past-race .race-indicator { background: #ff3131; }
-
 .day-cell.next-race {
     border: 2px solid #2ecc71;
     background: rgba(46, 204, 113, 0.15);
-    cursor: pointer;
 }
-.day-cell.next-race .race-indicator { background: #2ecc71; }
-
 .day-cell.future-race {
     border: 2px solid #3498db;
     background: rgba(52, 152, 219, 0.15);
-    cursor: pointer;
-}
-.day-cell.future-race .race-indicator { background: #3498db; }
-
-.day-cell.has-race:hover {
-    transform: scale(1.02);
 }
 
 .race-indicator {
     color: white;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: bold;
     padding: 4px 6px;
     border-radius: 4px;
@@ -341,7 +354,6 @@ nav a:hover {
 
 .event-card.next-card { border-left-color: #2ecc71; }
 .event-card.future-card { border-left-color: #3498db; }
-
 .event-card:hover { transform: translateX(4px); }
 
 .event-info {
@@ -391,58 +403,20 @@ footer {
     color: #a0a0a0;
 }
 
-.footer-col ul {
-    list-style: none;
-}
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 10px; }
+.footer-col ul li a { color: #a0a0a0; text-decoration: none; font-size: 14px; transition: color 0.2s ease; }
+.footer-col ul li a:hover { color: #ff3131; }
 
-.footer-col ul li {
-    margin-bottom: 10px;
-}
-
-.footer-col ul li a {
-    color: #a0a0a0;
-    text-decoration: none;
-    font-size: 14px;
-    transition: color 0.2s ease;
-}
-
-.footer-col ul li a:hover {
-    color: #ff3131;
-}
-
-/* Social Icons Links mit SVG Logos */
-.social-links {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-top: 10px;
-}
-
+.social-links { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
 .social-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 42px;
-    height: 42px;
-    background: #1a1a1a;
-    color: #ffffff;
-    border-radius: 50%;
-    text-decoration: none;
-    border: 1px solid var(--border-color);
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 42px; height: 42px; background: #1a1a1a; color: #ffffff;
+    border-radius: 50%; text-decoration: none; border: 1px solid var(--border-color);
     transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
 }
-
-.social-btn svg {
-    width: 20px;
-    height: 20px;
-    fill: currentColor;
-}
-
-.social-btn:hover {
-    background: #ff3131;
-    border-color: #ff3131;
-    transform: translateY(-3px);
-}
+.social-btn svg { width: 20px; height: 20px; fill: currentColor; }
+.social-btn:hover { background: #ff3131; border-color: #ff3131; transform: translateY(-3px); }
 
 .footer-bottom {
     border-top: 1px solid #1f1f1f;
@@ -457,22 +431,9 @@ footer {
     text-align: center;
 }
 
-.footer-bottom-links {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.footer-bottom-links a {
-    color: #777777;
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-.footer-bottom-links a:hover {
-    color: #ffffff;
-}
+.footer-bottom-links { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+.footer-bottom-links a { color: #777777; text-decoration: none; transition: color 0.2s ease; }
+.footer-bottom-links a:hover { color: #ffffff; }
 
 @media(max-width:900px){
     nav{ flex-direction:column; height: auto; gap:12px; padding:15px; }
@@ -482,18 +443,14 @@ footer {
     .race-indicator { font-size: 10px; padding: 2px; }
 }
 </style>
-
 </head>
 <body>
 
 <nav>
     <div class="nav-left">
-        <!-- CPL Logo ganz links -->
         <a href="index.html">
             <img class="cpl-logo-img" src="images/cpl_logo_lizard.png" alt="CPL Logo">
         </a>
-        
-        <!-- Menüpunkte -->
         <ul>
             <li><a href="kalendarz.html">Kalendarz</a></li>
             <li><a href="sezony.html">Sezony</a></li>
@@ -505,7 +462,6 @@ footer {
         </ul>
     </div>
     
-    <!-- Socials & Rechten Bereich -->
     <div class="nav-right">
         <div class="nav-socials">
             <a href="https://discord.com/invite/szt7rHnFSj" target="_blank" class="nav-social-icon" title="Discord">
@@ -513,15 +469,6 @@ footer {
             </a>
             <a href="https://www.youtube.com/@CPLeague" target="_blank" class="nav-social-icon" title="YouTube">
                 <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-            </a>
-            <a href="https://www.instagram.com/cpl_liga/" target="_blank" class="nav-social-icon" title="Instagram">
-                <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            </a>
-            <a href="https://www.facebook.com/CPLeSport" target="_blank" class="nav-social-icon" title="Facebook">
-                <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-            </a>
-            <a href="https://www.tiktok.com/@cpl_f1_league" target="_blank" class="nav-social-icon" title="TikTok">
-                <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.82.56-1.33 1.51-1.3 2.51.01.88.48 1.72 1.2 2.22 1.05.74 2.48.74 3.53-.02.82-.58 1.34-1.54 1.34-2.55.02-5.63.01-11.25.01-16.88z"/></svg>
             </a>
         </div>
         <a href="index.html#zaloguj">Zaloguj</a>
@@ -532,8 +479,14 @@ footer {
 
 <div class="calendar-page-container">
     <div class="page-title">
-        <h1>Kalendarz Wyścigów 2026</h1>
-        <p>Wybierz miesiąc, aby sprawdzić nadchodzące i minione wyścigi</p>
+        <h1>Kalendarz Wyścigów - Sezon 20</h1>
+        <p>Wybierz miesiąc i split, aby sprawdzić nadchodzące i minione wyścigi</p>
+    </div>
+
+    <!-- Split Selector Tabs -->
+    <div class="split-tabs">
+        <button class="split-btn active" onclick="switchSplit('Split 1', this)">Split 1</button>
+        <button class="split-btn" onclick="switchSplit('Split 2', this)">Split 2</button>
     </div>
 
     <!-- Interaktiver Kalender -->
@@ -555,14 +508,14 @@ footer {
         </div>
 
         <div class="calendar-days" id="calendar-days-container">
-            <!-- Dynamisch generiert durch JavaScript -->
+            <!-- Dynamisch -->
         </div>
     </div>
 
     <!-- Liste der Events -->
     <h2 class="events-section-title">Wyścigi w tym miesiącu</h2>
     <div class="events-list" id="month-events-list">
-        <!-- Dynamisch generiert durch JavaScript -->
+        <p style="color:#888;">Ładowanie danych z Google Sheets...</p>
     </div>
 </div>
 
@@ -576,8 +529,8 @@ footer {
             <h4>Nawigacja</h4>
             <ul>
                 <li><a href="kalendarz.html">Kalendarz Wyścigów</a></li>
-                <li><a href="index.html#kierowcy">Klasyfikacja Kierowców</a></li>
-                <li><a href="index.html#zespoly">Klasyfikacja Zespołów</a></li>
+                <li><a href="kierowcy.html">Klasyfikacja Kierowców</a></li>
+                <li><a href="zespoly.html">Klasyfikacja Zespołów</a></li>
                 <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSfLSj3z30_t1cdEPyULm26suCN8jpB8NOT9JsXNYE8ikeVUZg/viewform" target="_blank">Dołącz do ligi</a></li>
             </ul>
         </div>
@@ -591,34 +544,29 @@ footer {
         </div>
         <div class="footer-col">
             <h4>Social Media</h4>
-            <p style="margin-bottom: 12px;">Zaobserwuj nas w sieci:</p>
             <div class="social-links">
-                <a href="https://www.youtube.com/@CPLeague" target="_blank" class="social-btn" title="YouTube">
-                    <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                </a>
-                <a href="https://www.instagram.com/cpl_liga/" target="_blank" class="social-btn" title="Instagram">
-                    <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                </a>
-                <a href="https://www.facebook.com/CPLeSport" target="_blank" class="social-btn" title="Facebook">
-                    <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                </a>
-                <a href="https://www.tiktok.com/@cpl_f1_league" target="_blank" class="social-btn" title="TikTok">
-                    <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.82.56-1.33 1.51-1.3 2.51.01.88.48 1.72 1.2 2.22 1.05.74 2.48.74 3.53-.02.82-.58 1.34-1.54 1.34-2.55.02-5.63.01-11.25.01-16.88z"/></svg>
-                </a>
+                <a href="https://www.youtube.com/@CPLeague" target="_blank" class="social-btn" title="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
             </div>
         </div>
     </div>
     <div class="footer-bottom">
         <p>© 2026 CPL Racing League. Wszelkie prawa zastrzeżone.</p>
-        <div class="footer-bottom-links">
-            <a href="index.html#polityka-prywatnosci">Polityka Prywatności</a>
-            <a href="index.html#regulamin">Regulamin</a>
-            <a href="index.html#kontakt">Kontakt</a>
-        </div>
     </div>
 </footer>
 
 <script>
+    // Dein eingefügter Google Sheets CSV Link:
+    const CSV_URL = "https://docs.google.com/spreadsheets/d/1na_Zlv7uk9AGO3f76sqMvN5C5kT-EXnphJlTD6KKx0M//export?format=csv";
+
+    let allRacesData = [];
+    let activeSplit = "Split 1";
+    let currentDate = new Date(2026, 9, 1); // Startet im Oktober 2026 (Monat 9 = Oktober da 0-basiert)
+
+    const monthNamesPl = [
+        "Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", 
+        "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"
+    ];
+
     // Theme Toggle
     const themeToggleBtn = document.getElementById('theme-toggle');
     themeToggleBtn.addEventListener('click', () => {
@@ -626,49 +574,47 @@ footer {
         themeToggleBtn.textContent = document.body.classList.contains('light-mode') ? '🌙' : '☀️';
     });
 
-    // Renn-Kalender Daten
-    const raceEvents = [
-        { date: "2026-03-15", round: "Runda 1", name: "GP Bahrajnu", circuit: "Bahrain International Circuit", flag: "https://flagcdn.com/w80/bh.png" },
-        { date: "2026-03-29", round: "Runda 2", name: "GP Arabii Saudyjskiej", circuit: "Jeddah Corniche Circuit", flag: "https://flagcdn.com/w80/sa.png" },
-        { date: "2026-04-12", round: "Runda 3", name: "GP Australii", circuit: "Albert Park Circuit", flag: "https://flagcdn.com/w80/au.png" },
-        { date: "2026-05-10", round: "Runda 4", name: "GP Miami", circuit: "Miami International Autodrome", flag: "https://flagcdn.com/w80/us.png" },
-        { date: "2026-05-24", round: "Runda 5", name: "GP Monako", circuit: "Circuit de Monaco", flag: "https://flagcdn.com/w80/mc.png" },
-        { date: "2026-06-07", round: "Runda 6", name: "GP Hiszpanii", circuit: "Circuit de Barcelona-Catalunya", flag: "https://flagcdn.com/w80/es.png" },
-        { date: "2026-07-05", round: "Runda 7", name: "GP Wielkiej Brytanii", circuit: "Silverstone Circuit", flag: "https://flagcdn.com/w80/gb.png" },
-        { date: "2026-08-30", round: "Runda 8", name: "GP Belgii", circuit: "Circuit de Spa-Francorchamps", flag: "https://flagcdn.com/w80/be.png" },
-        { date: "2026-09-06", round: "Runda 9", name: "GP Holandii", circuit: "Circuit Zandvoort", flag: "https://flagcdn.com/w80/nl.png" },
-        { date: "2026-09-27", round: "Runda 10", name: "GP Monzy", circuit: "Autodromo Nazionale Monza", flag: "https://martini208.github.io/CPL-/italien.png" },
-        { date: "2026-10-11", round: "Runda 11", name: "GP Singapuru", circuit: "Marina Bay Street Circuit", flag: "https://flagcdn.com/w80/sg.png" },
-        { date: "2026-10-25", round: "Runda 12", name: "GP Austin", circuit: "Circuit of the Americas", flag: "https://flagcdn.com/w80/us.png" },
-        { date: "2026-11-08", round: "Runda 13", name: "GP Meksyku", circuit: "Autódromo Hermanos Rodríguez", flag: "https://flagcdn.com/w80/mx.png" },
-        { date: "2026-11-22", round: "Runda 14", name: "GP Abu Zabi", circuit: "Yas Marina Circuit", flag: "https://flagcdn.com/w80/ae.png" }
-    ];
+    // CSV Parser
+    function parseCSV(text) {
+        const lines = text.trim().split('\n');
+        const result = [];
+        const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"\$/g, ''));
 
-    const todayStr = new Date().toISOString().split('T')[0];
-    let nextRaceDate = null;
-    
-    const sortedRaces = [...raceEvents].sort((a,b) => a.date.localeCompare(b.date));
-    const upcoming = sortedRaces.filter(r => r.date >= todayStr);
-    if(upcoming.length > 0) {
-        nextRaceDate = upcoming[0].date;
+        for (let i = 1; i < lines.length; i++) {
+            if (!lines[i]) continue;
+            const currentline = lines[i].match(/(".*?"|[^",\s]+)(?=\s*,|\s*\$)/g) || lines[i].split(',');
+            const obj = {};
+            headers.forEach((header, index) => {
+                let val = currentline[index] ? currentline[index].trim() : '';
+                val = val.replace(/^"|"\$/g, '');
+                obj[header] = val;
+            });
+            result.push(obj);
+        }
+        return result;
     }
 
-    let currentDate = new Date();
-
-    const monthNamesPl = [
-        "Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", 
-        "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"
-    ];
-
-    const monthDisplay = document.getElementById("month-year-display");
-    const daysContainer = document.getElementById("calendar-days-container");
-    const eventsListContainer = document.getElementById("month-events-list");
+    async function fetchCalendarData() {
+        try {
+            const response = await fetch(CSV_URL);
+            const csvText = await response.text();
+            allRacesData = parseCSV(csvText);
+            renderCalendar();
+        } catch (error) {
+            console.error("Fehler beim Laden der CSV:", error);
+            document.getElementById('month-events-list').innerHTML = 
+                '<p style="color:#ff3131;">Nie udało się załadować kalendarza z Google Sheets.</p>';
+        }
+    }
 
     function renderCalendar() {
         const year = currentDate.getFullYear();
         const month = currentDate.getMonth();
 
-        monthDisplay.textContent = `${monthNamesPl[month]} ${year}`;
+        document.getElementById("month-year-display").textContent = `${monthNamesPl[month]} ${year}`;
+        const daysContainer = document.getElementById("calendar-days-container");
+        const eventsListContainer = document.getElementById("month-events-list");
+        
         daysContainer.innerHTML = "";
         eventsListContainer.innerHTML = "";
 
@@ -682,6 +628,9 @@ footer {
             daysContainer.appendChild(emptyCell);
         }
 
+        // Filtere Rennen nach aktivem Split
+        const splitRaces = allRacesData.filter(r => r.Split && r.Split.trim().toLowerCase() === activeSplit.toLowerCase());
+        const todayStr = new Date().toISOString().split('T')[0];
         let monthRaces = [];
 
         for (let day = 1; day <= totalDays; day++) {
@@ -698,32 +647,36 @@ footer {
             dayNumDiv.textContent = day;
             dayCell.appendChild(dayNumDiv);
 
+            // Datum formatisieren fürs Matching (DD.MM.YYYY in YYYY-MM-DD umwandeln)
             const formattedMonth = String(month + 1).padStart(2, '0');
             const formattedDay = String(day).padStart(2, '0');
             const dateString = `${year}-${formattedMonth}-${formattedDay}`;
 
-            const race = raceEvents.find(e => e.date === dateString);
+            // Suche Rennen in der Google Tabelle (Spalte "Data" im Format DD.MM.YYYY)
+            const race = splitRaces.find(e => {
+                if (!e.Data) return false;
+                const parts = e.Data.split('.');
+                if (parts.length === 3) {
+                    const isoDate = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+                    return isoDate === dateString;
+                }
+                return false;
+            });
 
             if (race) {
                 dayCell.classList.add("has-race");
 
-                if (dateString === nextRaceDate) {
-                    dayCell.classList.add("next-race");
-                    race.statusClass = "next-card";
-                    race.colorCode = "#2ecc71";
-                } else if (dateString < todayStr) {
+                if (dateString < todayStr) {
                     dayCell.classList.add("past-race");
-                    race.statusClass = "";
                     race.colorCode = "#ff3131";
                 } else {
                     dayCell.classList.add("future-race");
-                    race.statusClass = "future-card";
                     race.colorCode = "#3498db";
                 }
 
                 const badge = document.createElement("div");
                 badge.classList.add("race-indicator");
-                badge.textContent = race.name;
+                badge.textContent = race.Kraj || "Wyścig";
                 dayCell.appendChild(badge);
 
                 monthRaces.push(race);
@@ -733,26 +686,35 @@ footer {
         }
 
         if (monthRaces.length === 0) {
-            eventsListContainer.innerHTML = "<p style='color:#888;'>Brak wyścigów w tym miesiącu.</p>";
+            eventsListContainer.innerHTML = "<p style='color:#888;'>Brak wyścigów w tym miesiącu dla wybranego splitu.</p>";
         } else {
             monthRaces.forEach(race => {
+                const flagCode = race.Flaga ? race.Flaga.trim().toLowerCase() : 'un';
+                const flagUrl = `https://flagcdn.com/w80/${flagCode}.png`;
+
                 const eventCard = document.createElement("div");
                 eventCard.classList.add("event-card");
-                if (race.statusClass) eventCard.classList.add(race.statusClass);
 
                 eventCard.innerHTML = `
                     <div class="event-info">
-                        <img src="${race.flag}" alt="${race.name}" class="event-flag">
+                        <img src="${flagUrl}" alt="${race.Kraj}" class="event-flag" onerror="this.src='https://flagcdn.com/w80/un.png'">
                         <div class="event-title">
-                            <h3>${race.round} - ${race.name}</h3>
-                            <p>${race.circuit}</p>
+                            <h3>Runda ${race.Runda} - GP ${race.Kraj}</h3>
+                            <p>${race.Tor || ''} (${race.Format || ''})</p>
                         </div>
                     </div>
-                    <div class="event-date" style="color: ${race.colorCode}">${race.date.split('-').reverse().join('.')}</div>
+                    <div class="event-date" style="color: #ff3131;">${race.Data} (${race.Czas || ''})</div>
                 `;
                 eventsListContainer.appendChild(eventCard);
             });
         }
+    }
+
+    function switchSplit(splitName, btnElement) {
+        activeSplit = splitName;
+        document.querySelectorAll('.split-btn').forEach(btn => btn.classList.remove('active'));
+        btnElement.classList.add('active');
+        renderCalendar();
     }
 
     document.getElementById("prev-month").addEventListener("click", () => {
@@ -765,7 +727,8 @@ footer {
         renderCalendar();
     });
 
-    renderCalendar();
+    // Start beim Laden
+    fetchCalendarData();
 </script>
 
 </body>
