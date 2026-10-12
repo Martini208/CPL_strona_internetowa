@@ -34,7 +34,7 @@ body{
     padding-top: 80px;
 }
 
-/* Navigation - Exakte 1:1 Kopie der Hauptseite (Rote Box mit Transparenz) */
+/* Navigation */
 nav {
     position: fixed;
     top: 0;
@@ -192,21 +192,22 @@ nav a:hover {
     font-size: 15px;
 }
 
-/* Split Selection Tabs */
+/* Split Selection Tabs (3 Optionen) */
 .split-tabs {
     display: flex;
     justify-content: center;
-    gap: 15px;
+    gap: 12px;
     margin-bottom: 25px;
+    flex-wrap: wrap;
 }
 
 .split-btn {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
     color: var(--text-color);
-    padding: 10px 24px;
+    padding: 10px 22px;
     border-radius: 30px;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -278,46 +279,57 @@ nav a:hover {
 }
 
 .day-cell {
-    min-height: 95px;
+    min-height: 110px;
     background: rgba(255, 255, 255, 0.03);
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 8px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    font-size: 15px;
+    font-size: 14px;
     border: 2px solid transparent;
 }
 
 .day-cell.empty { background: transparent; }
-.day-cell.weekend { background: rgba(255, 255, 255, 0.06); }
-.day-number { font-weight: bold; }
+.day-cell.weekend { background: rgba(255, 255, 255, 0.05); }
+.day-number { font-weight: bold; font-size: 13px; color: #aaa; }
 
-/* Status-Farben exakt wie im Original */
+/* Aufgewertete Boxen-Designs */
 .day-cell.past-race {
     border: 2px solid #ff3131;
-    background: rgba(255, 49, 49, 0.15);
+    background: rgba(255, 49, 49, 0.12);
 }
 .day-cell.next-race {
     border: 2px solid #2ecc71;
     background: rgba(46, 204, 113, 0.15);
+    box-shadow: 0 0 12px rgba(46, 204, 113, 0.25);
 }
 .day-cell.future-race {
     border: 2px solid #3498db;
-    background: rgba(52, 152, 219, 0.15);
+    background: rgba(52, 152, 219, 0.12);
+}
+
+.race-badge-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 4px;
 }
 
 .race-indicator {
     color: white;
     font-size: 11px;
     font-weight: bold;
-    padding: 4px 6px;
-    border-radius: 4px;
+    padding: 3px 5px;
+    border-radius: 5px;
     text-align: center;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
+.race-indicator.past { background: #cc2525; }
+.race-indicator.next { background: #239b56; }
+.race-indicator.future { background: #2980b9; }
 
 /* Event Liste im alten Design */
 .events-section-title {
@@ -406,8 +418,8 @@ footer {
     nav{ flex-direction:column; height: auto; gap:12px; padding:15px; }
     .nav-left { flex-direction: column; align-items: center; }
     nav ul{ flex-wrap:wrap; justify-content:center; }
-    .day-cell { min-height: 60px; font-size: 12px; padding: 4px; }
-    .race-indicator { font-size: 10px; padding: 2px; }
+    .day-cell { min-height: 75px; font-size: 11px; padding: 4px; }
+    .race-indicator { font-size: 9px; padding: 2px; }
 }
 </style>
 </head>
@@ -450,9 +462,10 @@ footer {
         <p>Wybierz miesiąc i split, aby sprawdzić nadchodzące i minione wyścigi</p>
     </div>
 
-    <!-- Split Selector Tabs -->
+    <!-- Filter Tabs: Alle Splits, Split 1, Split 2 -->
     <div class="split-tabs">
-        <button class="split-btn active" onclick="switchSplit('Split 1', this)">Split 1</button>
+        <button class="split-btn active" onclick="switchSplit('All', this)">Wszystkie Split-y</button>
+        <button class="split-btn" onclick="switchSplit('Split 1', this)">Split 1</button>
         <button class="split-btn" onclick="switchSplit('Split 2', this)">Split 2</button>
     </div>
 
@@ -525,8 +538,8 @@ footer {
     const CSV_URL = "https://docs.google.com/spreadsheets/d/1na_Zlv7uk9AGO3f76sqMvN5C5kT-EXnphJlTD6KKx0M/export?format=csv";
 
     let allRacesData = [];
-    let activeSplit = "Split 1";
-    let currentDate = new Date(2026, 9, 1); // Startet im Oktober 2026 (Monat 9 = Oktober)
+    let activeSplitFilter = "All"; // "All", "Split 1", "Split 2"
+    let currentDate = new Date(2026, 9, 1); // Startet im Oktober 2026
 
     const monthNamesPl = [
         "Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", 
@@ -540,22 +553,30 @@ footer {
     });
 
     function parseCSV(text) {
-        const lines = text.trim().split('\n');
+        const lines = text.trim().split(/\r?\n/);
         if (lines.length < 2) return [];
         
         const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"\$/g, ''));
         const result = [];
 
         for (let i = 1; i < lines.length; i++) {
-            if (!lines[i]) continue;
-            const currentline = lines[i].split(',').map(item => item.trim().replace(/^"|"\$/g, ''));
+            if (!lines[i].trim()) continue;
+            const currentline = lines[i].match(/(".*?"|[^",\s]+)(?=\s*,|\s*\$)/g) || lines[i].split(',');
             const obj = {};
             headers.forEach((header, index) => {
-                obj[header] = currentline[index] || '';
+                let val = currentline[index] ? currentline[index].trim() : '';
+                val = val.replace(/^"|"\$/g, '');
+                obj[header] = val;
             });
             result.push(obj);
         }
         return result;
+    }
+
+    function toISODate(dateStr) {
+        if (!dateStr) return '';
+        const p = dateStr.trim().split('.');
+        return p.length === 3 ? `${p[2]}-${p[1].padStart(2, '0')}-${p[0].padStart(2, '0')}` : '';
     }
 
     async function fetchCalendarData() {
@@ -586,35 +607,27 @@ footer {
         const adjustedFirstDay = (firstDayIndex === 0) ? 6 : firstDayIndex - 1;
         const totalDays = new Date(year, month + 1, 0).getDate();
 
+        const todayStr = new Date().toISOString().split('T')[0];
+
+        // Global nächstes Rennen finden
+        const upcomingRaces = allRacesData
+            .map(r => ({ ...r, isoDate: toISODate(r.Data) }))
+            .filter(r => r.isoDate >= todayStr)
+            .sort((a, b) => a.isoDate.localeCompare(b.isoDate));
+
+        const nextRaceObject = upcomingRaces.length > 0 ? upcomingRaces[0] : null;
+
         for (let i = 0; i < adjustedFirstDay; i++) {
             const emptyCell = document.createElement("div");
             emptyCell.classList.add("day-cell", "empty");
             daysContainer.appendChild(emptyCell);
         }
 
-        // Filtere nach aktivem Split
-        const splitRaces = allRacesData.filter(r => r.Split && r.Split.trim().toLowerCase() === activeSplit.toLowerCase());
-        const todayStr = new Date().toISOString().split('T')[0];
-        
-        // Bestimme das nächste Rennen global über alle geladenen Split-Daten hinweg
-        const sortedAll = [...allRacesData].sort((a,b) => {
-            const parseDate = (dStr) => {
-                if (!dStr) return '';
-                const p = dStr.split('.');
-                return p.length === 3 ? `${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}` : '';
-            };
-            return parseDate(a.Data).localeCompare(parseDate(b.Data));
+        // Filter anwenden
+        const filteredRaces = allRacesData.filter(r => {
+            if (activeSplitFilter === "All") return true;
+            return r.Split && r.Split.trim().toLowerCase() === activeSplitFilter.toLowerCase();
         });
-        const upcoming = sortedAll.filter(r => {
-            const p = r.Data ? r.Data.split('.') : [];
-            if(p.length !== 3) return false;
-            const iso = `${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;
-            return iso >= todayStr;
-        });
-        const nextRaceIso = upcoming.length > 0 ? (() => {
-            const p = upcoming[0].Data.split('.');
-            return `${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;
-        })() : null;
 
         let monthRaces = [];
 
@@ -634,67 +647,85 @@ footer {
 
             const formattedMonth = String(month + 1).padStart(2, '0');
             const formattedDay = String(day).padStart(2, '0');
-            const dateString = `${formattedDay}.${formattedMonth}.${year}`;
-            const isoDateString = `${year}-${formattedMonth}-${formattedDay}`;
+            const targetIso = `${year}-${formattedMonth}-${formattedDay}`;
+            const targetDisplayDate = `${formattedDay}.${formattedMonth}.${year}`;
 
-            const race = splitRaces.find(e => e.Data && e.Data.trim() === dateString);
+            const racesOnDay = filteredRaces.filter(e => e.Data && e.Data.trim() === targetDisplayDate);
 
-            if (race) {
-                dayCell.classList.add("has-race");
+            if (racesOnDay.length > 0) {
+                const badgeContainer = document.createElement("div");
+                badgeContainer.className = "race-badge-container";
 
-                if (isoDateString === nextRaceIso && race.Split.trim().toLowerCase() === activeSplit.toLowerCase()) {
-                    dayCell.classList.add("next-race");
-                    race.statusClass = "next-card";
-                    race.colorCode = "#2ecc71";
-                } else if (isoDateString < todayStr) {
-                    dayCell.classList.add("past-race");
-                    race.statusClass = "";
-                    race.colorCode = "#ff3131";
-                } else {
-                    dayCell.classList.add("future-race");
-                    race.statusClass = "future-card";
-                    race.colorCode = "#3498db";
-                }
+                let dayStatusClass = "past-race";
 
-                const badge = document.createElement("div");
-                badge.classList.add("race-indicator");
-                badge.textContent = `GP ${race.Kraj || 'Wyścig'}`;
-                dayCell.appendChild(badge);
+                racesOnDay.forEach(race => {
+                    const raceIso = toISODate(race.Data);
+                    let statusType = "past";
 
-                monthRaces.push(race);
+                    if (nextRaceObject && race.Runda === nextRaceObject.Runda && race.Split === nextRaceObject.Split) {
+                        statusType = "next";
+                        dayStatusClass = "next-race";
+                    } else if (raceIso >= todayStr) {
+                        statusType = "future";
+                        if (dayStatusClass !== "next-race") dayStatusClass = "future-race";
+                    }
+
+                    race.computedStatus = statusType;
+
+                    const badge = document.createElement("div");
+                    badge.className = `race-indicator ${statusType}`;
+                    badge.textContent = `GP ${race.Kraj || 'Wyścig'}`;
+                    badgeContainer.appendChild(badge);
+
+                    monthRaces.push(race);
+                });
+
+                dayCell.classList.add(dayStatusClass);
+                dayCell.appendChild(badgeContainer);
             }
 
             daysContainer.appendChild(dayCell);
         }
 
         if (monthRaces.length === 0) {
-            eventsListContainer.innerHTML = "<p style='color:#888;'>Brak wyścigów w tym miesiącu dla wybranego splitu.</p>";
+            eventsListContainer.innerHTML = "<p style='color:#888;'>Brak wyścigów w tym miesiącu dla wybranego filtru.</p>";
         } else {
             monthRaces.forEach(race => {
                 const flagCode = race.Flaga ? race.Flaga.trim().toLowerCase() : 'un';
                 const flagUrl = `https://flagcdn.com/w80/${flagCode}.png`;
+                
+                const statusType = race.computedStatus || 'future';
+                let colorCode = '#3498db';
+                let cardStatusClass = 'future-card';
+
+                if (statusType === 'past') {
+                    colorCode = '#ff3131';
+                    cardStatusClass = '';
+                } else if (statusType === 'next') {
+                    colorCode = '#2ecc71';
+                    cardStatusClass = 'next-card';
+                }
 
                 const eventCard = document.createElement("div");
-                eventCard.classList.add("event-card");
-                if (race.statusClass) eventCard.classList.add(race.statusClass);
+                eventCard.classList.add("event-card", cardStatusClass);
 
                 eventCard.innerHTML = `
                     <div class="event-info">
                         <img src="${flagUrl}" alt="${race.Kraj}" class="event-flag" onerror="this.src='https://flagcdn.com/w80/un.png'">
                         <div class="event-title">
-                            <h3>Runda ${race.Runda} - GP ${race.Kraj}</h3>
+                            <h3>Runda ${race.Runda} - GP ${race.Kraj} (${race.Split})</h3>
                             <p>${race.Tor || ''} (${race.Format || ''})</p>
                         </div>
                     </div>
-                    <div class="event-date" style="color: ${race.colorCode || '#ff3131'}">${race.Data} (${race.Czas || ''})</div>
+                    <div class="event-date" style="color: ${colorCode}">${race.Data} (${race.Czas || ''})</div>
                 `;
                 eventsListContainer.appendChild(eventCard);
             });
         }
     }
 
-    function switchSplit(splitName, btnElement) {
-        activeSplit = splitName;
+    function switchSplit(filterName, btnElement) {
+        activeSplitFilter = filterName;
         document.querySelectorAll('.split-btn').forEach(btn => btn.classList.remove('active'));
         btnElement.classList.add('active');
         renderCalendar();
