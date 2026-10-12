@@ -120,38 +120,41 @@ nav a:hover {
     gap: 15px;
 }
 
-/* Social Media Icons in der Leiste */
+/* Social Media Icons in der Leiste (Vergrößert & Deutlich sichtbar) */
 .nav-socials {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     border-right: 1px solid rgba(255, 255, 255, 0.25);
-    padding-right: 15px;
+    padding-right: 18px;
 }
 
 .nav-social-icon {
-    width: 32px;
-    height: 32px;
+    width: 38px;
+    height: 38px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    background: rgba(0, 0, 0, 0.3);
-    color: white;
+    background: rgba(0, 0, 0, 0.4);
+    color: #ffffff;
     text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     transition: all 0.2s ease;
 }
 
 .nav-social-icon svg {
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     fill: currentColor;
 }
 
 .nav-social-icon:hover {
     background: #ffffff;
     color: #ff3131;
-    transform: translateY(-2px);
+    border-color: #ffffff;
+    transform: translateY(-3px) scale(1.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .theme-toggle-btn {
