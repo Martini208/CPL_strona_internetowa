@@ -34,7 +34,7 @@ body{
     padding-top: 80px;
 }
 
-/* Navigation - Exakte 1:1 Kopie der Hauptseite (Rote Box mit Transparenz) */
+/* Navigation - Exakte 1:1 Kopie der Hauptseite */
 nav {
     position: fixed;
     top: 0;
@@ -325,7 +325,7 @@ nav a:hover {
     text-overflow: ellipsis;
 }
 
-/* Event Liste im ursprünglichen Design */
+/* Event Liste */
 .events-section-title {
     color: #ff3131;
     margin-bottom: 16px;
@@ -369,7 +369,7 @@ nav a:hover {
 }
 
 .event-title h3 { font-size: 16px; }
-.event-title p { font-size: 13px; color: #aaa; margin-top: 3px; }
+.event-title p { font-size: 13px; color: #aaaaaa; margin-top: 3px; }
 .event-date { font-weight: bold; font-size: 15px; }
 
 /* Footer */
@@ -428,7 +428,7 @@ footer {
         <ul>
             <li><a href="kalendarz.html">Kalendarz</a></li>
             <li><a href="sezony.html">Sezony</a></li>
-            <li><a href="kierowcy.html">Kierowcy</a></li>
+            <li><a href="kierowcy.html">Klasyfikacja</a></li>
             <li><a href="zespoly.html">Zespoły</a></li>
             <li><a href="news.html">News</a></li>
             <li><a href="o-nas.html">O nas</a></li>
@@ -550,65 +550,36 @@ footer {
         "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"
     ];
 
-    // Zuordnung von Ländernamen/Strecken zu Flaggen-Ländercodes
-    const countryToFlagCode = {
-        'australia': 'au',
-        'singapur': 'sg',
-        'chiny': 'cn',
-        'austria': 'at',
-        'emilia romagna': 'it',
-        'włochy': 'it',
-        'wlochy': 'it',
-        'hiszpania': 'es',
-        'monako': 'mc',
-        'kanada': 'ca',
-        'wielka brytania': 'gb',
-        'wegry': 'hu',
-        'węgry': 'hu',
-        'belgia': 'be',
-        'holandia': 'nl',
-        'azerbejdżan': 'az',
-        'azerbejdzan': 'az',
-        'usa': 'us',
-        'stany zjednoczone': 'us',
-        'meksyk': 'mx',
-        'brazylia': 'br',
-        'las vegas': 'us',
-        'katar': 'qa',
-        'abu dhabi': 'ae',
-        'arabia saudyjska': 'sa',
-        'bahrajn': 'bh',
-        'japonia': 'jp',
-        'miami': 'us'
-    };
-
     const themeToggleBtn = document.getElementById('theme-toggle');
     themeToggleBtn.addEventListener('click', () => {
         document.body.classList.toggle('light-mode');
         themeToggleBtn.textContent = document.body.classList.contains('light-mode') ? '🌙' : '☀️';
     });
 
+    // Erweitertes CSV Parsing (berücksichtigt Anführungszeichen & Trim)
     function parseCSV(text) {
         const lines = text.trim().split(/\r?\n/);
         if (lines.length < 2) return [];
         
+        // Header aus Zeile 1 holen
         const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"\$/g, ''));
         const result = [];
 
         for (let i = 1; i < lines.length; i++) {
-            if (!lines[i]) continue;
-            const currentline = lines[i].match(/(".*?"|[^",\s]+)(?=\s*,|\s*\$)/g) || lines[i].split(',');
+            if (!lines[i].trim()) continue;
+            
+            // Trennt Werte nach Kommas, ignoriert Kommas in Anführungszeichen
+            const currentline = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(item => item.trim().replace(/^"\vert{}"$/g, ''));
             const obj = {};
             headers.forEach((header, index) => {
-                let val = currentline[index] ? currentline[index].trim() : '';
-                val = val.replace(/^"|"\$/g, '');
-                obj[header] = val;
+                obj[header] = currentline[index] || '';
             });
             result.push(obj);
         }
         return result;
     }
 
+    // Wandelt Datumsangaben wie '14.10.2026' oder '8.11.2026' verlässlich in ISO '2026-10-14' / '2026-11-08' um
     function toISODate(dStr) {
         if (!dStr) return '';
         const p = dStr.trim().split('.');
@@ -621,20 +592,11 @@ footer {
         return '';
     }
 
-    // Hilfsfunktion zur dynamischen Ermittlung der Flaggen-URL
-    function getFlagUrl(race) {
-        let rawCode = race.Flaga || race.Flag || race.Kraj || '';
-        rawCode = rawCode.trim().toLowerCase();
-
-        if (countryToFlagCode[rawCode]) {
-            return `https://flagcdn.com/w80/${countryToFlagCode[rawCode]}.png`;
-        }
-
-        if (rawCode.length === 2) {
-            return `https://flagcdn.com/w80/${rawCode}.png`;
-        }
-
-        return 'https://flagcdn.com/w80/un.png';
+    // Ermittelt die Flaggen-URL aus der Spalte 'Flaga'
+    function getFlagUrl(flagaCode) {
+        if (!flagaCode) return 'https://flagcdn.com/w80/un.png';
+        const code = flagaCode.trim().toLowerCase();
+        return `https://flagcdn.com/w80/${code}.png`;
     }
 
     async function fetchCalendarData() {
@@ -673,15 +635,17 @@ footer {
 
         const todayStr = new Date().toISOString().split('T')[0];
 
-        // Global nächstes Rennen finden
+        // Bestimme das nächste anstehende Rennen global aus allen Renn-Einträgen
         const sortedAll = [...allRacesData].sort((a,b) => toISODate(a.Data).localeCompare(toISODate(b.Data)));
         const upcoming = sortedAll.filter(r => toISODate(r.Data) >= todayStr);
         const nextRaceObject = upcoming.length > 0 ? upcoming[0] : null;
 
-        // Filtere nach ausgewähltem Split-Tab
+        // Filtere nach Split 1, Split 2 oder Alle
         const filteredRaces = allRacesData.filter(r => {
             if (activeSplit === "All") return true;
-            return r.Split && r.Split.trim().toLowerCase() === activeSplit.toLowerCase();
+            if (!r.Split) return false;
+            // Vergleicht 'Split 1' und 'Split 2' flexibel (z. B. 'split 1' == 'split 1')
+            return r.Split.trim().toLowerCase().replace(/\s+/g, '') === activeSplit.toLowerCase().replace(/\s+/g, '');
         });
 
         let monthRaces = [];
@@ -704,6 +668,7 @@ footer {
             const formattedDay = String(day).padStart(2, '0');
             const isoDateString = `${year}-${formattedMonth}-${formattedDay}`;
 
+            // Sucht nach Rennen am entsprechenden Kalendertag
             const racesOnDay = filteredRaces.filter(e => toISODate(e.Data) === isoDateString);
 
             if (racesOnDay.length > 0) {
@@ -734,10 +699,9 @@ footer {
                     const badge = document.createElement("div");
                     badge.classList.add("race-indicator");
 
-                    // Nummerischer Split (z.B. "1: GP Australia" oder "2: GP Australia")
-                    let splitNum = race.Split ? race.Split.replace(/\D/g, '') : '';
-                    if (!splitNum) splitNum = '1';
-
+                    // Nummerischer Split (z.B. "1: GP Australia")
+                    let splitNum = race.Split ? race.Split.replace(/\D/g, '') : '1';
+                    
                     badge.textContent = activeSplit === "All" ? `${splitNum}: GP ${race.Kraj || ''}` : `GP ${race.Kraj || 'Wyścig'}`;
                     badgeList.appendChild(badge);
 
@@ -755,14 +719,15 @@ footer {
             eventsListContainer.innerHTML = "<p style='color:#888;'>Brak wyścigów w tym miesiącu dla wybranego filtru.</p>";
         } else {
             monthRaces.forEach(race => {
-                const flagUrl = getFlagUrl(race);
+                // Flaggen-Bild direkt aus der Spalte 'Flaga' (au, sg, cn, jp, az, bh, sa, at, it, be, nl, es, gb, br, us, mx, ae)
+                const flagUrl = getFlagUrl(race.Flaga);
 
-                // Strecke und Format aus Google Sheets (Tor / Circuit und Format)
-                const trackName = race.Tor || race.Circuit || race.Kraj || '';
-                const formatInfo = race.Format || race.FormatWyścigu || '';
-                const subTitleText = formatInfo ? `${trackName} (${formatInfo})` : trackName;
+                // Holt Tor (z.B. Albert Park Circuit) und Format (z.B. Wyścig 50% + Full Qualifying) direkt aus deiner CSV-Tabelle
+                const trackName = race.Tor || '';
+                const formatInfo = race.Format || '';
+                const subTitleText = (trackName && formatInfo) ? `${trackName} (${formatInfo})` : (trackName || formatInfo);
 
-                // Split Identifikator
+                // Split Anzeige z.B. (1) oder (2)
                 let splitDisplay = race.Split ? ` (${race.Split.replace(/\D/g, '')})` : '';
 
                 const eventCard = document.createElement("div");
