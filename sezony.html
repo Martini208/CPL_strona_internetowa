@@ -18,21 +18,22 @@
 body {
     background: var(--bg-color);
     color: var(--text-color);
-    padding-top: 120px;
+    padding-top: 110px;
+    padding-bottom: 60px;
     min-height: 100vh;
 }
 
-/* KORRIGIERTE ROTE NAVIGATIONSBOX (Original Style) */
+/* ORIGINAL CPL RED-BOX NAVIGATION */
 nav {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 80px;
-    background: linear-gradient(135deg, rgba(180, 40, 50, 0.60) 0%, rgba(100, 15, 25, 0.70) 100%);
+    background: linear-gradient(135deg, rgba(180, 40, 50, 0.70) 0%, rgba(100, 15, 25, 0.85) 100%);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     display: flex; justify-content: space-between; align-items: center;
     padding: 0 30px; z-index: 1000;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    border-bottom: 2px solid rgba(255, 49, 49, 0.4);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
 }
 
 nav ul { display: flex; list-style: none; gap: 15px; align-items: center; }
@@ -41,13 +42,14 @@ nav a:hover { background: rgba(255, 255, 255, 0.2); }
 
 .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
 
+/* SEASON CARD CONTAINER */
 .season-card {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 25px;
     margin-bottom: 30px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6);
 }
 
 .tab-buttons {
@@ -72,7 +74,10 @@ nav a:hover { background: rgba(255, 255, 255, 0.2); }
 .tab-btn:hover { border-color: var(--red-main); color: var(--red-main); }
 .tab-btn.active { background: var(--red-main); color: #fff; border-color: var(--red-main); }
 
-.table-wrapper { overflow-x: auto; }
+.table-wrapper { 
+    overflow-x: auto; 
+    min-height: 250px;
+}
 
 .data-table {
     width: 100%;
@@ -103,6 +108,16 @@ nav a:hover { background: rgba(255, 255, 255, 0.2); }
 .badge-win { color: #ffd700; font-weight: bold; }
 .badge-p2 { color: #c0c0c0; font-weight: bold; }
 .badge-p3 { color: #cd7f32; font-weight: bold; }
+
+/* FOOTER SECTION */
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+    font-size: 13px;
+    border-top: 1px solid var(--border-color);
+    margin-top: 40px;
+}
 </style>
 </head>
 <body>
@@ -134,6 +149,10 @@ nav a:hover { background: rgba(255, 255, 255, 0.2); }
     </div>
 </div>
 
+<footer>
+    &copy; 2026 CPL F1 League. Wszystkie prawa zastrzeżone.
+</footer>
+
 <script>
 const SHEET_ID = '1na_Zlv7uk9AGO3f76sqMvN5C5kT-EXnphJlTD6KKx0M';
 const SHEET_GID = '482383691';
@@ -142,7 +161,6 @@ const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?forma
 
 let globalDrivers = [];
 
-// Robuster CSV Parser für Anführungszeichen & Kommas
 function parseCSV(text) {
     let lines = text.split(/\r\n|\n/);
     return lines.map(line => {
@@ -163,38 +181,57 @@ async function loadSeasonData() {
         const csvText = await response.text();
         const rawData = parseCSV(csvText);
 
-        // Suche flexibel nach der Fahrerliste anhand der Zeilenstruktur
-        globalDrivers = [];
+        // Dynamische Ermittlung der Spalten
+        let headerRowIndex = rawData.findIndex(r => r.includes('Kierowca') || r.includes('Pozycja'));
+        if (headerRowIndex === -1) headerRowIndex = 11; // Standardzeile 12
+
+        let headers = rawData[headerRowIndex];
         
-        rawData.forEach(row => {
-            // Prüfe, ob in Spalte B (Index 1) eine Nummer steht und ein Fahrername existiert
-            let pos = row[1];
-            let driverName = row[3]; // Spalte D
-            
-            if (pos && !isNaN(parseInt(pos)) && driverName && driverName !== '') {
+        let colPos = headers.indexOf('Pozycja');
+        let colNum = headers.indexOf('Numer');
+        let colDriver = headers.indexOf('Kierowca');
+        let colTeam = headers.indexOf('Drużyna');
+        let colPts = headers.indexOf('PUNKTY');
+
+        // Fallbacks falls Spaltennamen leicht variieren
+        if (colPos === -1) colPos = 1;
+        if (colNum === -1) colNum = 2;
+        if (colDriver === -1) colDriver = 3;
+        if (colTeam === -1) colTeam = 5;
+        if (colPts === -1) colPts = 6;
+
+        globalDrivers = [];
+
+        for (let i = headerRowIndex + 1; i < rawData.length; i++) {
+            let row = rawData[i];
+            let name = row[colDriver];
+            let pos = row[colPos];
+
+            // Nur Zeilen mit gültigen Fahrern aufnehmen
+            if (name && name !== '' && pos && !isNaN(parseInt(pos))) {
                 globalDrivers.push({
                     pos: pos,
-                    number: row[2] || '',
-                    name: driverName,
-                    team: row[5] || 'Niezależny',
-                    points: row[6] || '0',
+                    number: row[colNum] || '',
+                    name: name,
+                    team: row[colTeam] || 'Niezależny',
+                    points: row[colPts] || '0',
                     races: [
                         row[7] || '', row[8] || '', row[9] || '', 
                         row[10] || '', row[11] || '', row[12] || '', row[13] || ''
                     ]
                 });
             }
-        });
+        }
 
         if (globalDrivers.length === 0) {
-            document.getElementById('tab-content').innerHTML = `<p style="color:orange;">Brak danych w wybranej tabeli. Upewnij się, że arkusz jest publiczny.</p>`;
+            document.getElementById('tab-content').innerHTML = `<p style="color:orange; padding:20px;">Brak danych w wybranej tabeli. Upewnij się, że arkusz Google Sheets jest publiczny.</p>`;
         } else {
             renderKierowcy();
         }
 
     } catch (err) {
         console.error(err);
-        document.getElementById('tab-content').innerHTML = `<p style="color:red;">Błąd ładowania danych z Google Sheets.</p>`;
+        document.getElementById('tab-content').innerHTML = `<p style="color:red; padding:20px;">Błąd ładowania danych z Google Sheets.</p>`;
     }
 }
 
