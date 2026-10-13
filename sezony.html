@@ -161,51 +161,82 @@ const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?forma
 
 let globalDrivers = [];
 
-function parseCSV(text) {
-    let lines = text.split(/\r\n|\n/);
-    return lines.map(line => {
-        let regex = /(?:,|\n|^)("(?:(?:"")*[^"]*)*"|[^",\n]*)/g;
-        let matches = [];
-        let match;
-        while ((match = regex.exec(line)) !== null) {
-            let val = match[1].replace(/^"|"\$/g, '').trim();
-            matches.push(val);
+// Korrekter CSV-Parser für Anführungszeichen & Kommas
+function parseCSVRow(row) {
+    let cells = [];
+    let insideQuote = false;
+    let currentCell = '';
+    
+    for (let i = 0; i < row.length; i++) {
+        let char = row[i];
+        if (char === '"') {
+            insideQuote = !insideQuote;
+        } else if (char === ',' && !insideQuote) {
+            cells.push(currentCell.trim().replace(/^"|"\$/g, ''));
+            currentCell = '';
+        } else {
+            currentCell += char;
         }
-        return matches;
-    });
+    }
+    cells.push(currentCell.trim().replace(/^"|"\$/g, ''));
+    return cells;
 }
 
 async function loadSeasonData() {
     try {
         const response = await fetch(CSV_URL);
         const csvText = await response.text();
-        const rawData = parseCSV(csvText);
+        const lines = csvText.split(/\r\n|\n/);
+        const rawData = lines.map(parseCSVRow);
 
         globalDrivers = [];
 
-        rawData.forEach(row => {
-            let pos = row[1];
-            let driverName = row[3];
+        // Suche dynamisch nach der Kopfzeile mit 'Pozycja' oder 'Kierowca'
+        let headerIndex = rawData.findIndex(r => r.includes('Pozycja') || r.includes('Kierowca'));
+        if (headerIndex === -1) headerIndex = 11; // Standard-Fallback für Zeile 12
+
+        let headers = rawData[headerIndex];
+
+        // Finde die exakten Spalten-Positionen
+        let colPos = headers.indexOf('Pozycja');
+        let colNum = headers.indexOf('Numer');
+        let colDriver = headers.indexOf('Kierowca');
+        let colTeam = headers.indexOf('Drużyna');
+        let colPts = headers.indexOf('PUNKTY');
+
+        // Fallbacks
+        if (colPos === -1) colPos = 1;
+        if (colNum === -1) colNum = 2;
+        if (colDriver === -1) colDriver = 3;
+        if (colTeam === -1) colTeam = 5;
+        if (colPts === -1) colPts = 6;
+
+        for (let i = headerIndex + 1; i < rawData.length; i++) {
+            let row = rawData[i];
+            if (!row || row.length < 4) continue;
+
+            let pos = row[colPos];
+            let driverName = row[colDriver];
 
             if (pos && !isNaN(parseInt(pos)) && driverName && driverName !== '') {
                 globalDrivers.push({
                     pos: pos,
-                    number: row[2] || '',
+                    number: row[colNum] || '',
                     name: driverName,
-                    team: row[5] || 'Niezależny',  // Korrekte Spalte F für Teams
-                    points: row[6] || '0',          // Korrekte Spalte G für Punkte
+                    team: row[colTeam] || 'Niezależny',
+                    points: row[colPts] || '0',
                     races: [
-                        row[7] || '',  // AUS
-                        row[8] || '',  // CAT
-                        row[9] || '',  // WLO
-                        row[10] || '', // AZE
-                        row[11] || '', // MEK
-                        row[12] || '', // HIS
-                        row[13] || ''  // BRA
+                        row[colPts + 1] || '', // AUS
+                        row[colPts + 2] || '', // CAT
+                        row[colPts + 3] || '', // WLO
+                        row[colPts + 4] || '', // AZE
+                        row[colPts + 5] || '', // MEK
+                        row[colPts + 6] || '', // HIS
+                        row[colPts + 7] || ''  // BRA
                     ]
                 });
             }
-        });
+        }
 
         if (globalDrivers.length === 0) {
             document.getElementById('tab-content').innerHTML = `<p style="color:orange; padding:20px;">Brak danych w wybranej tabeli.</p>`;
