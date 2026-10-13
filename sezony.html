@@ -181,50 +181,34 @@ async function loadSeasonData() {
         const csvText = await response.text();
         const rawData = parseCSV(csvText);
 
-        // Dynamische Ermittlung der Spalten
-        let headerRowIndex = rawData.findIndex(r => r.includes('Kierowca') || r.includes('Pozycja'));
-        if (headerRowIndex === -1) headerRowIndex = 11; // Standardzeile 12
-
-        let headers = rawData[headerRowIndex];
-        
-        let colPos = headers.indexOf('Pozycja');
-        let colNum = headers.indexOf('Numer');
-        let colDriver = headers.indexOf('Kierowca');
-        let colTeam = headers.indexOf('Drużyna');
-        let colPts = headers.indexOf('PUNKTY');
-
-        // Fallbacks falls Spaltennamen leicht variieren
-        if (colPos === -1) colPos = 1;
-        if (colNum === -1) colNum = 2;
-        if (colDriver === -1) colDriver = 3;
-        if (colTeam === -1) colTeam = 5;
-        if (colPts === -1) colPts = 6;
-
         globalDrivers = [];
 
-        for (let i = headerRowIndex + 1; i < rawData.length; i++) {
-            let row = rawData[i];
-            let name = row[colDriver];
-            let pos = row[colPos];
+        rawData.forEach(row => {
+            let pos = row[1];
+            let driverName = row[3];
 
-            // Nur Zeilen mit gültigen Fahrern aufnehmen
-            if (name && name !== '' && pos && !isNaN(parseInt(pos))) {
+            if (pos && !isNaN(parseInt(pos)) && driverName && driverName !== '') {
                 globalDrivers.push({
                     pos: pos,
-                    number: row[colNum] || '',
-                    name: name,
-                    team: row[colTeam] || 'Niezależny',
-                    points: row[colPts] || '0',
+                    number: row[2] || '',
+                    name: driverName,
+                    team: row[5] || 'Niezależny',  // Korrekte Spalte F für Teams
+                    points: row[6] || '0',          // Korrekte Spalte G für Punkte
                     races: [
-                        row[7] || '', row[8] || '', row[9] || '', 
-                        row[10] || '', row[11] || '', row[12] || '', row[13] || ''
+                        row[7] || '',  // AUS
+                        row[8] || '',  // CAT
+                        row[9] || '',  // WLO
+                        row[10] || '', // AZE
+                        row[11] || '', // MEK
+                        row[12] || '', // HIS
+                        row[13] || ''  // BRA
                     ]
                 });
             }
-        }
+        });
 
         if (globalDrivers.length === 0) {
-            document.getElementById('tab-content').innerHTML = `<p style="color:orange; padding:20px;">Brak danych w wybranej tabeli. Upewnij się, że arkusz Google Sheets jest publiczny.</p>`;
+            document.getElementById('tab-content').innerHTML = `<p style="color:orange; padding:20px;">Brak danych w wybranej tabeli.</p>`;
         } else {
             renderKierowcy();
         }
