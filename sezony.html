@@ -92,6 +92,11 @@ nav a:hover { background: rgba(255, 255, 255, 0.2); }
     white-space: nowrap;
 }
 
+/* Mittige Ausrichtung für Rennspalten und Ergebnisse */
+.text-center {
+    text-align: center !important;
+}
+
 .data-table th {
     background: rgba(255, 49, 49, 0.15);
     color: var(--red-main);
@@ -172,13 +177,13 @@ function parseCSVRow(row) {
         if (char === '"') {
             insideQuote = !insideQuote;
         } else if (char === ',' && !insideQuote) {
-            cells.push(currentCell.trim().replace(/^"|"\$/g, ''));
+            cells.push(currentCell.trim().replace(/^"|"$/g, ''));
             currentCell = '';
         } else {
             currentCell += char;
         }
     }
-    cells.push(currentCell.trim().replace(/^"|"\$/g, ''));
+    cells.push(currentCell.trim().replace(/^"|"$/g, ''));
     return cells;
 }
 
@@ -193,18 +198,17 @@ async function loadSeasonData() {
 
         // Suche dynamisch nach der Kopfzeile mit 'Pozycja' oder 'Kierowca'
         let headerIndex = rawData.findIndex(r => r.includes('Pozycja') || r.includes('Kierowca'));
-        if (headerIndex === -1) headerIndex = 11; // Standard-Fallback für Zeile 12
+        if (headerIndex === -1) headerIndex = 11;
 
         let headers = rawData[headerIndex];
 
-        // Finde die exakten Spalten-Positionen
         let colPos = headers.indexOf('Pozycja');
         let colNum = headers.indexOf('Numer');
         let colDriver = headers.indexOf('Kierowca');
         let colTeam = headers.indexOf('Drużyna');
         let colPts = headers.indexOf('PUNKTY');
 
-        // Fallbacks
+        // Fallback-Indizes laut Tabellenstruktur
         if (colPos === -1) colPos = 1;
         if (colNum === -1) colNum = 2;
         if (colDriver === -1) colDriver = 3;
@@ -226,13 +230,13 @@ async function loadSeasonData() {
                     team: row[colTeam] || 'Niezależny',
                     points: row[colPts] || '0',
                     races: [
-                        row[colPts + 1] || '', // AUS
-                        row[colPts + 2] || '', // CAT
-                        row[colPts + 3] || '', // WLO
-                        row[colPts + 4] || '', // AZE
-                        row[colPts + 5] || '', // MEK
-                        row[colPts + 6] || '', // HIS
-                        row[colPts + 7] || ''  // BRA
+                        row[7] || '', // AUS
+                        row[8] || '', // CAT
+                        row[9] || '', // WLO
+                        row[10] || '', // AZE
+                        row[11] || '', // MEK
+                        row[12] || '', // HIS
+                        row[13] || ''  // BRA
                     ]
                 });
             }
@@ -263,21 +267,21 @@ function renderKierowcy() {
     let html = `<table class="data-table">
         <thead>
             <tr>
-                <th>Poz</th>
-                <th>#</th>
+                <th class="text-center">Poz</th>
+                <th class="text-center">#</th>
                 <th>Kierowca</th>
                 <th>Drużyna</th>
-                <th>Punkty</th>
+                <th class="text-center">Punkty</th>
             </tr>
         </thead><tbody>`;
 
     globalDrivers.forEach(d => {
         html += `<tr>
-            <td class="pos-badge">${d.pos}</td>
-            <td>${d.number}</td>
+            <td class="pos-badge text-center">${d.pos}</td>
+            <td class="text-center">${d.number}</td>
             <td><strong>${d.name}</strong></td>
             <td>${d.team}</td>
-            <td style="color: var(--red-main); font-weight:bold;">${d.points} PKT</td>
+            <td class="text-center" style="color: var(--red-main); font-weight:bold;">${d.points} PKT</td>
         </tr>`;
     });
     html += '</tbody></table>';
@@ -289,14 +293,20 @@ function renderWyscigi() {
         <thead>
             <tr>
                 <th>Kierowca</th>
-                <th>AUS</th><th>CAT</th><th>WLO</th><th>AZE</th><th>MEK</th><th>HIS</th><th>BRA</th>
+                <th class="text-center">AUS</th>
+                <th class="text-center">CAT</th>
+                <th class="text-center">WLO</th>
+                <th class="text-center">AZE</th>
+                <th class="text-center">MEK</th>
+                <th class="text-center">HIS</th>
+                <th class="text-center">BRA</th>
             </tr>
         </thead><tbody>`;
 
     globalDrivers.forEach(d => {
         html += `<tr>
             <td><strong>${d.name}</strong></td>
-            ${d.races.map(r => `<td>\${formatResult(r)}</td>`).join('')}
+            ${d.races.map(r => `<td class="text-center">${formatResult(r)}</td>`).join('')}
         </tr>`;
     });
     html += '</tbody></table>';
@@ -319,17 +329,17 @@ function renderZespoly() {
     let html = `<table class="data-table">
         <thead>
             <tr>
-                <th>Poz</th>
+                <th class="text-center">Poz</th>
                 <th>Zespół</th>
-                <th>Suma Punktów</th>
+                <th class="text-center">Suma Punktów</th>
             </tr>
         </thead><tbody>`;
 
     sortedTeams.forEach((t, idx) => {
         html += `<tr>
-            <td class="pos-badge">${idx + 1}</td>
+            <td class="pos-badge text-center">${idx + 1}</td>
             <td><strong>${t.name}</strong></td>
-            <td style="color: var(--red-main); font-weight:bold;">${t.points} PKT</td>
+            <td class="text-center" style="color: var(--red-main); font-weight:bold;">${t.points} PKT</td>
         </tr>`;
     });
     html += '</tbody></table>';
