@@ -168,6 +168,7 @@ footer {
                 <option value="767862976" data-name="Sezon 19 S2">Sezon 19 S2</option>
                 <option value="188448851" data-name="Sezon 19 S3">Sezon 19 S3</option>
                 <option value="1084021057" data-name="Sezon 18">Sezon 18</option>
+                <option value="1357536057" data-name="Sezon 18 S2">Sezon 18 S2</option>
             </select>
         </div>
         
@@ -291,7 +292,6 @@ async function loadSeasonData() {
             let pos = row[colPos];
             let driverName = row[colDriver];
 
-            // Stoppe nur noch, wenn die untere Team-Tabelle erreicht wird (durch "Team" oder "Punkty" in Spalte Poz/Kierowca)
             if (pos && (pos.toLowerCase() === 'team' || pos.toLowerCase() === 'punkty')) {
                 break;
             }
