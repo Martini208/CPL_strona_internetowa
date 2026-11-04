@@ -291,7 +291,11 @@ async function loadSeasonData() {
             let pos = row[colPos];
             let driverName = row[colDriver];
 
-            if (driverName && (driverName.includes('Team') || driverName.includes('Punkty') && i > startIndex + 5)) {
+            // Stoppe nur noch, wenn die untere Team-Tabelle erreicht wird (durch "Team" oder "Punkty" in Spalte Poz/Kierowca)
+            if (pos && (pos.toLowerCase() === 'team' || pos.toLowerCase() === 'punkty')) {
+                break;
+            }
+            if (driverName && driverName.toLowerCase() === 'punkty' && i > startIndex + 15) {
                 break;
             }
 
@@ -306,7 +310,7 @@ async function loadSeasonData() {
                     pos: pos,
                     number: colNum !== -1 ? (row[colNum] || '') : '',
                     name: driverName,
-                    team: colTeam !== -1 ? (row[colTeam] || 'Niezależny') : 'Niezależny',
+                    team: (colTeam !== -1 && row[colTeam] && row[colTeam] !== '') ? row[colTeam] : 'Niezależny',
                     points: row[colPts] || '0',
                     races: driverRaces
                 });
