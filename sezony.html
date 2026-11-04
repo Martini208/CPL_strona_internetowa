@@ -42,7 +42,6 @@ nav a:hover { background: rgba(255, 255, 255, 0.2); }
 
 .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
 
-/* SEASON CARD CONTAINER */
 .season-card {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
@@ -311,7 +310,6 @@ async function loadSeasonData() {
             }
         }
 
-        // Untere Team-Tabelle parsen (falls vorhanden)
         let teamHeaderIndex = rawData.findIndex((r, idx) => idx > headerIndex && r.some(c => c && (c.toLowerCase() === 'team' || c.toLowerCase() === 'punkty')));
         if (teamHeaderIndex !== -1) {
             let tHeaders = rawData[teamHeaderIndex];
@@ -401,7 +399,6 @@ function renderZespoly() {
     if (globalTeams.length > 0) {
         sortedTeams = globalTeams;
     } else {
-        // Automatische Team-Aggregierung aus den Fahrern (inkl. Zuordnung der Fahrernamen darunter)
         let teamMap = {};
         globalDrivers.forEach(d => {
             let teamName = d.team || 'Niezależny';
@@ -417,7 +414,7 @@ function renderZespoly() {
             .map(t => ({
                 name: t,
                 points: teamMap[t].points,
-                drivers: teamMap[t].drivers.join(' & ') // Listet die Fahrernamen mit "&" verknüpft auf
+                drivers: teamMap[t].drivers.join(' & ')
             }))
             .sort((a, b) => b.points - a.points);
     }
@@ -442,7 +439,7 @@ function renderZespoly() {
         </tr>`;
     });
     html += '</tbody></table>';
-    document.getElementById('tab-content'].innerHTML = html;
+    document.getElementById('tab-content').innerHTML = html;
 }
 
 function formatResult(val) {
