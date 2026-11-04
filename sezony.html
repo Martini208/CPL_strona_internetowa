@@ -134,7 +134,6 @@ nav a:hover { background: rgba(255, 255, 255, 0.2); }
 .badge-p2 { color: #c0c0c0; font-weight: bold; }
 .badge-p3 { color: #cd7f32; font-weight: bold; }
 
-/* FOOTER SECTION */
 footer {
     text-align: center;
     padding: 20px;
@@ -166,8 +165,7 @@ footer {
             <h2 id="season-title">Sezon Letni 2026</h2>
             <select id="season-picker" class="season-select" onchange="onSeasonChange()">
                 <option value="482383691" data-name="Sezon Letni 2026" selected>Sezon Letni 2026</option>
-                <!-- Trage hier die GID von Tabellenblatt "Sezon 19" ein falls sie abweicht -->
-                <option value="SEZON_19_GID_HIER_EINTRAGEN" data-name="Sezon 19">Sezon 19</option>
+                <option value="1746450890" data-name="Sezon 19">Sezon 19</option>
             </select>
         </div>
         
@@ -236,7 +234,6 @@ async function loadSeasonData() {
         globalTeams = [];
         raceHeaders = [];
 
-        // 1. Suche nach Kopfzeile für Fahrer (Pozycja / Poz / Kierowca)
         let headerIndex = rawData.findIndex(r => r.includes('Pozycja') || r.includes('Poz') || r.includes('Kierowca'));
         if (headerIndex === -1) headerIndex = 11;
 
@@ -252,7 +249,6 @@ async function loadSeasonData() {
         if (colDriver === -1) colDriver = 3;
         if (colPts === -1) colPts = 6;
 
-        // Streckenabkürzungen aus der Zeile über den Fahrern auslesen (z.B. AUS, CAT, ITA, JAP...)
         let raceHeaderIndex = headerIndex > 0 ? headerIndex - 1 : -1;
         if (raceHeaderIndex !== -1 && rawData[raceHeaderIndex]) {
             let hRow = rawData[raceHeaderIndex];
@@ -263,12 +259,10 @@ async function loadSeasonData() {
             }
         }
         
-        // Standard-Rennen falls keine Kopfzeile gefunden wurde
         if (raceHeaders.length === 0) {
             raceHeaders = ['AUS', 'CAT', 'WLO', 'AZE', 'MEK', 'HIS', 'BRA'];
         }
 
-        // 2. Fahrerdaten parsen
         for (let i = headerIndex + 1; i < rawData.length; i++) {
             let row = rawData[i];
             if (!row || row.length < 4) continue;
@@ -293,7 +287,6 @@ async function loadSeasonData() {
             }
         }
 
-        // 3. Untere Team-Tabelle parsen (speziell für Sezon 19)
         let teamHeaderIndex = rawData.findIndex((r, idx) => idx > headerIndex && (r.includes('Team') || r.includes('Kierowca')) && r.includes('Punkty'));
         if (teamHeaderIndex !== -1) {
             let tHeaders = rawData[teamHeaderIndex];
@@ -381,10 +374,8 @@ function renderZespoly() {
     let sortedTeams = [];
 
     if (globalTeams.length > 0) {
-        // Falls die Tabelle eine eigene Team-Sektion hatte (z.B. Sezon 19)
         sortedTeams = globalTeams;
     } else {
-        // Berechne Punkte dynamisch aus den Fahrern (z.B. Sezon Letni 2026)
         let teams = {};
         globalDrivers.forEach(d => {
             let teamName = d.team || 'Niezależny';
