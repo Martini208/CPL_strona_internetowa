@@ -234,46 +234,79 @@ async function loadSeasonData() {
         globalTeams = [];
         raceHeaders = [];
 
+        // 1. Finde die Zeile, in der die Fahrer beginnen (enthält 'Pozycja', 'Poz' oder 'Kierowca')
         let headerIndex = rawData.findIndex(r => r.includes('Pozycja') || r.includes('Poz') || r.includes('Kierowca'));
-        if (headerIndex === -1) headerIndex = 11;
+        if (headerIndex === -1) headerIndex = 5;
 
         let headers = rawData[headerIndex];
 
-        let colPos = headers.indexOf('Pozycja') !== -1 ? headers.indexOf('Pozycja') : headers.indexOf('Poz');
+        let colPos = headers.indexOf('Pozycja') !== -1 ? headers.indexOf('Pozycja') : (headers.indexOf('Poz') !== -1 ? headers.indexOf('Poz') : 0);
         let colNum = headers.indexOf('Numer');
-        let colDriver = headers.indexOf('Kierowca');
-        let colTeam = headers.indexOf('Drużyna') !== -1 ? headers.indexOf('Drużyna') : headers.indexOf('Team');
-        let colPts = headers.indexOf('PUNKTY') !== -1 ? headers.indexOf('PUNKTY') : headers.indexOf('Punkty');
+        let colDriver = headers.indexOf('Kierowca') !== -1 ? headers.indexOf('Kierowca') : 1;
+        let colTeam = headers.indexOf('Drużyna') !== -1 ? headers.indexOf('Drużyna') : (headers.indexOf('Team') !== -1 ? headers.indexOf('Team') : 2);
+        
+        // Finde die Spalte für 'Punkty' / 'PUNKTY'
+        let colPts = headers.findIndex(h => h && h.toUpperCase().includes('PUNKT'));
+        if (colPts === -1) {
+            // Falls Punkty weiter rechts steht (wie in Sezon 19)
+            headerIndex = rawData.findIndex((r, idx) => idx > 2 && r.some(cell => cell && cell.toUpperCase().includes('PUNKT')));
+            if (headerIndex !== -1) {
+                headers = rawData[headerIndex];
+                colPos = headers.indexOf('Poz') !== -1 ? headers.indexOf('Poz') : 0;
+                colDriver = headers.indexOf('Kierowca') !== -1 ? headers.indexOf('Kierowca') : 1;
+                colTeam = headers.indexOf('Team') !== -1 ? headers.indexOf('Team') : 2;
+                colPts = headers.findIndex(h => h && h.toUpperCase().includes('PUNKT'));
+            } else {
+                colPts = headers.length - 3;
+            }
+        }
 
-        if (colPos === -1) colPos = 1;
-        if (colDriver === -1) colDriver = 3;
-        if (colPts === -1) colPts = 6;
+        // 2. Suche dynamisch nach den Strecken-Kürzungen (ITA, JAP, BAH, AUS etc.) oberhalb der Fahrer
+        let foundRaceRow = -1;
+        for (let r = 0; r < headerIndex; r++) {
+            let rowStr = rawData[r].join(' ');
+            if (rowStr.includes('ITA') || rowStr.includes('JAP') || rowStr.includes('AUS')) {
+                foundRaceRow = r;
+                break;
+            }
+        }
 
-        let raceHeaderIndex = headerIndex > 0 ? headerIndex - 1 : -1;
-        if (raceHeaderIndex !== -1 && rawData[raceHeaderIndex]) {
-            let hRow = rawData[raceHeaderIndex];
-            for (let c = colPts + 1; c < hRow.length; c++) {
-                if (hRow[c] && hRow[c] !== '' && hRow[c] !== 'PUNKTY' && hRow[c] !== 'Delta') {
-                    raceHeaders.push(hRow[c]);
+        if (foundRaceRow !== -1) {
+            let hRow = rawData[foundRaceRow];
+            // Wir nehmen alle Spalten ab Spalte 3 (nach Fahrer/Team) bis zu den Punkten
+            for (let c = colTeam + 1; c < colPts; c++) {
+                let val = hRow[c];
+                if (val && val !== '' && !val.match(/^\d+$/)) {
+                    raceHeaders.push(val);
                 }
             }
         }
-        
+
+        // Fallback falls keine Strecken gefunden wurden
         if (raceHeaders.length === 0) {
-            raceHeaders = ['AUS', 'CAT', 'WLO', 'AZE', 'MEK', 'HIS', 'BRA'];
+            raceHeaders = ['ITA', 'JAP', 'BAH', 'QAT', 'SAR', 'ITA', 'BEL', 'AUS', 'CHI', 'ESP', 'AUT', 'CAN', 'BRA', 'MON'];
         }
 
-        for (let i = headerIndex + 1; i < rawData.length; i++) {
+        // 3. Fahrerdaten parsen
+        let startIndex = headerIndex + 1;
+        for (let i = startIndex; i < rawData.length; i++) {
             let row = rawData[i];
-            if (!row || row.length < 4) continue;
+            if (!row || row.length < 2) continue;
 
             let pos = row[colPos];
             let driverName = row[colDriver];
 
+            // Stoppe, wenn die untere Team-Tabelle beginnt
+            if (driverName && (driverName.includes('Team') || driverName.includes('Punkty') && i > startIndex + 5)) {
+                break;
+            }
+
             if (pos && !isNaN(parseInt(pos)) && driverName && driverName !== '' && driverName !== '0') {
                 let driverRaces = [];
+                // Lese die Rennergebnisse zwischen Team-Spalte und Punkte-Spalte aus
                 for (let r = 0; r < raceHeaders.length; r++) {
-                    driverRaces.push(row[colPts + 1 + r] || '');
+                    let cellVal = row[colTeam + 1 + r] || '';
+                    driverRaces.push(cellVal);
                 }
 
                 globalDrivers.push({
@@ -287,22 +320,23 @@ async function loadSeasonData() {
             }
         }
 
-        let teamHeaderIndex = rawData.findIndex((r, idx) => idx > headerIndex && (r.includes('Team') || r.includes('Kierowca')) && r.includes('Punkty'));
+        // 4. Untere Team-Tabelle parsen (für Sezon 19)
+        let teamHeaderIndex = rawData.findIndex((r, idx) => idx > headerIndex && r.some(c => c && (c.toLowerCase() === 'team' || c.toLowerCase() === 'punkty')));
         if (teamHeaderIndex !== -1) {
             let tHeaders = rawData[teamHeaderIndex];
-            let tPosCol = tHeaders.indexOf('Poz') !== -1 ? tHeaders.indexOf('Poz') : 2;
-            let tDriverCol = tHeaders.indexOf('Kierowca') !== -1 ? tHeaders.indexOf('Kierowca') : 3;
-            let tTeamCol = tHeaders.indexOf('Team') !== -1 ? tHeaders.indexOf('Team') : 4;
-            let tPtsCol = tHeaders.indexOf('Punkty') !== -1 ? tHeaders.indexOf('Punkty') : 5;
+            let tPosCol = tHeaders.findIndex(h => h && h.toLowerCase().includes('poz'));
+            let tDriverCol = tHeaders.findIndex(h => h && h.toLowerCase().includes('kierowca'));
+            let tTeamCol = tHeaders.findIndex(h => h && h.toLowerCase().includes('team'));
+            let tPtsCol = tHeaders.findIndex(h => h && h.toLowerCase().includes('punkt'));
 
             for (let i = teamHeaderIndex + 1; i < rawData.length; i++) {
                 let r = rawData[i];
-                if (r[tPosCol] && !isNaN(parseInt(r[tPosCol]))) {
+                if (r && r[tPosCol] && !isNaN(parseInt(r[tPosCol]))) {
                     globalTeams.push({
                         pos: r[tPosCol],
-                        drivers: r[tDriverCol] || '',
-                        name: r[tTeamCol] || 'Niezależny',
-                        points: parseInt(r[tPtsCol]) || 0
+                        drivers: tDriverCol !== -1 ? (r[tDriverCol] || '') : '',
+                        name: tTeamCol !== -1 ? (r[tTeamCol] || 'Niezależny') : 'Niezależny',
+                        points: tPtsCol !== -1 ? (parseInt(r[tPtsCol]) || 0) : 0
                     });
                 }
             }
@@ -410,11 +444,11 @@ function renderZespoly() {
 }
 
 function formatResult(val) {
-    if (!val || val === '') return '-';
+    if (!val || val === '' || val === '0') return '-';
     if (val === '1') return `<span class="badge-win">P1</span>`;
     if (val === '2') return `<span class="badge-p2">P2</span>`;
     if (val === '3') return `<span class="badge-p3">P3</span>`;
-    if (val === 'DNF' || val === 'DSC') return `<span class="badge-dnf">${val}</span>`;
+    if (val === 'DNF' || val === 'DSC' || val === 'DSQ') return `<span class="badge-dnf">${val}</span>`;
     if (val === 'DNS') return `<span class="badge-dns">DNS</span>`;
     return val;
 }
