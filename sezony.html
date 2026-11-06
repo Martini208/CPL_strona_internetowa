@@ -244,7 +244,7 @@ async function loadSeasonData() {
         let headers = rawData[headerIndex];
 
         let colPos = headers.indexOf('Pozycja') !== -1 ? headers.indexOf('Pozycja') : (headers.indexOf('Poz') !== -1 ? headers.indexOf('Poz') : 0);
-        let colNum = headers.indexOf('Numer') !== -1 ? headers.indexOf('Numer') : headers.indexOf('No');
+        let colNum = headers.indexOf('Numer') !== -1 ? headers.indexOf('Numer') : (headers.indexOf('No') !== -1 ? headers.indexOf('No') : -1);
         let colDriver = headers.indexOf('Kierowca') !== -1 ? headers.indexOf('Kierowca') : 4;
         let colTeam = headers.indexOf('Drużyna') !== -1 ? headers.indexOf('Drużyna') : (headers.indexOf('Team') !== -1 ? headers.indexOf('Team') : 3);
         
@@ -285,33 +285,27 @@ async function loadSeasonData() {
             raceHeaders = ['AUS', 'CHI', 'CAN', 'FRA', 'AUT', 'ITA', 'ITA', 'ESP', 'POR', 'SGP', 'JAP', 'USA', 'USA', 'BRA', 'SAR', 'ABU'];
         }
 
-        // Untere Team-Tabelle parsen (speziell für Sezon 15 Logik mit Team-Zusammenfassung)
-        let teamHeaderIndex = rawData.findIndex((r, idx) => idx > headerIndex && r.some(c => c && (c.toLowerCase() === 'team' || c.toLowerCase() === 'punkty')));
-        let teamMapFromBottom = {};
+        // Spezielle Team-Erkennung für Sezon 15 (wo Teamname in Spalte C steht und Fahrer in Spalte E folgen)
+        let isSezon15 = (currentGid === '1977413477');
+        let currentTeamName = 'Niezależny';
 
-        if (teamHeaderIndex !== -1) {
-            let tHeaders = rawData[teamHeaderIndex];
-            let tPosCol = tHeaders.findIndex(h => h && h.toLowerCase().includes('poz'));
-            let tDriverCol = tHeaders.findIndex(h => h && h.toLowerCase().includes('kierowca'));
-            let tTeamCol = tHeaders.findIndex(h => h && h.toLowerCase().includes('team'));
-            let tPtsCol = tHeaders.findIndex(h => h && h.toLowerCase().includes('punkt'));
-
+        if (isSezon15) {
+            let teamMap = {};
+            let currentPos = '';
             let currentTeam = '';
             let currentDrivers = [];
-            let currentPos = '';
             let currentPts = 0;
 
-            for (let i = teamHeaderIndex + 1; i < rawData.length; i++) {
+            for (let i = headerIndex + 1; i < rawData.length; i++) {
                 let r = rawData[i];
                 if (!r || r.every(cell => cell === '')) continue;
 
-                let posVal = tPosCol !== -1 ? r[tPosCol] : '';
-                let teamVal = tTeamCol !== -1 ? r[tTeamCol] : '';
-                let driverVal = tDriverCol !== -1 ? r[tDriverCol] : '';
-                let ptsVal = tPtsCol !== -1 ? r[tPtsCol] : '';
+                let pos = r[colPos];
+                let teamCol = r[2] || r[3]; // Spalte C oder D für Team
+                let driverCol = r[4] || r[colDriver]; // Spalte E für Fahrer
+                let ptsCol = r[colPts];
 
-                if (posVal && !isNaN(parseInt(posVal))) {
-                    // Wenn ein neues Team beginnt, speichern wir das alte Team ab
+                if (pos && !isNaN(parseInt(pos))) {
                     if (currentTeam && currentDrivers.length > 0) {
                         globalTeams.push({
                             pos: currentPos,
@@ -320,22 +314,23 @@ async function loadSeasonData() {
                             points: currentPts
                         });
                     }
-                    currentPos = posVal;
-                    currentTeam = teamVal || currentTeam;
+                    currentPos = pos;
+                    currentTeam = (teamCol && teamCol !== '') ? teamCol : currentTeam;
                     currentDrivers = [];
-                    currentPts = parseInt(ptsVal) || 0;
-                } else if (teamVal && teamVal !== '') {
-                    currentTeam = teamVal;
+                    currentPts = parseInt(ptsCol) || 0;
+                } else if (teamCol && teamCol !== '') {
+                    currentTeam = teamCol;
                 }
 
-                if (driverVal && driverVal !== '' && driverVal !== '-') {
-                    currentDrivers.push(driverVal);
+                if (driverCol && driverCol !== '' && driverCol !== '-' && !driverCol.match(/^\d+$/)) {
+                    if (!currentDrivers.includes(driverCol)) {
+                        currentDrivers.push(driverCol);
+                    }
                 }
-                if (ptsVal && !isNaN(parseInt(ptsVal))) {
-                    currentPts = parseInt(ptsVal);
+                if (ptsCol && !isNaN(parseInt(ptsCol))) {
+                    currentPts = parseInt(ptsCol);
                 }
             }
-            // Letztes Team hinzufügen
             if (currentTeam && currentDrivers.length > 0) {
                 globalTeams.push({
                     pos: currentPos,
@@ -344,9 +339,31 @@ async function loadSeasonData() {
                     points: currentPts
                 });
             }
+        } else {
+            // Standard Team-Tabelle parsen (wie bei Sezon 18 / 19)
+            let teamHeaderIndex = rawData.findIndex((r, idx) => idx > headerIndex && r.some(c => c && (c.toLowerCase() === 'team' || c.toLowerCase() === 'punkty')));
+            if (teamHeaderIndex !== -1) {
+                let tHeaders = rawData[teamHeaderIndex];
+                let tPosCol = tHeaders.findIndex(h => h && h.toLowerCase().includes('poz'));
+                let tDriverCol = tHeaders.findIndex(h => h && h.toLowerCase().includes('kierowca'));
+                let tTeamCol = tHeaders.findIndex(h => h && h.toLowerCase().includes('team'));
+                let tPtsCol = tHeaders.findIndex(h => h && h.toLowerCase().includes('punkt'));
+
+                for (let i = teamHeaderIndex + 1; i < rawData.length; i++) {
+                    let r = rawData[i];
+                    if (r && r[tPosCol] && !isNaN(parseInt(r[tPosCol]))) {
+                        globalTeams.push({
+                            pos: r[tPosCol],
+                            drivers: tDriverCol !== -1 ? (r[tDriverCol] || '') : '',
+                            name: tTeamCol !== -1 ? (r[tTeamCol] || 'Niezależny') : 'Niezależny',
+                            points: tPtsCol !== -1 ? (parseInt(r[tPtsCol]) || 0) : 0
+                        });
+                    }
+                }
+            }
         }
 
-        // Mapping für die Fahrer-Zuweisung erstellen
+        // Mapping für Fahrer zu Teams
         let driverToTeamMap = {};
         globalTeams.forEach(t => {
             let dList = t.drivers.split('&').map(d => d.trim());
@@ -371,6 +388,13 @@ async function loadSeasonData() {
                 break;
             }
 
+            if (isSezon15) {
+                let possibleTeam = row[2] || row[3];
+                if (possibleTeam && possibleTeam !== '' && !possibleTeam.match(/^\d+$/)) {
+                    currentTeamName = possibleTeam;
+                }
+            }
+
             if (pos && !isNaN(parseInt(pos)) && driverName && driverName !== '' && driverName !== '0') {
                 let driverRaces = [];
                 for (let r = 0; r < raceHeaders.length; r++) {
@@ -378,7 +402,14 @@ async function loadSeasonData() {
                     driverRaces.push(cellVal);
                 }
 
-                let assignedTeam = driverToTeamMap[driverName.toLowerCase()] || 'Niezależny';
+                let assignedTeam = 'Niezależny';
+                if (isSezon15) {
+                    assignedTeam = driverToTeamMap[driverName.toLowerCase()] || currentTeamName;
+                } else if (colTeam !== -1 && row[colTeam] && row[colTeam] !== '') {
+                    assignedTeam = row[colTeam];
+                } else if (driverToTeamMap[driverName.toLowerCase()]) {
+                    assignedTeam = driverToTeamMap[driverName.toLowerCase()];
+                }
 
                 globalDrivers.push({
                     pos: pos,
@@ -493,7 +524,7 @@ function renderZespoly() {
             <td class="pos-badge text-center">${t.pos || (idx + 1)}</td>
             <td>
                 <strong>${t.name}</strong>
-                ${t.drivers ? `<br><small style="color:#888;">${t.drivers}</small>` : ''}
+                ${t.drivers ? `<br><small style="color:#888;">${t.drivers.replace(/\n/g, ' & ')}</small>` : ''}
             </td>
             <td class="text-center" style="color: var(--red-main); font-weight:bold;">${t.points} PKT</td>
         </tr>`;
