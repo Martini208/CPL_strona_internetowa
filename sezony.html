@@ -376,7 +376,12 @@ async function loadSeasonData() {
             });
         });
 
-        // Fahrerdaten parsen (Strikt bis maximal 20 Fahrer)
+        // Bestimme das Limit für die Anzahl der Fahrer je nach Saison
+        let maxDrivers = 20;
+        if (currentGid === '1127275876') maxDrivers = 14;      // Sezon 14 S2
+        else if (currentGid === '476402002') maxDrivers = 19; // Sezon 14
+
+        // Fahrerdaten parsen (Strikt bis zum saisonabhängigen Limit)
         let startIndex = headerIndex + 1;
         for (let i = startIndex; i < rawData.length; i++) {
             let row = rawData[i];
@@ -388,7 +393,7 @@ async function loadSeasonData() {
             if (pos && (pos.toLowerCase() === 'team' || pos.toLowerCase() === 'punkty')) {
                 break;
             }
-            if (globalDrivers.length >= 20) {
+            if (globalDrivers.length >= maxDrivers) {
                 break;
             }
 
@@ -399,7 +404,7 @@ async function loadSeasonData() {
                 }
             }
 
-            if (pos && !isNaN(parseInt(pos)) && driverName && driverName !== '' && driverName !== '0' && parseInt(pos) <= 20) {
+            if (pos && !isNaN(parseInt(pos)) && driverName && driverName !== '' && driverName !== '0' && parseInt(pos) <= maxDrivers) {
                 let driverRaces = [];
                 for (let r = 0; r < raceHeaders.length; r++) {
                     let cellVal = row[colTeam + 1 + r] || '';
