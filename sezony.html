@@ -172,6 +172,7 @@ footer {
                 <option value="1977413477" data-name="Sezon 15">Sezon 15</option>
                 <option value="476402002" data-name="Sezon 14">Sezon 14</option>
                 <option value="1127275876" data-name="Sezon 14 S2">Sezon 14 S2</option>
+                <option value="113798131" data-name="S14 PRE SEASON Akademia">S14 PRE SEASON Akademia</option>
             </select>
         </div>
         
@@ -267,7 +268,7 @@ async function loadSeasonData() {
         let foundRaceRow = -1;
         for (let r = 0; r < headerIndex; r++) {
             let rowStr = rawData[r].join(' ');
-            if (rowStr.includes('ITA') || rowStr.includes('JAP') || rowStr.includes('AUS') || rowStr.includes('CHI')) {
+            if (rowStr.includes('ITA') || rowStr.includes('JAP') || rowStr.includes('AUS') || rowStr.includes('CHI') || rowStr.includes('USA')) {
                 foundRaceRow = r;
                 break;
             }
@@ -284,17 +285,17 @@ async function loadSeasonData() {
         }
 
         if (raceHeaders.length === 0) {
-            raceHeaders = ['AUS', 'CHI', 'CAN', 'FRA', 'AUT', 'ITA', 'ESP', 'POR', 'SGP', 'JAP', 'USA', 'BRA', 'SAR', 'ABU'];
+            raceHeaders = ['USA', 'AUT', 'CHI', 'CHI', 'ESP', 'ITA', 'MON', 'ABU'];
         }
 
-        let isMultiRowTeamFormat = (currentGid === '1977413477' || currentGid === '476402002' || currentGid === '1127275876');
+        let isMultiRowTeamFormat = (currentGid === '1977413477' || currentGid === '476402002' || currentGid === '1127275876' || currentGid === '113798131');
         let currentTeamName = 'Niezależny';
 
         if (isMultiRowTeamFormat) {
             let teamHeaderIdx = -1;
             for (let i = headerIndex + 1; i < rawData.length; i++) {
                 let rStr = rawData[i].join(' ');
-                if (rStr.includes('Alpine') || rStr.includes('Haas') || rStr.includes('Aston Martin') || rStr.includes('Ferrari') || rStr.includes('Red Bull')) {
+                if (rStr.includes('Alpine') || rStr.includes('Haas') || rStr.includes('Aston Martin') || rStr.includes('Ferrari') || rStr.includes('Red Bull') || rStr.includes('McLaren')) {
                     teamHeaderIdx = i - 2;
                     break;
                 }
