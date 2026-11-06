@@ -281,9 +281,46 @@ async function loadSeasonData() {
         }
 
         if (raceHeaders.length === 0) {
-            raceHeaders = ['AUS', 'AZB', 'JAP', 'SGP', 'HUN', 'USA', 'MEX', 'BRA', 'NET', 'USA', 'CHI', 'ABU', 'AUT', 'GBR'];
+            raceHeaders = ['ITA', 'JAP', 'BAH', 'QAT', 'SAR', 'BEL', 'AUS', 'CHI', 'ESP', 'AUT', 'CAN', 'BRA', 'MON'];
         }
 
+        // 1. Zuerst die untere Team-Tabelle parsen, um die Fahrer den Teams zuzuordnen
+        let teamHeaderIndex = rawData.findIndex((r, idx) => idx > headerIndex && r.some(c => c && (c.toLowerCase() === 'team' || c.toLowerCase() === 'punkty')));
+        let driverToTeamMap = {};
+
+        if (teamHeaderIndex !== -1) {
+            let tHeaders = rawData[teamHeaderIndex];
+            let tPosCol = tHeaders.findIndex(h => h && h.toLowerCase().includes('poz'));
+            let tDriverCol = tHeaders.findIndex(h => h && h.toLowerCase().includes('kierowca'));
+            let tTeamCol = tHeaders.findIndex(h => h && h.toLowerCase().includes('team'));
+            let tPtsCol = tHeaders.findIndex(h => h && h.toLowerCase().includes('punkt'));
+
+            for (let i = teamHeaderIndex + 1; i < rawData.length; i++) {
+                let r = rawData[i];
+                if (r && r[tPosCol] && !isNaN(parseInt(r[tPosCol]))) {
+                    let teamName = tTeamCol !== -1 ? (r[tTeamCol] || 'Niezależny') : 'Niezależny';
+                    let driversStr = tDriverCol !== -1 ? (r[tDriverCol] || '') : '';
+                    let pointsVal = tPtsCol !== -1 ? (parseInt(r[tPtsCol]) || 0) : 0;
+
+                    globalTeams.push({
+                        pos: r[tPosCol],
+                        drivers: driversStr,
+                        name: teamName,
+                        points: pointsVal
+                    });
+
+                    // Fahrer aufteilen, die mit "&" verknüpft sind (z.B. "Bartex & Klocek")
+                    let teamDrivers = driversStr.split('&').map(d => d.trim());
+                    teamDrivers.forEach(dName => {
+                        if (dName && dName !== '-') {
+                            driverToTeamMap[dName.toLowerCase()] = teamName;
+                        }
+                    });
+                }
+            }
+        }
+
+        // 2. Fahrerdaten parsen
         let startIndex = headerIndex + 1;
         for (let i = startIndex; i < rawData.length; i++) {
             let row = rawData[i];
@@ -306,35 +343,22 @@ async function loadSeasonData() {
                     driverRaces.push(cellVal);
                 }
 
+                // Team zuweisen: Entweder aus der Spalte oder aus der Team-Tabelle ermitteln
+                let assignedTeam = 'Niezależny';
+                if (colTeam !== -1 && row[colTeam] && row[colTeam] !== '' && !row[colTeam].match(/^\d+$/)) {
+                    assignedTeam = row[colTeam];
+                } else if (driverToTeamMap[driverName.toLowerCase()]) {
+                    assignedTeam = driverToTeamMap[driverName.toLowerCase()];
+                }
+
                 globalDrivers.push({
                     pos: pos,
                     number: colNum !== -1 ? (row[colNum] || '') : '',
                     name: driverName,
-                    team: (colTeam !== -1 && row[colTeam] && row[colTeam] !== '') ? row[colTeam] : 'Niezależny',
+                    team: assignedTeam,
                     points: row[colPts] || '0',
                     races: driverRaces
                 });
-            }
-        }
-
-        let teamHeaderIndex = rawData.findIndex((r, idx) => idx > headerIndex && r.some(c => c && (c.toLowerCase() === 'team' || c.toLowerCase() === 'punkty')));
-        if (teamHeaderIndex !== -1) {
-            let tHeaders = rawData[teamHeaderIndex];
-            let tPosCol = tHeaders.findIndex(h => h && h.toLowerCase().includes('poz'));
-            let tDriverCol = tHeaders.findIndex(h => h && h.toLowerCase().includes('kierowca'));
-            let tTeamCol = tHeaders.findIndex(h => h && h.toLowerCase().includes('team'));
-            let tPtsCol = tHeaders.findIndex(h => h && h.toLowerCase().includes('punkt'));
-
-            for (let i = teamHeaderIndex + 1; i < rawData.length; i++) {
-                let r = rawData[i];
-                if (r && r[tPosCol] && !isNaN(parseInt(r[tPosCol]))) {
-                    globalTeams.push({
-                        pos: r[tPosCol],
-                        drivers: tDriverCol !== -1 ? (r[tDriverCol] || '') : '',
-                        name: tTeamCol !== -1 ? (r[tTeamCol] || 'Niezależny') : 'Niezależny',
-                        points: tPtsCol !== -1 ? (parseInt(r[tPtsCol]) || 0) : 0
-                    });
-                }
             }
         }
 
