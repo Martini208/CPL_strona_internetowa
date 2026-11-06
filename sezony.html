@@ -173,6 +173,7 @@ footer {
                 <option value="476402002" data-name="Sezon 14">Sezon 14</option>
                 <option value="1127275876" data-name="Sezon 14 S2">Sezon 14 S2</option>
                 <option value="113798131" data-name="S14 PRE SEASON Akademia">S14 PRE SEASON Akademia</option>
+                <option value="830059160" data-name="Sezon 13">Sezon 13</option>
             </select>
         </div>
         
@@ -268,7 +269,7 @@ async function loadSeasonData() {
         let foundRaceRow = -1;
         for (let r = 0; r < headerIndex; r++) {
             let rowStr = rawData[r].join(' ');
-            if (rowStr.includes('ITA') || rowStr.includes('JAP') || rowStr.includes('AUS') || rowStr.includes('CHI') || rowStr.includes('USA')) {
+            if (rowStr.includes('ITA') || rowStr.includes('JAP') || rowStr.includes('AUS') || rowStr.includes('CHI') || rowStr.includes('BAH')) {
                 foundRaceRow = r;
                 break;
             }
@@ -285,17 +286,17 @@ async function loadSeasonData() {
         }
 
         if (raceHeaders.length === 0) {
-            raceHeaders = ['USA', 'AUT', 'CHI', 'CHI', 'ESP', 'ITA', 'MON', 'ABU'];
+            raceHeaders = ['AUS', 'BAH', 'SAR', 'CHI', 'POR', 'ESP', 'AZB', 'CAN', 'GBR', 'AUT', 'FRA', 'BEL', 'ITA', 'USA', 'MEX', 'BRA', 'ABU'];
         }
 
-        let isMultiRowTeamFormat = (currentGid === '1977413477' || currentGid === '476402002' || currentGid === '1127275876' || currentGid === '113798131');
+        let isMultiRowTeamFormat = (currentGid === '1977413477' || currentGid === '476402002' || currentGid === '1127275876' || currentGid === '113798131' || currentGid === '830059160');
         let currentTeamName = 'Niezależny';
 
         if (isMultiRowTeamFormat) {
             let teamHeaderIdx = -1;
             for (let i = headerIndex + 1; i < rawData.length; i++) {
                 let rStr = rawData[i].join(' ');
-                if (rStr.includes('Alpine') || rStr.includes('Haas') || rStr.includes('Aston Martin') || rStr.includes('Ferrari') || rStr.includes('Red Bull') || rStr.includes('McLaren')) {
+                if (rStr.includes('Alpine') || rStr.includes('Haas') || rStr.includes('Aston Martin') || rStr.includes('Ferrari') || rStr.includes('Red Bull') || rStr.includes('McLaren') || rStr.includes('Alfa Romeo') || rStr.includes('Mercedes') || rStr.includes('Williams')) {
                     teamHeaderIdx = i - 2;
                     break;
                 }
@@ -381,6 +382,7 @@ async function loadSeasonData() {
         let maxDrivers = 20;
         if (currentGid === '1127275876') maxDrivers = 14;      // Sezon 14 S2
         else if (currentGid === '476402002') maxDrivers = 19; // Sezon 14
+        else if (currentGid === '830059160') maxDrivers = 19; // Sezon 13
 
         // Fahrerdaten parsen (Strikt bis zum saisonabhängigen Limit)
         let startIndex = headerIndex + 1;
