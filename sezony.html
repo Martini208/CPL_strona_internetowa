@@ -170,6 +170,8 @@ footer {
                 <option value="1084021057" data-name="Sezon 18">Sezon 18</option>
                 <option value="1357536057" data-name="Sezon 18 S2">Sezon 18 S2</option>
                 <option value="1977413477" data-name="Sezon 15">Sezon 15</option>
+                <option value="476402002" data-name="Sezon 14">Sezon 14</option>
+                <option value="1127275876" data-name="Sezon 14 S2">Sezon 14 S2</option>
             </select>
         </div>
         
@@ -282,17 +284,17 @@ async function loadSeasonData() {
         }
 
         if (raceHeaders.length === 0) {
-            raceHeaders = ['AUS', 'CHI', 'CAN', 'FRA', 'AUT', 'ITA', 'ITA', 'ESP', 'POR', 'SGP', 'JAP', 'USA', 'USA', 'BRA', 'SAR', 'ABU'];
+            raceHeaders = ['AUS', 'CHI', 'CAN', 'FRA', 'AUT', 'ITA', 'ESP', 'POR', 'SGP', 'JAP', 'USA', 'BRA', 'SAR', 'ABU'];
         }
 
-        let isSezon15 = (currentGid === '1977413477');
+        let isMultiRowTeamFormat = (currentGid === '1977413477' || currentGid === '476402002' || currentGid === '1127275876');
         let currentTeamName = 'Niezależny';
 
-        if (isSezon15) {
+        if (isMultiRowTeamFormat) {
             let teamHeaderIdx = -1;
             for (let i = headerIndex + 1; i < rawData.length; i++) {
                 let rStr = rawData[i].join(' ');
-                if (rStr.includes('Alpine') || rStr.includes('Haas') || rStr.includes('Aston Martin')) {
+                if (rStr.includes('Alpine') || rStr.includes('Haas') || rStr.includes('Aston Martin') || rStr.includes('Ferrari') || rStr.includes('Red Bull')) {
                     teamHeaderIdx = i - 2;
                     break;
                 }
@@ -383,7 +385,6 @@ async function loadSeasonData() {
             let pos = row[colPos];
             let driverName = row[colDriver];
 
-            // Stoppe, wenn die untere Team-Tabelle erreicht wird oder mehr als 20 Fahrer eingelesen wurden
             if (pos && (pos.toLowerCase() === 'team' || pos.toLowerCase() === 'punkty')) {
                 break;
             }
@@ -391,7 +392,7 @@ async function loadSeasonData() {
                 break;
             }
 
-            if (isSezon15) {
+            if (isMultiRowTeamFormat) {
                 let possibleTeam = row[3];
                 if (possibleTeam && possibleTeam !== '' && !possibleTeam.match(/^\d+$/)) {
                     currentTeamName = possibleTeam;
