@@ -293,7 +293,7 @@ async function loadSeasonData() {
             for (let i = headerIndex + 1; i < rawData.length; i++) {
                 let rStr = rawData[i].join(' ');
                 if (rStr.includes('Alpine') || rStr.includes('Haas') || rStr.includes('Aston Martin')) {
-                    teamHeaderIdx = i - 2; // Ein paar Zeilen vor den Teamnamen fängt die Tabelle an
+                    teamHeaderIdx = i - 2;
                     break;
                 }
             }
@@ -308,10 +308,9 @@ async function loadSeasonData() {
                 let r = rawData[i];
                 if (!r || r.every(cell => cell === '')) continue;
 
-                let pos = r[2]; // Spalte C (Poz)
-                let teamCol = r[3]; // Spalte D (Team)
-                let driverCol = r[5]; // Spalte F (Kierowca)
-                let ptsCol = r[21] || r[22]; // Spalte Punktzahl bei Sezon 15
+                let pos = r[2]; 
+                let teamCol = r[3]; 
+                let driverCol = r[5]; 
 
                 if (pos && !isNaN(parseInt(pos))) {
                     if (currentTeam && currentDrivers.length > 0) {
@@ -344,23 +343,7 @@ async function loadSeasonData() {
                     points: 0
                 });
             }
-
-            // Punkte für Sezon 15 Teams automatisch aus den Fahrern summieren
-            globalTeams.forEach(t => {
-                let dList = t.drivers.split('&').map(d => d.trim().toLowerCase());
-                let totalP = 0;
-                globalDrivers.forEach(d => {
-                    if (dList.includes(d.name.toLowerCase())) {
-                        totalP += parseInt(d.points) || 0;
-                    }
-                });
-                t.points = totalP;
-            });
-            globalTeams.sort((a, b) => b.points - a.points);
-            globalTeams.forEach((t, idx) => { t.pos = idx + 1; });
-
         } else {
-            // Standard Team-Tabelle parsen (Sezon 18, 19 etc.)
             let teamHeaderIndex = rawData.findIndex((r, idx) => idx > headerIndex && r.some(c => c && (c.toLowerCase() === 'team' || c.toLowerCase() === 'punkty')));
             if (teamHeaderIndex !== -1) {
                 let tHeaders = rawData[teamHeaderIndex];
@@ -391,7 +374,7 @@ async function loadSeasonData() {
             });
         });
 
-        // Fahrerdaten parsen
+        // Fahrerdaten parsen (Strikt bis maximal 20 Fahrer)
         let startIndex = headerIndex + 1;
         for (let i = startIndex; i < rawData.length; i++) {
             let row = rawData[i];
@@ -400,14 +383,22 @@ async function loadSeasonData() {
             let pos = row[colPos];
             let driverName = row[colDriver];
 
+            // Stoppe, wenn die untere Team-Tabelle erreicht wird oder mehr als 20 Fahrer eingelesen wurden
             if (pos && (pos.toLowerCase() === 'team' || pos.toLowerCase() === 'punkty')) {
                 break;
             }
-            if (driverName && driverName.toLowerCase() === 'punkty' && i > startIndex + 15) {
+            if (globalDrivers.length >= 20) {
                 break;
             }
 
-            if (pos && !isNaN(parseInt(pos)) && driverName && driverName !== '' && driverName !== '0') {
+            if (isSezon15) {
+                let possibleTeam = row[3];
+                if (possibleTeam && possibleTeam !== '' && !possibleTeam.match(/^\d+$/)) {
+                    currentTeamName = possibleTeam;
+                }
+            }
+
+            if (pos && !isNaN(parseInt(pos)) && driverName && driverName !== '' && driverName !== '0' && parseInt(pos) <= 20) {
                 let driverRaces = [];
                 for (let r = 0; r < raceHeaders.length; r++) {
                     let cellVal = row[colTeam + 1 + r] || '';
@@ -427,8 +418,8 @@ async function loadSeasonData() {
             }
         }
 
-        // Wenn Sezon 15, Teams nochmals mit den echten Fahrern und Punkten updaten
-        if (isSezon15 && globalTeams.length > 0) {
+        // Teams mit den echten Fahrern und Punkten updaten
+        if (globalTeams.length > 0) {
             globalTeams.forEach(t => {
                 let dList = t.drivers.split('&').map(d => d.trim().toLowerCase());
                 let totalP = 0;
