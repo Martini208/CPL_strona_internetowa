@@ -285,9 +285,9 @@ async function loadSeasonData() {
             raceHeaders = ['AUS', 'CHI', 'CAN', 'FRA', 'AUT', 'ITA', 'ITA', 'ESP', 'POR', 'SGP', 'JAP', 'USA', 'USA', 'BRA', 'SAR', 'ABU'];
         }
 
-        // Untere Team-Tabelle für Sezon 15 parsen (wo Teams zusammengefasst sind)
+        // Untere Team-Tabelle parsen (speziell für Sezon 15 Logik mit Team-Zusammenfassung)
         let teamHeaderIndex = rawData.findIndex((r, idx) => idx > headerIndex && r.some(c => c && (c.toLowerCase() === 'team' || c.toLowerCase() === 'punkty')));
-        let driverToTeamMap = {};
+        let teamMapFromBottom = {};
 
         if (teamHeaderIndex !== -1) {
             let tHeaders = rawData[teamHeaderIndex];
@@ -296,27 +296,67 @@ async function loadSeasonData() {
             let tTeamCol = tHeaders.findIndex(h => h && h.toLowerCase().includes('team'));
             let tPtsCol = tHeaders.findIndex(h => h && h.toLowerCase().includes('punkt'));
 
+            let currentTeam = '';
+            let currentDrivers = [];
+            let currentPos = '';
+            let currentPts = 0;
+
             for (let i = teamHeaderIndex + 1; i < rawData.length; i++) {
                 let r = rawData[i];
-                if (r && r[tPosCol] && !isNaN(parseInt(r[tPosCol]))) {
-                    let teamName = tTeamCol !== -1 ? (r[tTeamCol] || 'Niezależny') : 'Niezależny';
-                    let driversStr = tDriverCol !== -1 ? (r[tDriverCol] || '') : '';
-                    let pointsVal = tPtsCol !== -1 ? (parseInt(r[tPtsCol]) || 0) : 0;
+                if (!r || r.every(cell => cell === '')) continue;
 
-                    globalTeams.push({
-                        pos: r[tPosCol],
-                        drivers: driversStr,
-                        name: teamName,
-                        points: pointsVal
-                    });
+                let posVal = tPosCol !== -1 ? r[tPosCol] : '';
+                let teamVal = tTeamCol !== -1 ? r[tTeamCol] : '';
+                let driverVal = tDriverCol !== -1 ? r[tDriverCol] : '';
+                let ptsVal = tPtsCol !== -1 ? r[tPtsCol] : '';
+
+                if (posVal && !isNaN(parseInt(posVal))) {
+                    // Wenn ein neues Team beginnt, speichern wir das alte Team ab
+                    if (currentTeam && currentDrivers.length > 0) {
+                        globalTeams.push({
+                            pos: currentPos,
+                            name: currentTeam,
+                            drivers: currentDrivers.join(' & '),
+                            points: currentPts
+                        });
+                    }
+                    currentPos = posVal;
+                    currentTeam = teamVal || currentTeam;
+                    currentDrivers = [];
+                    currentPts = parseInt(ptsVal) || 0;
+                } else if (teamVal && teamVal !== '') {
+                    currentTeam = teamVal;
                 }
+
+                if (driverVal && driverVal !== '' && driverVal !== '-') {
+                    currentDrivers.push(driverVal);
+                }
+                if (ptsVal && !isNaN(parseInt(ptsVal))) {
+                    currentPts = parseInt(ptsVal);
+                }
+            }
+            // Letztes Team hinzufügen
+            if (currentTeam && currentDrivers.length > 0) {
+                globalTeams.push({
+                    pos: currentPos,
+                    name: currentTeam,
+                    drivers: currentDrivers.join(' & '),
+                    points: currentPts
+                });
             }
         }
 
+        // Mapping für die Fahrer-Zuweisung erstellen
+        let driverToTeamMap = {};
+        globalTeams.forEach(t => {
+            let dList = t.drivers.split('&').map(d => d.trim());
+            dList.forEach(dName => {
+                driverToTeamMap[dName.toLowerCase()] = t.name;
+            });
+        });
+
         // Fahrerdaten parsen
         let startIndex = headerIndex + 1;
-        let currentTeamName = 'Niezależny';
-
         for (let i = startIndex; i < rawData.length; i++) {
             let row = rawData[i];
             if (!row || row.length < 2) continue;
@@ -331,12 +371,6 @@ async function loadSeasonData() {
                 break;
             }
 
-            // In Sezon 15 steht der Teamname manchmal in einer eigenen Spalte davor oder fasst mehrere Zeilen zusammen
-            let possibleTeam = row[colTeam];
-            if (possibleTeam && possibleTeam !== '' && !possibleTeam.match(/^\d+$/)) {
-                currentTeamName = possibleTeam;
-            }
-
             if (pos && !isNaN(parseInt(pos)) && driverName && driverName !== '' && driverName !== '0') {
                 let driverRaces = [];
                 for (let r = 0; r < raceHeaders.length; r++) {
@@ -344,11 +378,13 @@ async function loadSeasonData() {
                     driverRaces.push(cellVal);
                 }
 
+                let assignedTeam = driverToTeamMap[driverName.toLowerCase()] || 'Niezależny';
+
                 globalDrivers.push({
                     pos: pos,
                     number: colNum !== -1 ? (row[colNum] || '') : '',
                     name: driverName,
-                    team: currentTeamName,
+                    team: assignedTeam,
                     points: row[colPts] || '0',
                     races: driverRaces
                 });
