@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sezony - CPL F1 League</title>
-<!-- html2canvas Bibliothek für den Bild-Download -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 :root {
     --bg-color: #0d0d0d;
@@ -62,12 +60,6 @@ nav a:hover { background: rgba(255, 255, 255, 0.2); }
     gap: 15px;
 }
 
-.header-controls {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
 .season-select {
     background: #222;
     color: #fff;
@@ -79,20 +71,6 @@ nav a:hover { background: rgba(255, 255, 255, 0.2); }
     cursor: pointer;
     outline: none;
 }
-
-.save-img-btn {
-    background: var(--red-main);
-    color: #fff;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.save-img-btn:hover { background: #e02828; }
 
 .tab-buttons {
     display: flex;
@@ -181,21 +159,18 @@ footer {
 <div class="container">
     <h1 style="color: var(--red-main); margin-bottom: 20px;">ARCHIWUM SEZONÓW</h1>
 
-    <div class="season-card" id="capture-area">
+    <div class="season-card">
         <div class="season-header">
             <h2 id="season-title">Sezon Letni 2026</h2>
-            <div class="header-controls">
-                <select id="season-picker" class="season-select" onchange="onSeasonChange()">
-                    <option value="482383691" data-name="Sezon Letni 2026" selected>Sezon Letni 2026</option>
-                    <option value="1746450890" data-name="Sezon 19">Sezon 19</option>
-                    <option value="767862976" data-name="Sezon 19 S2">Sezon 19 S2</option>
-                    <option value="188448851" data-name="Sezon 19 S3">Sezon 19 S3</option>
-                    <option value="1084021057" data-name="Sezon 18">Sezon 18</option>
-                    <option value="1357536057" data-name="Sezon 18 S2">Sezon 18 S2</option>
-                    <option value="1977413477" data-name="Sezon 15">Sezon 15</option>
-                </select>
-                <button class="save-img-btn" onclick="saveAsImage()">📷 Als Bild speichern</button>
-            </div>
+            <select id="season-picker" class="season-select" onchange="onSeasonChange()">
+                <option value="482383691" data-name="Sezon Letni 2026" selected>Sezon Letni 2026</option>
+                <option value="1746450890" data-name="Sezon 19">Sezon 19</option>
+                <option value="767862976" data-name="Sezon 19 S2">Sezon 19 S2</option>
+                <option value="188448851" data-name="Sezon 19 S3">Sezon 19 S3</option>
+                <option value="1084021057" data-name="Sezon 18">Sezon 18</option>
+                <option value="1357536057" data-name="Sezon 18 S2">Sezon 18 S2</option>
+                <option value="1977413477" data-name="Sezon 15">Sezon 15</option>
+            </select>
         </div>
         
         <div class="tab-buttons">
@@ -270,8 +245,8 @@ async function loadSeasonData() {
 
         let colPos = headers.indexOf('Pozycja') !== -1 ? headers.indexOf('Pozycja') : (headers.indexOf('Poz') !== -1 ? headers.indexOf('Poz') : 0);
         let colNum = headers.indexOf('Numer') !== -1 ? headers.indexOf('Numer') : headers.indexOf('No');
-        let colDriver = headers.indexOf('Kierowca') !== -1 ? headers.indexOf('Kierowca') : 1;
-        let colTeam = headers.indexOf('Drużyna') !== -1 ? headers.indexOf('Drużyna') : (headers.indexOf('Team') !== -1 ? headers.indexOf('Team') : 2);
+        let colDriver = headers.indexOf('Kierowca') !== -1 ? headers.indexOf('Kierowca') : 4;
+        let colTeam = headers.indexOf('Drużyna') !== -1 ? headers.indexOf('Drużyna') : (headers.indexOf('Team') !== -1 ? headers.indexOf('Team') : 3);
         
         let colPts = headers.findIndex(h => h && h.toUpperCase().includes('PUNKT'));
         if (colPts === -1) {
@@ -279,8 +254,8 @@ async function loadSeasonData() {
             if (headerIndex !== -1) {
                 headers = rawData[headerIndex];
                 colPos = headers.indexOf('Poz') !== -1 ? headers.indexOf('Poz') : 0;
-                colDriver = headers.indexOf('Kierowca') !== -1 ? headers.indexOf('Kierowca') : 1;
-                colTeam = headers.indexOf('Team') !== -1 ? headers.indexOf('Team') : 2;
+                colDriver = headers.indexOf('Kierowca') !== -1 ? headers.indexOf('Kierowca') : 4;
+                colTeam = headers.indexOf('Team') !== -1 ? headers.indexOf('Team') : 3;
                 colPts = headers.findIndex(h => h && h.toUpperCase().includes('PUNKT'));
             } else {
                 colPts = headers.length - 3;
@@ -310,6 +285,7 @@ async function loadSeasonData() {
             raceHeaders = ['AUS', 'CHI', 'CAN', 'FRA', 'AUT', 'ITA', 'ITA', 'ESP', 'POR', 'SGP', 'JAP', 'USA', 'USA', 'BRA', 'SAR', 'ABU'];
         }
 
+        // Untere Team-Tabelle für Sezon 15 parsen (wo Teams zusammengefasst sind)
         let teamHeaderIndex = rawData.findIndex((r, idx) => idx > headerIndex && r.some(c => c && (c.toLowerCase() === 'team' || c.toLowerCase() === 'punkty')));
         let driverToTeamMap = {};
 
@@ -333,18 +309,14 @@ async function loadSeasonData() {
                         name: teamName,
                         points: pointsVal
                     });
-
-                    let teamDrivers = driversStr.split('\n').join('&').split('&').map(d => d.trim());
-                    teamDrivers.forEach(dName => {
-                        if (dName && dName !== '-') {
-                            driverToTeamMap[dName.toLowerCase()] = teamName;
-                        }
-                    });
                 }
             }
         }
 
+        // Fahrerdaten parsen
         let startIndex = headerIndex + 1;
+        let currentTeamName = 'Niezależny';
+
         for (let i = startIndex; i < rawData.length; i++) {
             let row = rawData[i];
             if (!row || row.length < 2) continue;
@@ -359,6 +331,12 @@ async function loadSeasonData() {
                 break;
             }
 
+            // In Sezon 15 steht der Teamname manchmal in einer eigenen Spalte davor oder fasst mehrere Zeilen zusammen
+            let possibleTeam = row[colTeam];
+            if (possibleTeam && possibleTeam !== '' && !possibleTeam.match(/^\d+$/)) {
+                currentTeamName = possibleTeam;
+            }
+
             if (pos && !isNaN(parseInt(pos)) && driverName && driverName !== '' && driverName !== '0') {
                 let driverRaces = [];
                 for (let r = 0; r < raceHeaders.length; r++) {
@@ -366,18 +344,11 @@ async function loadSeasonData() {
                     driverRaces.push(cellVal);
                 }
 
-                let assignedTeam = 'Niezależny';
-                if (colTeam !== -1 && row[colTeam] && row[colTeam] !== '' && !row[colTeam].match(/^\d+$/)) {
-                    assignedTeam = row[colTeam];
-                } else if (driverToTeamMap[driverName.toLowerCase()]) {
-                    assignedTeam = driverToTeamMap[driverName.toLowerCase()];
-                }
-
                 globalDrivers.push({
                     pos: pos,
                     number: colNum !== -1 ? (row[colNum] || '') : '',
                     name: driverName,
-                    team: assignedTeam,
+                    team: currentTeamName,
                     points: row[colPts] || '0',
                     races: driverRaces
                 });
@@ -486,7 +457,7 @@ function renderZespoly() {
             <td class="pos-badge text-center">${t.pos || (idx + 1)}</td>
             <td>
                 <strong>${t.name}</strong>
-                ${t.drivers ? `<br><small style="color:#888;">${t.drivers.replace(/\n/g, ' & ')}</small>` : ''}
+                ${t.drivers ? `<br><small style="color:#888;">${t.drivers}</small>` : ''}
             </td>
             <td class="text-center" style="color: var(--red-main); font-weight:bold;">${t.points} PKT</td>
         </tr>`;
@@ -503,16 +474,6 @@ function formatResult(val) {
     if (val === 'DNF' || val === 'DSC' || val === 'DSQ' || val === 'BAN') return `<span class="badge-dnf">${val}</span>`;
     if (val === 'DNS') return `<span class="badge-dns">DNS</span>`;
     return val;
-}
-
-function saveAsImage() {
-    let element = document.getElementById('capture-area');
-    html2canvas(element, { backgroundColor: '#181818', scale: 2 }).then(canvas => {
-        let link = document.createElement('a');
-        link.download = document.getElementById('season-title').innerText.toLowerCase().replace(/\s+/g, '_') + '.png';
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-    });
 }
 
 loadSeasonData();
