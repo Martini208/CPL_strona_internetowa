@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sezony - CPL F1 League</title>
+<!-- html2canvas Bibliothek für den Bild-Download -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 :root {
     --bg-color: #0d0d0d;
@@ -60,6 +62,12 @@ nav a:hover { background: rgba(255, 255, 255, 0.2); }
     gap: 15px;
 }
 
+.header-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
 .season-select {
     background: #222;
     color: #fff;
@@ -71,6 +79,20 @@ nav a:hover { background: rgba(255, 255, 255, 0.2); }
     cursor: pointer;
     outline: none;
 }
+
+.save-img-btn {
+    background: var(--red-main);
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.save-img-btn:hover { background: #e02828; }
 
 .tab-buttons {
     display: flex;
@@ -159,17 +181,21 @@ footer {
 <div class="container">
     <h1 style="color: var(--red-main); margin-bottom: 20px;">ARCHIWUM SEZONÓW</h1>
 
-    <div class="season-card">
+    <div class="season-card" id="capture-area">
         <div class="season-header">
             <h2 id="season-title">Sezon Letni 2026</h2>
-            <select id="season-picker" class="season-select" onchange="onSeasonChange()">
-                <option value="482383691" data-name="Sezon Letni 2026" selected>Sezon Letni 2026</option>
-                <option value="1746450890" data-name="Sezon 19">Sezon 19</option>
-                <option value="767862976" data-name="Sezon 19 S2">Sezon 19 S2</option>
-                <option value="188448851" data-name="Sezon 19 S3">Sezon 19 S3</option>
-                <option value="1084021057" data-name="Sezon 18">Sezon 18</option>
-                <option value="1357536057" data-name="Sezon 18 S2">Sezon 18 S2</option>
-            </select>
+            <div class="header-controls">
+                <select id="season-picker" class="season-select" onchange="onSeasonChange()">
+                    <option value="482383691" data-name="Sezon Letni 2026" selected>Sezon Letni 2026</option>
+                    <option value="1746450890" data-name="Sezon 19">Sezon 19</option>
+                    <option value="767862976" data-name="Sezon 19 S2">Sezon 19 S2</option>
+                    <option value="188448851" data-name="Sezon 19 S3">Sezon 19 S3</option>
+                    <option value="1084021057" data-name="Sezon 18">Sezon 18</option>
+                    <option value="1357536057" data-name="Sezon 18 S2">Sezon 18 S2</option>
+                    <option value="1977413477" data-name="Sezon 15">Sezon 15</option>
+                </select>
+                <button class="save-img-btn" onclick="saveAsImage()">📷 Als Bild speichern</button>
+            </div>
         </div>
         
         <div class="tab-buttons">
@@ -243,7 +269,7 @@ async function loadSeasonData() {
         let headers = rawData[headerIndex];
 
         let colPos = headers.indexOf('Pozycja') !== -1 ? headers.indexOf('Pozycja') : (headers.indexOf('Poz') !== -1 ? headers.indexOf('Poz') : 0);
-        let colNum = headers.indexOf('Numer');
+        let colNum = headers.indexOf('Numer') !== -1 ? headers.indexOf('Numer') : headers.indexOf('No');
         let colDriver = headers.indexOf('Kierowca') !== -1 ? headers.indexOf('Kierowca') : 1;
         let colTeam = headers.indexOf('Drużyna') !== -1 ? headers.indexOf('Drużyna') : (headers.indexOf('Team') !== -1 ? headers.indexOf('Team') : 2);
         
@@ -264,7 +290,7 @@ async function loadSeasonData() {
         let foundRaceRow = -1;
         for (let r = 0; r < headerIndex; r++) {
             let rowStr = rawData[r].join(' ');
-            if (rowStr.includes('ITA') || rowStr.includes('JAP') || rowStr.includes('AUS')) {
+            if (rowStr.includes('ITA') || rowStr.includes('JAP') || rowStr.includes('AUS') || rowStr.includes('CHI')) {
                 foundRaceRow = r;
                 break;
             }
@@ -281,10 +307,9 @@ async function loadSeasonData() {
         }
 
         if (raceHeaders.length === 0) {
-            raceHeaders = ['ITA', 'JAP', 'BAH', 'QAT', 'SAR', 'BEL', 'AUS', 'CHI', 'ESP', 'AUT', 'CAN', 'BRA', 'MON'];
+            raceHeaders = ['AUS', 'CHI', 'CAN', 'FRA', 'AUT', 'ITA', 'ITA', 'ESP', 'POR', 'SGP', 'JAP', 'USA', 'USA', 'BRA', 'SAR', 'ABU'];
         }
 
-        // 1. Zuerst die untere Team-Tabelle parsen, um die Fahrer den Teams zuzuordnen
         let teamHeaderIndex = rawData.findIndex((r, idx) => idx > headerIndex && r.some(c => c && (c.toLowerCase() === 'team' || c.toLowerCase() === 'punkty')));
         let driverToTeamMap = {};
 
@@ -309,8 +334,7 @@ async function loadSeasonData() {
                         points: pointsVal
                     });
 
-                    // Fahrer aufteilen, die mit "&" verknüpft sind (z.B. "Bartex & Klocek")
-                    let teamDrivers = driversStr.split('&').map(d => d.trim());
+                    let teamDrivers = driversStr.split('\n').join('&').split('&').map(d => d.trim());
                     teamDrivers.forEach(dName => {
                         if (dName && dName !== '-') {
                             driverToTeamMap[dName.toLowerCase()] = teamName;
@@ -320,7 +344,6 @@ async function loadSeasonData() {
             }
         }
 
-        // 2. Fahrerdaten parsen
         let startIndex = headerIndex + 1;
         for (let i = startIndex; i < rawData.length; i++) {
             let row = rawData[i];
@@ -343,7 +366,6 @@ async function loadSeasonData() {
                     driverRaces.push(cellVal);
                 }
 
-                // Team zuweisen: Entweder aus der Spalte oder aus der Team-Tabelle ermitteln
                 let assignedTeam = 'Niezależny';
                 if (colTeam !== -1 && row[colTeam] && row[colTeam] !== '' && !row[colTeam].match(/^\d+$/)) {
                     assignedTeam = row[colTeam];
@@ -464,7 +486,7 @@ function renderZespoly() {
             <td class="pos-badge text-center">${t.pos || (idx + 1)}</td>
             <td>
                 <strong>${t.name}</strong>
-                ${t.drivers ? `<br><small style="color:#888;">${t.drivers}</small>` : ''}
+                ${t.drivers ? `<br><small style="color:#888;">${t.drivers.replace(/\n/g, ' & ')}</small>` : ''}
             </td>
             <td class="text-center" style="color: var(--red-main); font-weight:bold;">${t.points} PKT</td>
         </tr>`;
@@ -478,9 +500,19 @@ function formatResult(val) {
     if (val === '1') return `<span class="badge-win">P1</span>`;
     if (val === '2') return `<span class="badge-p2">P2</span>`;
     if (val === '3') return `<span class="badge-p3">P3</span>`;
-    if (val === 'DNF' || val === 'DSC' || val === 'DSQ') return `<span class="badge-dnf">${val}</span>`;
+    if (val === 'DNF' || val === 'DSC' || val === 'DSQ' || val === 'BAN') return `<span class="badge-dnf">${val}</span>`;
     if (val === 'DNS') return `<span class="badge-dns">DNS</span>`;
     return val;
+}
+
+function saveAsImage() {
+    let element = document.getElementById('capture-area');
+    html2canvas(element, { backgroundColor: '#181818', scale: 2 }).then(canvas => {
+        let link = document.createElement('a');
+        link.download = document.getElementById('season-title').innerText.toLowerCase().replace(/\s+/g, '_') + '.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    });
 }
 
 loadSeasonData();
