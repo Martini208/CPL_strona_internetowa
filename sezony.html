@@ -161,9 +161,10 @@ footer {
 
     <div class="season-card">
         <div class="season-header">
-            <h2 id="season-title">Sezon 20</h2>
+            <h2 id="season-title">Sezon 20 S2</h2>
             <select id="season-picker" class="season-select" onchange="onSeasonChange()">
-                <option value="1651963070" data-name="Sezon 20" selected>Sezon 20</option>
+                <option value="1869079550" data-name="Sezon 20 S2" selected>Sezon 20 S2</option>
+                <option value="1651963070" data-name="Sezon 20">Sezon 20</option>
                 <option value="482383691" data-name="Sezon Letni 2026">Sezon Letni 2026</option>
                 <option value="1746450890" data-name="Sezon 19">Sezon 19</option>
                 <option value="767862976" data-name="Sezon 19 S2">Sezon 19 S2</option>
@@ -195,7 +196,7 @@ footer {
 
 <script>
 const SHEET_ID = '1na_Zlv7uk9AGO3f76sqMvN5C5kT-EXnphJlTD6KKx0M';
-let currentGid = '1651963070';
+let currentGid = '1869079550';
 
 let globalDrivers = [];
 let globalTeams = [];
@@ -268,12 +269,10 @@ async function loadSeasonData() {
             }
         }
 
-        // Sonderbehandlung für Sezon 20 (Spaltenstruktur aus IMPORTRANGE)
-        let isSeason20 = (currentGid === '1651963070');
+        let isSeason20or20S2 = (currentGid === '1651963070' || currentGid === '1869079550');
         let raceStartCol = colTeam + 1;
 
-        if (isSeason20) {
-            // In Sezon 20 steht der Teamname in Spalte G (direkt nach Drużyna/Logo), PUNKTY in H, Rennen ab I
+        if (isSeason20or20S2) {
             colTeam = colTeam + 1;
             raceStartCol = colPts + 1;
             raceHeaders = ['AUS', 'SIN', 'CHI', 'JAP', 'AZE', 'BAH', 'KSA', 'AUT', 'EMR', 'WLO', 'BEL', 'NID', 'CAT', 'WBR', 'BRA', 'MIA', 'STA', 'MEK', 'LVE', 'ABU'];
@@ -305,7 +304,7 @@ async function loadSeasonData() {
         let isMultiRowTeamFormat = (currentGid === '1977413477' || currentGid === '476402002' || currentGid === '1127275876' || currentGid === '113798131' || currentGid === '830059160' || currentGid === '423989328');
         let currentTeamName = 'Niezależny';
 
-        if (!isSeason20) {
+        if (!isSeason20or20S2) {
             if (isMultiRowTeamFormat) {
                 let teamHeaderIdx = -1;
                 for (let i = headerIndex + 1; i < rawData.length; i++) {
@@ -395,12 +394,13 @@ async function loadSeasonData() {
 
         // Bestimme das Limit für die Anzahl der Fahrer je nach Saison
         let maxDrivers = 20;
-        if (currentGid === '1651963070') maxDrivers = 22;      // Sezon 20 (22 Fahrer)
+        if (currentGid === '1869079550') maxDrivers = 14;      // Sezon 20 S2 (14 Fahrer)
+        else if (currentGid === '1651963070') maxDrivers = 22; // Sezon 20 (22 Fahrer)
         else if (currentGid === '1127275876') maxDrivers = 14; // Sezon 14 S2
         else if (currentGid === '476402002') maxDrivers = 19;  // Sezon 14
         else if (currentGid === '830059160') maxDrivers = 19;  // Sezon 13
 
-        // Fahrerdaten parsen (Strikt bis zum saisonabhängigen Limit)
+        // Fahrerdaten parsen
         let startIndex = headerIndex + 1;
         for (let i = startIndex; i < rawData.length; i++) {
             let row = rawData[i];
@@ -430,7 +430,7 @@ async function loadSeasonData() {
                     driverRaces.push(cellVal);
                 }
 
-                let assignedTeam = isSeason20
+                let assignedTeam = isSeason20or20S2
                     ? (row[colTeam] || 'Niezależny')
                     : (driverToTeamMap[driverName.toLowerCase()] || 'Niezależny');
 
