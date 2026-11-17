@@ -161,9 +161,10 @@ footer {
 
     <div class="season-card">
         <div class="season-header">
-            <h2 id="season-title">Sezon 20</h2>
+            <h2 id="season-title">Sezon 12 S2</h2>
             <select id="season-picker" class="season-select" onchange="onSeasonChange()">
-                <option value="1651963070" data-name="Sezon 20" selected>Sezon 20</option>
+                <option value="1216314763" data-name="Sezon 12 S2" selected>Sezon 12 S2</option>
+                <option value="1651963070" data-name="Sezon 20">Sezon 20</option>
                 <option value="1869079550" data-name="Sezon 20 S2">Sezon 20 S2</option>
                 <option value="482383691" data-name="Sezon Letni 2026">Sezon Letni 2026</option>
                 <option value="1746450890" data-name="Sezon 19">Sezon 19</option>
@@ -197,7 +198,7 @@ footer {
 
 <script>
 const SHEET_ID = '1na_Zlv7uk9AGO3f76sqMvN5C5kT-EXnphJlTD6KKx0M';
-let currentGid = '1651963070';
+let currentGid = '1216314763';
 
 let globalDrivers = [];
 let globalTeams = [];
@@ -298,11 +299,11 @@ async function loadSeasonData() {
             }
 
             if (raceHeaders.length === 0) {
-                raceHeaders = ['BEL', 'NET', 'GBR', 'ITA', 'MON', 'AUT', 'HUN', 'AZB', 'SGP', 'JAP', 'AUS', 'USA', 'BRA', 'BAH', 'SAR', 'ABU'];
+                raceHeaders = ['NET', 'GBR', 'ITA', 'ITA', 'MON', 'AUT', 'HUN', 'AZB', 'SGP', 'JAP', 'AUS', 'USA', 'USA', 'BRA', 'BAH', 'SAR', 'ABU'];
             }
         }
 
-        let isMultiRowTeamFormat = (currentGid === '874501409' || currentGid === '1977413477' || currentGid === '476402002' || currentGid === '1127275876' || currentGid === '113798131' || currentGid === '830059160' || currentGid === '423989328');
+        let isMultiRowTeamFormat = (currentGid === '1216314763' || currentGid === '874501409' || currentGid === '1977413477' || currentGid === '476402002' || currentGid === '1127275876' || currentGid === '113798131' || currentGid === '830059160' || currentGid === '423989328');
         let currentTeamName = 'Niezależny';
 
         if (!isSeason20or20S2) {
@@ -395,9 +396,10 @@ async function loadSeasonData() {
 
         // Bestimme das Limit für die Anzahl der Fahrer je nach Saison
         let maxDrivers = 20;
-        if (currentGid === '874501409') maxDrivers = 20;       // Sezon 12 (20 Fahrer)
+        if (currentGid === '1216314763') maxDrivers = 20;       // Sezon 12 S2 (20 Fahrer)
+        else if (currentGid === '874501409') maxDrivers = 20; // Sezon 12 (20 Fahrer)
         else if (currentGid === '1651963070') maxDrivers = 22; // Sezon 20 (22 Fahrer)
-        else if (currentGid === '1869079550') maxDrivers = 14; // Sezon 20 S2 (14 Fahrer)
+        else if (currentGid === '1869079550') maxDrivers = 14; // Sezon 12 S2 (14 Fahrer)
         else if (currentGid === '1127275876') maxDrivers = 14; // Sezon 14 S2
         else if (currentGid === '476402002') maxDrivers = 19;  // Sezon 14
         else if (currentGid === '830059160') maxDrivers = 19;  // Sezon 13
