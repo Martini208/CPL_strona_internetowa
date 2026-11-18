@@ -183,6 +183,7 @@ footer {
                 <option value="2021228459" data-name="Sezon 10">Sezon 10</option>
                 <option value="972147265" data-name="Sezon 10 S2">Sezon 10 S2</option>
                 <option value="1684329818" data-name="Sezon 9">Sezon 9</option>
+                <option value="228738175" data-name="Sezon 8">Sezon 8</option>
             </select>
         </div>
         
@@ -282,6 +283,17 @@ async function loadSeasonData() {
             colTeam = colTeam + 1;
             raceStartCol = colPts + 1;
             raceHeaders = ['AUS', 'SIN', 'CHI', 'JAP', 'AZE', 'BAH', 'KSA', 'AUT', 'EMR', 'WLO', 'BEL', 'NID', 'CAT', 'WBR', 'BRA', 'MIA', 'STA', 'MEK', 'LVE', 'ABU'];
+        } else if (currentGid === '228738175') {
+            // In Sezon 8 stehen die Streckenkürzel direkt in der Header-Zeile zwischen Team und Punkty
+            for (let c = colTeam + 1; c < colPts; c++) {
+                let val = headers[c];
+                if (val && val !== '' && !val.match(/^\d+$/)) {
+                    raceHeaders.push(val);
+                }
+            }
+            if (raceHeaders.length === 0) {
+                raceHeaders = ['AUS', 'BAH', 'VIE', 'CHI', 'NET', 'ESP', 'MON', 'AZB', 'CAN', 'FRA', 'AUT', 'GBR', 'HUN', 'BEL', 'ITA', 'SGP', 'RUS', 'JAP', 'USA', 'MEX', 'BRA', 'ABU'];
+            }
         } else {
             let foundRaceRow = -1;
             for (let r = 0; r < headerIndex; r++) {
@@ -315,7 +327,7 @@ async function loadSeasonData() {
             }
         }
 
-        let isMultiRowTeamFormat = (currentGid === '1684329818' || currentGid === '972147265' || currentGid === '2021228459' || currentGid === '412483433' || currentGid === '1216314763' || currentGid === '874501409' || currentGid === '1977413477' || currentGid === '476402002' || currentGid === '1127275876' || currentGid === '113798131' || currentGid === '830059160' || currentGid === '423989328');
+        let isMultiRowTeamFormat = (currentGid === '228738175' || currentGid === '1684329818' || currentGid === '972147265' || currentGid === '2021228459' || currentGid === '412483433' || currentGid === '1216314763' || currentGid === '874501409' || currentGid === '1977413477' || currentGid === '476402002' || currentGid === '1127275876' || currentGid === '113798131' || currentGid === '830059160' || currentGid === '423989328');
         let currentTeamName = 'Niezależny';
 
         if (!isSeason20or20S2) {
@@ -330,6 +342,10 @@ async function loadSeasonData() {
                 }
                 if (teamHeaderIdx === -1) teamHeaderIdx = headerIndex + 25;
 
+                // In Sezon 8 steht Team in Spalte D (3) und Kierowca in Spalte E (4)
+                let tTeamIdx = (currentGid === '228738175') ? 3 : 3;
+                let tDriverIdx = (currentGid === '228738175') ? 4 : 5;
+
                 let currentPos = '';
                 let currentTeam = '';
                 let currentDrivers = [];
@@ -340,8 +356,8 @@ async function loadSeasonData() {
                     if (!r || r.every(cell => cell === '')) continue;
 
                     let pos = r[2]; 
-                    let teamCol = r[3]; 
-                    let driverCol = r[5]; 
+                    let teamCol = r[tTeamIdx]; 
+                    let driverCol = r[tDriverIdx]; 
 
                     if (pos && !isNaN(parseInt(pos))) {
                         if (currentTeam && currentDrivers.length > 0) {
@@ -408,7 +424,8 @@ async function loadSeasonData() {
 
         // Bestimme das Limit für die Anzahl der Fahrer je nach Saison
         let maxDrivers = 20;
-        if (currentGid === '1684329818') maxDrivers = 19;        // Sezon 9 (19 Fahrer)
+        if (currentGid === '228738175') maxDrivers = 15;         // Sezon 8 (15 Fahrer)
+        else if (currentGid === '1684329818') maxDrivers = 19; // Sezon 9 (19 Fahrer)
         else if (currentGid === '972147265') maxDrivers = 20;  // Sezon 10 S2 (20 Fahrer)
         else if (currentGid === '2021228459') maxDrivers = 20; // Sezon 10 (20 Fahrer)
         else if (currentGid === '412483433') maxDrivers = 20;  // Sezon 11 (20 Fahrer)
