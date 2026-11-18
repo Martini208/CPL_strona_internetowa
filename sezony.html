@@ -278,13 +278,14 @@ async function loadSeasonData() {
         }
 
         let isSeason20or20S2 = (currentGid === '1651963070' || currentGid === '1869079550');
+        let isSeason8Or8S2 = (currentGid === '228738175' || currentGid === '593270460');
         let raceStartCol = colTeam + 1;
 
         if (isSeason20or20S2) {
             colTeam = colTeam + 1;
             raceStartCol = colPts + 1;
             raceHeaders = ['AUS', 'SIN', 'CHI', 'JAP', 'AZE', 'BAH', 'KSA', 'AUT', 'EMR', 'WLO', 'BEL', 'NID', 'CAT', 'WBR', 'BRA', 'MIA', 'STA', 'MEK', 'LVE', 'ABU'];
-        } else if (currentGid === '228738175' || currentGid === '593270460') {
+        } else if (isSeason8Or8S2) {
             for (let c = colTeam + 1; c < colPts; c++) {
                 let val = headers[c];
                 if (val && val !== '' && !val.match(/^\d+$/)) {
@@ -292,7 +293,7 @@ async function loadSeasonData() {
                 }
             }
             if (raceHeaders.length === 0) {
-                raceHeaders = ['AUS', 'BAH', 'VIE', 'CHI', 'NET', 'ESP', 'MON', 'AZB', 'CAN', 'FRA', 'AUT', 'GBR', 'HUN', 'BEL', 'ITA', 'SGP', 'RUS', 'JAP', 'USA', 'MEX', 'BRA', 'ABU'];
+                raceHeaders = ['AUT', 'BAH', 'VIE', 'CHI', 'NET', 'ESP', 'MON', 'AZB', 'CAN', 'FRA', 'AUT', 'GBR', 'HUN', 'BEL', 'ITA', 'SGP', 'RUS', 'JAP', 'USA', 'MEX', 'BRA', 'ABU'];
             }
         } else {
             let foundRaceRow = -1;
@@ -327,7 +328,7 @@ async function loadSeasonData() {
             }
         }
 
-        let isMultiRowTeamFormat = (currentGid === '593270460' || currentGid === '228738175' || currentGid === '1684329818' || currentGid === '972147265' || currentGid === '2021228459' || currentGid === '412483433' || currentGid === '1216314763' || currentGid === '874501409' || currentGid === '1977413477' || currentGid === '476402002' || currentGid === '1127275876' || currentGid === '113798131' || currentGid === '830059160' || currentGid === '423989328');
+        let isMultiRowTeamFormat = (isSeason8Or8S2 || currentGid === '1684329818' || currentGid === '972147265' || currentGid === '2021228459' || currentGid === '412483433' || currentGid === '1216314763' || currentGid === '874501409' || currentGid === '1977413477' || currentGid === '476402002' || currentGid === '1127275876' || currentGid === '113798131' || currentGid === '830059160' || currentGid === '423989328');
 
         if (!isSeason20or20S2) {
             if (isMultiRowTeamFormat) {
@@ -341,8 +342,8 @@ async function loadSeasonData() {
                 }
                 if (teamHeaderIdx === -1) teamHeaderIdx = headerIndex + 25;
 
-                let tTeamIdx = 3;
-                let tDriverIdx = 4;
+                let tTeamIdx = 3; // Spalte D (Team)
+                let tDriverIdx = 4; // Spalte E (Kierowca)
 
                 let currentPos = '';
                 let currentTeam = '';
@@ -357,6 +358,7 @@ async function loadSeasonData() {
                     let teamCol = r[tTeamIdx]; 
                     let driverCol = r[tDriverIdx]; 
                     
+                    // Für Sezon 8 / 8 S2: Die echten Team-Punkte stehen in Spalte AB (colPts)
                     let rowTeamPts = parseFloat(String(r[colPts]).replace(',', '.')) || 0;
 
                     if (pos && !isNaN(parseInt(pos))) {
@@ -464,11 +466,8 @@ async function loadSeasonData() {
                     ? (row[colTeam] || 'Niezależny')
                     : (driverToTeamMap[driverName.toLowerCase()] || 'Niezależny');
 
-                // EXTRA KORREKTUR FÜR SEZON 8 / 8 S2: Hole die Punkte exakt aus Spalte AB (colPts)
+                // Die echten Fahrer-Punkte stehen exakt in Spalte AB (colPts)
                 let driverPts = row[colPts] || '0';
-                if ((currentGid === '228738175' || currentGid === '593270460') && colPts < row.length) {
-                    driverPts = row[colPts] || '0';
-                }
 
                 globalDrivers.push({
                     pos: pos,
