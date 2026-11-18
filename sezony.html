@@ -185,6 +185,7 @@ footer {
                 <option value="228738175" data-name="Sezon 8">Sezon 8</option>
                 <option value="593270460" data-name="Sezon 8 S2">Sezon 8 S2</option>
                 <option value="1028522704" data-name="Sezon 8 PS">Sezon 8 PS</option>
+                <option value="878950892" data-name="Sezon 7">Sezon 7</option>
             </select>
         </div>
         
@@ -277,14 +278,13 @@ async function loadSeasonData() {
             }
         }
 
-        // Finde exakt die Spalte "Punkty" anhand des Headers
         let colAbIndex = headers.findIndex(h => h && h.toUpperCase() === 'PUNKTY');
         if (colAbIndex !== -1) {
             colPts = colAbIndex;
         }
 
         let isSeason20or20S2 = (currentGid === '1651963070' || currentGid === '1869079550');
-        let isSeason8Format = (currentGid === '228738175' || currentGid === '593270460' || currentGid === '1028522704');
+        let isSeason8Format = (currentGid === '228738175' || currentGid === '593270460' || currentGid === '1028522704' || currentGid === '878950892');
         let raceStartCol = colTeam + 1;
 
         if (isSeason20or20S2) {
@@ -333,15 +333,15 @@ async function loadSeasonData() {
                 let teamHeaderIdx = -1;
                 for (let i = headerIndex + 1; i < rawData.length; i++) {
                     let rStr = rawData[i].join(' ');
-                    if (rStr.includes('Alpine') || rStr.includes('Haas') || rStr.includes('Aston Martin') || rStr.includes('Ferrari') || rStr.includes('Red Bull') || rStr.includes('McLaren') || rStr.includes('Alfa Romeo') || rStr.includes('Mercedes') || rStr.includes('Williams') || rStr.includes('Alpha Tauri') || rStr.includes('Renault') || rStr.includes('Racing Point')) {
+                    if (rStr.includes('Alpine') || rStr.includes('Haas') || rStr.includes('Aston Martin') || rStr.includes('Ferrari') || rStr.includes('Red Bull') || rStr.includes('McLaren') || rStr.includes('Alfa Romeo') || rStr.includes('Mercedes') || rStr.includes('Williams') || rStr.includes('Alpha Tauri') || rStr.includes('Renault') || rStr.includes('Racing Point') || rStr.includes('Toro Rosso')) {
                         teamHeaderIdx = i;
                         break;
                     }
                 }
                 if (teamHeaderIdx === -1) teamHeaderIdx = headerIndex + 25;
 
-                let tTeamIdx = 3; // Spalte D (Team)
-                let tDriverIdx = 4; // Spalte E (Kierowca)
+                let tTeamIdx = 3; 
+                let tDriverIdx = 4; 
 
                 let currentPos = '';
                 let currentTeam = '';
@@ -423,7 +423,8 @@ async function loadSeasonData() {
         });
 
         let maxDrivers = 20;
-        if (currentGid === '1028522704') maxDrivers = 20;       // Sezon 8 PS (20 Fahrer)
+        if (currentGid === '878950892') maxDrivers = 20;       // Sezon 7 (20 Fahrer)
+        else if (currentGid === '1028522704') maxDrivers = 20;  // Sezon 8 PS (20 Fahrer)
         else if (currentGid === '593270460') maxDrivers = 20;   // Sezon 8 S2 (20 Fahrer)
         else if (currentGid === '228738175') maxDrivers = 15;   // Sezon 8 (15 Fahrer)
         else if (currentGid === '1684329818') maxDrivers = 19;  // Sezon 9 (19 Fahrer)
