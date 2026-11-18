@@ -340,8 +340,8 @@ async function loadSeasonData() {
                 }
                 if (teamHeaderIdx === -1) teamHeaderIdx = headerIndex + 25;
 
-                let tTeamIdx = 3; 
-                let tDriverIdx = 4; 
+                let tTeamIdx = (currentGid === '878950892') ? 2 : 3; // Spalte C bei Sezon 7, sonst Spalte D
+                let tDriverIdx = 4; // Spalte E
 
                 let currentPos = '';
                 let currentTeam = '';
@@ -353,7 +353,7 @@ async function loadSeasonData() {
                     if (!r || r.every(cell => cell === '')) continue;
 
                     let pos = r[2]; 
-                    let teamCol = r[tTeamIdx]; 
+                    let teamCol = r[tTeamIdx] || (currentGid === '878950892' ? r[3] : ''); 
                     let driverCol = r[tDriverIdx]; 
                     
                     let rowTeamPts = parseFloat(String(r[colPts]).replace(',', '.')) || 0;
