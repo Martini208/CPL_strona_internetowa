@@ -23,7 +23,6 @@ body {
     min-height: 100vh;
 }
 
-/* ORIGINAL CPL RED-BOX NAVIGATION */
 nav {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 80px;
@@ -356,7 +355,6 @@ async function loadSeasonData() {
                     let teamCol = r[tTeamIdx]; 
                     let driverCol = r[tDriverIdx]; 
                     
-                    // Für Sezon 8 & 8 S2: Die echten Team-Punkte stehen in Spalte AB (colPts)
                     let rowTeamPts = parseFloat(String(r[colPts]).replace(',', '.')) || 0;
 
                     if (pos && !isNaN(parseInt(pos))) {
