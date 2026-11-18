@@ -357,6 +357,16 @@ async function loadSeasonData() {
                     let pos = r[2]; 
                     let teamCol = r[tTeamIdx]; 
                     let driverCol = r[tDriverIdx]; 
+                    
+                    // In Sezon 8 / 8 S2 stehen die Teampunkte in der Spalte rechts neben den Fahrern (bzw. in colPts)
+                    let rowTeamPts = 0;
+                    for (let c = colPts - 1; c < r.length; c++) {
+                        let pVal = parseFloat(String(r[c]).replace(',', '.'));
+                        if (!isNaN(pVal) && pVal > 0) {
+                            rowTeamPts = pVal;
+                            break;
+                        }
+                    }
 
                     if (pos && !isNaN(parseInt(pos))) {
                         if (currentTeam && currentDrivers.length > 0) {
@@ -370,9 +380,10 @@ async function loadSeasonData() {
                         currentPos = pos;
                         currentTeam = (teamCol && teamCol !== '') ? teamCol : currentTeam;
                         currentDrivers = [];
-                        currentPts = 0;
+                        currentPts = rowTeamPts;
                     } else if (teamCol && teamCol !== '') {
                         currentTeam = teamCol;
+                        if (rowTeamPts > 0) currentPts = rowTeamPts;
                     }
 
                     if (driverCol && driverCol !== '' && driverCol !== '-' && !driverCol.match(/^\d+$/)) {
@@ -386,7 +397,7 @@ async function loadSeasonData() {
                         pos: currentPos,
                         name: currentTeam,
                         drivers: currentDrivers.join(' & '),
-                        points: 0
+                        points: currentPts
                     });
                 }
             } else {
@@ -421,7 +432,6 @@ async function loadSeasonData() {
             });
         });
 
-        // Bestimme das Limit für die Anzahl der Fahrer je nach Saison
         let maxDrivers = 20;
         if (currentGid === '593270460') maxDrivers = 20;        // Sezon 8 S2 (20 Fahrer)
         else if (currentGid === '228738175') maxDrivers = 15;  // Sezon 8 (15 Fahrer)
@@ -437,7 +447,6 @@ async function loadSeasonData() {
         else if (currentGid === '476402002') maxDrivers = 19;  // Sezon 14
         else if (currentGid === '830059160') maxDrivers = 19;  // Sezon 13
 
-        // Fahrerdaten parsen
         let startIndex = headerIndex + 1;
         for (let i = startIndex; i < rawData.length; i++) {
             let row = rawData[i];
@@ -482,8 +491,7 @@ async function loadSeasonData() {
             }
         }
 
-        // Teams mit den echten Fahrern und Punkten updaten
-        if (globalTeams.length > 0) {
+        if (globalTeams.length > 0 && currentGid !== '228738175' && currentGid !== '593270460') {
             globalTeams.forEach(t => {
                 let dList = t.drivers.split('&').map(d => d.trim().toLowerCase());
                 let totalP = 0;
