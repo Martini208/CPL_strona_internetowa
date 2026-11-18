@@ -358,9 +358,9 @@ async function loadSeasonData() {
                     let teamCol = r[tTeamIdx]; 
                     let driverCol = r[tDriverIdx]; 
                     
-                    // In Sezon 8 / 8 S2 stehen die Teampunkte in der Spalte rechts neben den Fahrern (bzw. in colPts)
+                    // Bei Sezon 8 / 8 S2 stehen die Teampunkte in der Punktezahl-Spalte (colPts) oder rechts daneben
                     let rowTeamPts = 0;
-                    for (let c = colPts - 1; c < r.length; c++) {
+                    for (let c = colPts; c < r.length; c++) {
                         let pVal = parseFloat(String(r[c]).replace(',', '.'));
                         if (!isNaN(pVal) && pVal > 0) {
                             rowTeamPts = pVal;
@@ -380,7 +380,7 @@ async function loadSeasonData() {
                         currentPos = pos;
                         currentTeam = (teamCol && teamCol !== '') ? teamCol : currentTeam;
                         currentDrivers = [];
-                        currentPts = rowTeamPts;
+                        currentPts = rowTeamPts > 0 ? rowTeamPts : 0;
                     } else if (teamCol && teamCol !== '') {
                         currentTeam = teamCol;
                         if (rowTeamPts > 0) currentPts = rowTeamPts;
@@ -460,13 +460,6 @@ async function loadSeasonData() {
             }
             if (globalDrivers.length >= maxDrivers) {
                 break;
-            }
-
-            if (isMultiRowTeamFormat) {
-                let possibleTeam = row[3];
-                if (possibleTeam && possibleTeam !== '' && !possibleTeam.match(/^\d+$/)) {
-                    currentTeamName = possibleTeam;
-                }
             }
 
             if (pos && !isNaN(parseInt(pos)) && driverName && driverName !== '' && driverName !== '0' && parseInt(pos) <= maxDrivers) {
