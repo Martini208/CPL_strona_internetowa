@@ -464,12 +464,18 @@ async function loadSeasonData() {
                     ? (row[colTeam] || 'Niezależny')
                     : (driverToTeamMap[driverName.toLowerCase()] || 'Niezależny');
 
+                // EXTRA KORREKTUR FÜR SEZON 8 / 8 S2: Hole die Punkte exakt aus Spalte AB (colPts)
+                let driverPts = row[colPts] || '0';
+                if ((currentGid === '228738175' || currentGid === '593270460') && colPts < row.length) {
+                    driverPts = row[colPts] || '0';
+                }
+
                 globalDrivers.push({
                     pos: pos,
                     number: colNum !== -1 ? (row[colNum] || '') : '',
                     name: driverName,
                     team: assignedTeam,
-                    points: row[colPts] || '0',
+                    points: driverPts,
                     races: driverRaces
                 });
             }
