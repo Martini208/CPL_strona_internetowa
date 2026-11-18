@@ -336,7 +336,7 @@ async function loadSeasonData() {
                 for (let i = headerIndex + 1; i < rawData.length; i++) {
                     let rStr = rawData[i].join(' ');
                     if (rStr.includes('Alpine') || rStr.includes('Haas') || rStr.includes('Aston Martin') || rStr.includes('Ferrari') || rStr.includes('Red Bull') || rStr.includes('McLaren') || rStr.includes('Alfa Romeo') || rStr.includes('Mercedes') || rStr.includes('Williams') || rStr.includes('Alpha Tauri') || rStr.includes('Renault') || rStr.includes('Racing Point')) {
-                        teamHeaderIdx = i - 2;
+                        teamHeaderIdx = i;
                         break;
                     }
                 }
@@ -358,7 +358,6 @@ async function loadSeasonData() {
                     let teamCol = r[tTeamIdx]; 
                     let driverCol = r[tDriverIdx]; 
                     
-                    // Bei Sezon 8 / 8 S2 stehen die Teampunkte in der Punktezahl-Spalte (colPts) oder rechts daneben
                     let rowTeamPts = 0;
                     for (let c = colPts; c < r.length; c++) {
                         let pVal = parseFloat(String(r[c]).replace(',', '.'));
