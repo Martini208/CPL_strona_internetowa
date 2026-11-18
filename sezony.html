@@ -357,14 +357,7 @@ async function loadSeasonData() {
                     let teamCol = r[tTeamIdx]; 
                     let driverCol = r[tDriverIdx]; 
                     
-                    let rowTeamPts = 0;
-                    for (let c = colPts; c < r.length; c++) {
-                        let pVal = parseFloat(String(r[c]).replace(',', '.'));
-                        if (!isNaN(pVal)) {
-                            rowTeamPts = pVal;
-                            break;
-                        }
-                    }
+                    let rowTeamPts = parseFloat(String(r[colPts]).replace(',', '.')) || 0;
 
                     if (pos && !isNaN(parseInt(pos))) {
                         if (currentTeam && currentDrivers.length > 0) {
@@ -381,7 +374,7 @@ async function loadSeasonData() {
                         currentPts = rowTeamPts;
                     } else if (teamCol && teamCol !== '' && teamCol.toLowerCase() !== 'team') {
                         currentTeam = teamCol;
-                        if (rowTeamPts > 0) currentPts = rowTeamPts;
+                        if (rowTeamPts !== 0) currentPts = rowTeamPts;
                     }
 
                     if (driverCol && driverCol !== '' && driverCol !== '-' && driverCol.toLowerCase() !== 'kierowca' && !driverCol.match(/^\d+$/)) {
