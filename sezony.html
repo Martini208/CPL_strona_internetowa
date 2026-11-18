@@ -184,6 +184,7 @@ footer {
                 <option value="1684329818" data-name="Sezon 9">Sezon 9</option>
                 <option value="228738175" data-name="Sezon 8">Sezon 8</option>
                 <option value="593270460" data-name="Sezon 8 S2">Sezon 8 S2</option>
+                <option value="1028522704" data-name="Sezon 8 PS">Sezon 8 PS</option>
             </select>
         </div>
         
@@ -276,21 +277,21 @@ async function loadSeasonData() {
             }
         }
 
-        // Finde exakt die Spalte "Punkty" (Spalte AB) anhand des Headers
+        // Finde exakt die Spalte "Punkty" anhand des Headers
         let colAbIndex = headers.findIndex(h => h && h.toUpperCase() === 'PUNKTY');
         if (colAbIndex !== -1) {
             colPts = colAbIndex;
         }
 
         let isSeason20or20S2 = (currentGid === '1651963070' || currentGid === '1869079550');
-        let isSeason8Or8S2 = (currentGid === '228738175' || currentGid === '593270460');
+        let isSeason8Format = (currentGid === '228738175' || currentGid === '593270460' || currentGid === '1028522704');
         let raceStartCol = colTeam + 1;
 
         if (isSeason20or20S2) {
             colTeam = colTeam + 1;
             raceStartCol = colPts + 1;
             raceHeaders = ['AUS', 'SIN', 'CHI', 'JAP', 'AZE', 'BAH', 'KSA', 'AUT', 'EMR', 'WLO', 'BEL', 'NID', 'CAT', 'WBR', 'BRA', 'MIA', 'STA', 'MEK', 'LVE', 'ABU'];
-        } else if (isSeason8Or8S2) {
+        } else if (isSeason8Format) {
             for (let c = colTeam + 1; c < colPts; c++) {
                 let val = headers[c];
                 if (val && val !== '' && !val.match(/^\d+$/)) {
@@ -325,7 +326,7 @@ async function loadSeasonData() {
             }
         }
 
-        let isMultiRowTeamFormat = (isSeason8Or8S2 || currentGid === '1684329818' || currentGid === '972147265' || currentGid === '2021228459' || currentGid === '412483433' || currentGid === '1216314763' || currentGid === '874501409' || currentGid === '1977413477' || currentGid === '476402002' || currentGid === '1127275876' || currentGid === '113798131' || currentGid === '830059160' || currentGid === '423989328');
+        let isMultiRowTeamFormat = (isSeason8Format || currentGid === '1684329818' || currentGid === '972147265' || currentGid === '2021228459' || currentGid === '412483433' || currentGid === '1216314763' || currentGid === '874501409' || currentGid === '1977413477' || currentGid === '476402002' || currentGid === '1127275876' || currentGid === '113798131' || currentGid === '830059160' || currentGid === '423989328');
 
         if (!isSeason20or20S2) {
             if (isMultiRowTeamFormat) {
@@ -422,19 +423,20 @@ async function loadSeasonData() {
         });
 
         let maxDrivers = 20;
-        if (currentGid === '593270460') maxDrivers = 20;        // Sezon 8 S2 (20 Fahrer)
-        else if (currentGid === '228738175') maxDrivers = 15;  // Sezon 8 (15 Fahrer)
-        else if (currentGid === '1684329818') maxDrivers = 19; // Sezon 9 (19 Fahrer)
-        else if (currentGid === '972147265') maxDrivers = 20;  // Sezon 10 S2 (20 Fahrer)
-        else if (currentGid === '2021228459') maxDrivers = 20; // Sezon 10 (20 Fahrer)
-        else if (currentGid === '412483433') maxDrivers = 20;  // Sezon 11 (20 Fahrer)
-        else if (currentGid === '1216314763') maxDrivers = 20; // Sezon 12 S2 (20 Fahrer)
-        else if (currentGid === '874501409') maxDrivers = 20;  // Sezon 12 (20 Fahrer)
-        else if (currentGid === '1651963070') maxDrivers = 22; // Sezon 20 (22 Fahrer)
-        else if (currentGid === '1869079550') maxDrivers = 14; // Sezon 20 S2 (14 Fahrer)
-        else if (currentGid === '1127275876') maxDrivers = 14; // Sezon 14 S2
-        else if (currentGid === '476402002') maxDrivers = 19;  // Sezon 14
-        else if (currentGid === '830059160') maxDrivers = 19;  // Sezon 13
+        if (currentGid === '1028522704') maxDrivers = 20;       // Sezon 8 PS (20 Fahrer)
+        else if (currentGid === '593270460') maxDrivers = 20;   // Sezon 8 S2 (20 Fahrer)
+        else if (currentGid === '228738175') maxDrivers = 15;   // Sezon 8 (15 Fahrer)
+        else if (currentGid === '1684329818') maxDrivers = 19;  // Sezon 9 (19 Fahrer)
+        else if (currentGid === '972147265') maxDrivers = 20;   // Sezon 10 S2 (20 Fahrer)
+        else if (currentGid === '2021228459') maxDrivers = 20;  // Sezon 10 (20 Fahrer)
+        else if (currentGid === '412483433') maxDrivers = 20;   // Sezon 11 (20 Fahrer)
+        else if (currentGid === '1216314763') maxDrivers = 20;  // Sezon 12 S2 (20 Fahrer)
+        else if (currentGid === '874501409') maxDrivers = 20;   // Sezon 12 (20 Fahrer)
+        else if (currentGid === '1651963070') maxDrivers = 22;  // Sezon 20 (22 Fahrer)
+        else if (currentGid === '1869079550') maxDrivers = 14;  // Sezon 20 S2 (14 Fahrer)
+        else if (currentGid === '1127275876') maxDrivers = 14;  // Sezon 14 S2
+        else if (currentGid === '476402002') maxDrivers = 19;   // Sezon 14
+        else if (currentGid === '830059160') maxDrivers = 19;   // Sezon 13
 
         let startIndex = headerIndex + 1;
         for (let i = startIndex; i < rawData.length; i++) {
