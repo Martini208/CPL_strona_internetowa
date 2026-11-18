@@ -207,10 +207,79 @@ footer {
 const SHEET_ID = '1na_Zlv7uk9AGO3f76sqMvN5C5kT-EXnphJlTD6KKx0M';
 let currentGid = '1651963070';
 
+// Individuelle Konfiguration pro Saison (gid)
+// 0-basierte Spaltenindizes: A=0, B=1, C=2, D=3, E=4 ... AB=27, AC=28
+const SEASON_CONFIGS = {
+    '1651963070': { // Sezon 20
+        layout: 'single',
+        maxDrivers: 22,
+        teamOffsetAfterTeamCol: 1,
+        racesAfterPts: 1,
+        fixedRaces: ['AUS', 'SIN', 'CHI', 'JAP', 'AZE', 'BAH', 'KSA', 'AUT', 'EMR', 'WLO', 'BEL', 'NID', 'CAT', 'WBR', 'BRA', 'MIA', 'STA', 'MEK', 'LVE', 'ABU']
+    },
+    '1869079550': { // Sezon 20 S2
+        layout: 'single',
+        maxDrivers: 14,
+        teamOffsetAfterTeamCol: 1,
+        racesAfterPts: 1,
+        fixedRaces: ['AUS', 'SIN', 'CHI', 'JAP', 'AZE', 'BAH', 'KSA', 'AUT', 'EMR', 'WLO', 'BEL', 'NID', 'CAT', 'WBR', 'BRA', 'MIA', 'STA', 'MEK', 'LVE', 'ABU']
+    },
+    '593270460': { // Sezon 8 S2
+        layout: 'multiRowTeams',
+        maxDrivers: 20,
+        teamPosCol: 2,    // C
+        teamNameCol: 3,   // D
+        teamDriverCol: 4, // E
+        teamPtsCol: null, // Nutzt 'Punkty' (AB) aus dem Header
+        fallbackRaces: ['AUS', 'BAH', 'VIE', 'CHI', 'NET', 'ESP', 'MON', 'AZB', 'CAN', 'FRA', 'AUT', 'GBR', 'HUN', 'BEL', 'ITA', 'SGP', 'RUS', 'JAP', 'USA', 'MEX', 'BRA', 'ABU']
+    },
+    '228738175': { // Sezon 8
+        layout: 'multiRowTeams',
+        maxDrivers: 15,
+        teamPosCol: 2,
+        teamNameCol: 3,
+        teamDriverCol: 4,
+        teamPtsCol: null,
+        fallbackRaces: ['AUS', 'BAH', 'VIE', 'CHI', 'NET', 'ESP', 'MON', 'AZB', 'CAN', 'FRA', 'AUT', 'GBR', 'HUN', 'BEL', 'ITA', 'SGP', 'RUS', 'JAP', 'USA', 'MEX', 'BRA', 'ABU']
+    },
+    '1028522704': { // Sezon 8 PS
+        layout: 'multiRowTeams',
+        maxDrivers: 20,
+        teamPosCol: 2,
+        teamNameCol: 3,
+        teamDriverCol: 4,
+        teamPtsCol: null,
+        fallbackRaces: ['AUS', 'BAH', 'VIE', 'CHI', 'NET', 'ESP', 'MON', 'AZB', 'CAN', 'FRA', 'AUT', 'GBR', 'HUN', 'BEL', 'ITA', 'SGP', 'RUS', 'JAP', 'USA', 'MEX', 'BRA', 'ABU']
+    },
+    '878950892': { // Sezon 7
+        layout: 'multiRowTeams',
+        maxDrivers: 20,
+        teamPosCol: 2,    // C
+        teamNameCol: 3,   // D
+        teamDriverCol: 4, // E
+        teamPtsCol: null, // Nutzt 'Punkty' (AC) aus dem Header
+        fallbackRaces: ['AUS', 'BAH', 'AZB', 'ESP', 'MON', 'CAN', 'AUT', 'GBR', 'GER', 'HUN', 'BEL', 'ITA', 'SGP', 'RUS', 'JAP', 'USA', 'MEX', 'BRA', 'ABU']
+    }
+};
+
+const DEFAULT_CONFIG = {
+    layout: 'multiRowTeams',
+    maxDrivers: 20,
+    teamPosCol: 2,
+    teamNameCol: 3,
+    teamDriverCol: 4,
+    teamPtsCol: null,
+    fallbackRaces: ['BEL', 'NET', 'GBR', 'ITA', 'MON', 'AUT', 'HUN', 'AZB', 'SGP', 'JAP', 'AUS', 'USA', 'BRA', 'BAH', 'SAR', 'ABU']
+};
+
 let globalDrivers = [];
 let globalTeams = [];
 let raceHeaders = [];
 let activeTab = 'kierowcy';
+
+function getSeasonConfig(gid) {
+    return SEASON_CONFIGS[gid] || DEFAULT_CONFIG;
+}
 
 function parseCSVRow(row) {
     let cells = [];
@@ -243,6 +312,7 @@ function onSeasonChange() {
 async function loadSeasonData() {
     document.getElementById('tab-content').innerHTML = `Ładowanie danych...`;
     const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${currentGid}`;
+    const cfg = getSeasonConfig(currentGid);
 
     try {
         const response = await fetch(CSV_URL);
@@ -257,7 +327,7 @@ async function loadSeasonData() {
         let headerIndex = rawData.findIndex(r => r.includes('Pozycja') || r.includes('Poz') || r.includes('Kierowca'));
         if (headerIndex === -1) headerIndex = 5;
 
-        let headers = rawData[headerIndex];
+        let headers = rawData[headerIndex] || [];
 
         let colPos = headers.indexOf('Pozycja') !== -1 ? headers.indexOf('Pozycja') : (headers.indexOf('Poz') !== -1 ? headers.indexOf('Poz') : 0);
         let colNum = headers.indexOf('Numer') !== -1 ? headers.indexOf('Numer') : (headers.indexOf('No') !== -1 ? headers.indexOf('No') : -1);
@@ -268,81 +338,72 @@ async function loadSeasonData() {
         if (colPts === -1) {
             headerIndex = rawData.findIndex((r, idx) => idx > 2 && r.some(cell => cell && cell.toUpperCase().includes('PUNKT')));
             if (headerIndex !== -1) {
-                headers = rawData[headerIndex];
+                headers = rawData[headerIndex] || [];
                 colPos = headers.indexOf('Poz') !== -1 ? headers.indexOf('Poz') : 0;
                 colDriver = headers.indexOf('Kierowca') !== -1 ? headers.indexOf('Kierowca') : 4;
                 colTeam = headers.indexOf('Team') !== -1 ? headers.indexOf('Team') : 3;
                 colPts = headers.findIndex(h => h && h.toUpperCase().includes('PUNKT'));
             } else {
-                colPts = headers.length - 3;
+                colPts = Math.max(0, headers.length - 3);
             }
         }
 
-        let colAbIndex = headers.findIndex(h => h && h.toUpperCase() === 'PUNKTY');
-        if (colAbIndex !== -1) {
-            colPts = colAbIndex;
+        let exactPtsCol = headers.findIndex(h => h && h.toUpperCase() === 'PUNKTY');
+        if (exactPtsCol !== -1) {
+            colPts = exactPtsCol;
         }
 
-        let isSeason20or20S2 = (currentGid === '1651963070' || currentGid === '1869079550');
-        let isSeason8Format = (currentGid === '228738175' || currentGid === '593270460' || currentGid === '1028522704' || currentGid === '878950892');
         let raceStartCol = colTeam + 1;
 
-        if (isSeason20or20S2) {
-            colTeam = colTeam + 1;
-            raceStartCol = colPts + 1;
-            raceHeaders = ['AUS', 'SIN', 'CHI', 'JAP', 'AZE', 'BAH', 'KSA', 'AUT', 'EMR', 'WLO', 'BEL', 'NID', 'CAT', 'WBR', 'BRA', 'MIA', 'STA', 'MEK', 'LVE', 'ABU'];
-        } else if (isSeason8Format) {
+        if (cfg.layout === 'single') {
+            colTeam = colTeam + (cfg.teamOffsetAfterTeamCol ?? 1);
+            raceStartCol = colPts + (cfg.racesAfterPts ?? 1);
+            raceHeaders = cfg.fixedRaces ? [...cfg.fixedRaces] : [];
+        } else {
             for (let c = colTeam + 1; c < colPts; c++) {
                 let val = headers[c];
-                if (val && val !== '' && !val.match(/^\d+$/)) {
+                if (val && val !== '' && !val.match(/^\d+$/) && !val.includes('#REF!')) {
                     raceHeaders.push(val);
                 }
             }
             if (raceHeaders.length === 0) {
-                raceHeaders = ['AUS', 'BAH', 'VIE', 'CHI', 'NET', 'ESP', 'MON', 'AZB', 'CAN', 'FRA', 'AUT', 'GBR', 'HUN', 'BEL', 'ITA', 'SGP', 'RUS', 'JAP', 'USA', 'MEX', 'BRA', 'ABU'];
+                let foundRaceRow = -1;
+                for (let r = 0; r < headerIndex; r++) {
+                    let rowStr = (rawData[r] || []).join(' ');
+                    if (rowStr.includes('ITA') || rowStr.includes('JAP') || rowStr.includes('AUS') || rowStr.includes('CHI') || rowStr.includes('BAH') || rowStr.includes('BEL') || rowStr.includes('MON') || rowStr.includes('POR') || rowStr.includes('BRA') || rowStr.includes('FRA')) {
+                        foundRaceRow = r;
+                        break;
+                    }
+                }
+                if (foundRaceRow !== -1) {
+                    let hRow = rawData[foundRaceRow] || [];
+                    for (let c = colTeam + 1; c < colPts; c++) {
+                        let val = hRow[c];
+                        if (val && val !== '' && !val.match(/^\d+$/) && !val.includes('#REF!')) {
+                            raceHeaders.push(val);
+                        }
+                    }
+                }
             }
-        } else {
-            let foundRaceRow = -1;
-            for (let r = 0; r < headerIndex; r++) {
-                let rowStr = rawData[r].join(' ');
-                if (rowStr.includes('ITA') || rowStr.includes('JAP') || rowStr.includes('AUS') || rowStr.includes('CHI') || rowStr.includes('BAH') || rowStr.includes('BEL') || rowStr.includes('MON') || rowStr.includes('POR') || rowStr.includes('BRA') || rowStr.includes('FRA')) {
-                    foundRaceRow = r;
+            if (raceHeaders.length === 0) {
+                raceHeaders = [...cfg.fallbackRaces];
+            }
+        }
+
+        if (cfg.layout === 'multiRowTeams') {
+            let teamHeaderIdx = -1;
+            const knownTeams = ['Alpine', 'Haas', 'Aston Martin', 'Ferrari', 'Red Bull', 'McLaren', 'Alfa Romeo', 'Mercedes', 'Williams', 'Alpha Tauri', 'Renault', 'Racing Point', 'Toro Rosso'];
+            for (let i = headerIndex + 1; i < rawData.length; i++) {
+                let r = rawData[i] || [];
+                let cellVal = r[cfg.teamNameCol] || r.join(' ');
+                if (knownTeams.some(t => cellVal.includes(t))) {
+                    teamHeaderIdx = i;
                     break;
                 }
             }
 
-            if (foundRaceRow !== -1) {
-                let hRow = rawData[foundRaceRow];
-                for (let c = colTeam + 1; c < colPts; c++) {
-                    let val = hRow[c];
-                    if (val && val !== '' && !val.match(/^\d+$/)) {
-                        raceHeaders.push(val);
-                    }
-                }
-            }
-
-            if (raceHeaders.length === 0) {
-                raceHeaders = ['BEL', 'NET', 'GBR', 'ITA', 'MON', 'AUT', 'HUN', 'AZB', 'SGP', 'JAP', 'AUS', 'USA', 'BRA', 'BAH', 'SAR', 'ABU'];
-            }
-        }
-
-        let isMultiRowTeamFormat = (isSeason8Format || currentGid === '1684329818' || currentGid === '972147265' || currentGid === '2021228459' || currentGid === '412483433' || currentGid === '1216314763' || currentGid === '874501409' || currentGid === '1977413477' || currentGid === '476402002' || currentGid === '1127275876' || currentGid === '113798131' || currentGid === '830059160' || currentGid === '423989328');
-
-        if (!isSeason20or20S2) {
-            if (isMultiRowTeamFormat) {
-                let teamHeaderIdx = -1;
-                for (let i = headerIndex + 1; i < rawData.length; i++) {
-                    let rStr = rawData[i].join(' ');
-                    if (rStr.includes('Alpine') || rStr.includes('Haas') || rStr.includes('Aston Martin') || rStr.includes('Ferrari') || rStr.includes('Red Bull') || rStr.includes('McLaren') || rStr.includes('Alfa Romeo') || rStr.includes('Mercedes') || rStr.includes('Williams') || rStr.includes('Alpha Tauri') || rStr.includes('Renault') || rStr.includes('Racing Point') || rStr.includes('Toro Rosso')) {
-                        teamHeaderIdx = i;
-                        break;
-                    }
-                }
-                if (teamHeaderIdx === -1) teamHeaderIdx = headerIndex + 25;
-
-                let tTeamIdx = 3; 
-                let tDriverIdx = 4; 
-
+            if (teamHeaderIdx !== -1) {
+                let effectiveTeamPtsCol = (cfg.teamPtsCol !== null && cfg.teamPtsCol !== undefined) ? cfg.teamPtsCol : colPts;
                 let currentPos = '';
                 let currentTeam = '';
                 let currentDrivers = [];
@@ -352,11 +413,10 @@ async function loadSeasonData() {
                     let r = rawData[i];
                     if (!r || r.every(cell => cell === '')) continue;
 
-                    let pos = r[2]; 
-                    let teamCol = r[tTeamIdx]; 
-                    let driverCol = r[tDriverIdx]; 
-                    
-                    let rowTeamPts = parseFloat(String(r[colPts]).replace(',', '.')) || 0;
+                    let pos = r[cfg.teamPosCol];
+                    let teamCol = r[cfg.teamNameCol];
+                    let driverCol = r[cfg.teamDriverCol];
+                    let rowTeamPts = parseFloat(String(r[effectiveTeamPtsCol] ?? '').replace(',', '.')) || 0;
 
                     if (pos && !isNaN(parseInt(pos))) {
                         if (currentTeam && currentDrivers.length > 0) {
@@ -390,27 +450,6 @@ async function loadSeasonData() {
                         points: currentPts
                     });
                 }
-            } else {
-                let teamHeaderIndex = rawData.findIndex((r, idx) => idx > headerIndex && r.some(c => c && (c.toLowerCase() === 'team' || c.toLowerCase() === 'punkty')));
-                if (teamHeaderIndex !== -1) {
-                    let tHeaders = rawData[teamHeaderIndex];
-                    let tPosCol = tHeaders.findIndex(h => h && h.toLowerCase().includes('poz'));
-                    let tDriverCol = tHeaders.findIndex(h => h && h.toLowerCase().includes('kierowca'));
-                    let tTeamCol = tHeaders.findIndex(h => h && h.toLowerCase().includes('team'));
-                    let tPtsCol = tHeaders.findIndex(h => h && h.toLowerCase().includes('punkt'));
-
-                    for (let i = teamHeaderIndex + 1; i < rawData.length; i++) {
-                        let r = rawData[i];
-                        if (r && r[tPosCol] && !isNaN(parseInt(r[tPosCol]))) {
-                            globalTeams.push({
-                                pos: r[tPosCol],
-                                drivers: tDriverCol !== -1 ? (r[tDriverCol] || '') : '',
-                                name: tTeamCol !== -1 ? (r[tTeamCol] || 'Niezależny') : 'Niezależny',
-                                points: tPtsCol !== -1 ? (parseFloat(r[tPtsCol].replace(',', '.')) || 0) : 0
-                            });
-                        }
-                    }
-                }
             }
         }
 
@@ -422,24 +461,9 @@ async function loadSeasonData() {
             });
         });
 
-        let maxDrivers = 20;
-        if (currentGid === '878950892') maxDrivers = 20;       // Sezon 7 (20 Fahrer)
-        else if (currentGid === '1028522704') maxDrivers = 20;  // Sezon 8 PS (20 Fahrer)
-        else if (currentGid === '593270460') maxDrivers = 20;   // Sezon 8 S2 (20 Fahrer)
-        else if (currentGid === '228738175') maxDrivers = 15;   // Sezon 8 (15 Fahrer)
-        else if (currentGid === '1684329818') maxDrivers = 19;  // Sezon 9 (19 Fahrer)
-        else if (currentGid === '972147265') maxDrivers = 20;   // Sezon 10 S2 (20 Fahrer)
-        else if (currentGid === '2021228459') maxDrivers = 20;  // Sezon 10 (20 Fahrer)
-        else if (currentGid === '412483433') maxDrivers = 20;   // Sezon 11 (20 Fahrer)
-        else if (currentGid === '1216314763') maxDrivers = 20;  // Sezon 12 S2 (20 Fahrer)
-        else if (currentGid === '874501409') maxDrivers = 20;   // Sezon 12 (20 Fahrer)
-        else if (currentGid === '1651963070') maxDrivers = 22;  // Sezon 20 (22 Fahrer)
-        else if (currentGid === '1869079550') maxDrivers = 14;  // Sezon 20 S2 (14 Fahrer)
-        else if (currentGid === '1127275876') maxDrivers = 14;  // Sezon 14 S2
-        else if (currentGid === '476402002') maxDrivers = 19;   // Sezon 14
-        else if (currentGid === '830059160') maxDrivers = 19;   // Sezon 13
-
+        let maxDrivers = cfg.maxDrivers ?? 20;
         let startIndex = headerIndex + 1;
+
         for (let i = startIndex; i < rawData.length; i++) {
             let row = rawData[i];
             if (!row || row.length < 2) continue;
@@ -461,7 +485,7 @@ async function loadSeasonData() {
                     driverRaces.push(cellVal);
                 }
 
-                let assignedTeam = isSeason20or20S2
+                let assignedTeam = cfg.layout === 'single'
                     ? (row[colTeam] || 'Niezależny')
                     : (driverToTeamMap[driverName.toLowerCase()] || 'Niezależny');
 
