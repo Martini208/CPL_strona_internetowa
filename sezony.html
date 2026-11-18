@@ -328,7 +328,6 @@ async function loadSeasonData() {
         }
 
         let isMultiRowTeamFormat = (currentGid === '593270460' || currentGid === '228738175' || currentGid === '1684329818' || currentGid === '972147265' || currentGid === '2021228459' || currentGid === '412483433' || currentGid === '1216314763' || currentGid === '874501409' || currentGid === '1977413477' || currentGid === '476402002' || currentGid === '1127275876' || currentGid === '113798131' || currentGid === '830059160' || currentGid === '423989328');
-        let currentTeamName = 'Niezależny';
 
         if (!isSeason20or20S2) {
             if (isMultiRowTeamFormat) {
@@ -342,8 +341,8 @@ async function loadSeasonData() {
                 }
                 if (teamHeaderIdx === -1) teamHeaderIdx = headerIndex + 25;
 
-                let tTeamIdx = ((currentGid === '228738175' || currentGid === '593270460') ? 3 : 3);
-                let tDriverIdx = ((currentGid === '228738175' || currentGid === '593270460') ? 4 : 5);
+                let tTeamIdx = 3;
+                let tDriverIdx = 4;
 
                 let currentPos = '';
                 let currentTeam = '';
@@ -361,7 +360,7 @@ async function loadSeasonData() {
                     let rowTeamPts = 0;
                     for (let c = colPts; c < r.length; c++) {
                         let pVal = parseFloat(String(r[c]).replace(',', '.'));
-                        if (!isNaN(pVal) && pVal > 0) {
+                        if (!isNaN(pVal)) {
                             rowTeamPts = pVal;
                             break;
                         }
@@ -379,7 +378,7 @@ async function loadSeasonData() {
                         currentPos = pos;
                         currentTeam = (teamCol && teamCol !== '' && teamCol.toLowerCase() !== 'team') ? teamCol : currentTeam;
                         currentDrivers = [];
-                        currentPts = rowTeamPts > 0 ? rowTeamPts : 0;
+                        currentPts = rowTeamPts;
                     } else if (teamCol && teamCol !== '' && teamCol.toLowerCase() !== 'team') {
                         currentTeam = teamCol;
                         if (rowTeamPts > 0) currentPts = rowTeamPts;
@@ -481,21 +480,6 @@ async function loadSeasonData() {
                     races: driverRaces
                 });
             }
-        }
-
-        if (globalTeams.length > 0 && currentGid !== '228738175' && currentGid !== '593270460') {
-            globalTeams.forEach(t => {
-                let dList = t.drivers.split('&').map(d => d.trim().toLowerCase());
-                let totalP = 0;
-                globalDrivers.forEach(d => {
-                    if (dList.includes(d.name.toLowerCase())) {
-                        totalP += parseFloat(String(d.points).replace(',', '.')) || 0;
-                    }
-                });
-                t.points = totalP;
-            });
-            globalTeams.sort((a, b) => b.points - a.points);
-            globalTeams.forEach((t, idx) => { t.pos = idx + 1; });
         }
 
         switchTab(activeTab);
