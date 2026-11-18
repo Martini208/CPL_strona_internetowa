@@ -377,21 +377,21 @@ async function loadSeasonData() {
                             });
                         }
                         currentPos = pos;
-                        currentTeam = (teamCol && teamCol !== '') ? teamCol : currentTeam;
+                        currentTeam = (teamCol && teamCol !== '' && teamCol.toLowerCase() !== 'team') ? teamCol : currentTeam;
                         currentDrivers = [];
                         currentPts = rowTeamPts > 0 ? rowTeamPts : 0;
-                    } else if (teamCol && teamCol !== '') {
+                    } else if (teamCol && teamCol !== '' && teamCol.toLowerCase() !== 'team') {
                         currentTeam = teamCol;
                         if (rowTeamPts > 0) currentPts = rowTeamPts;
                     }
 
-                    if (driverCol && driverCol !== '' && driverCol !== '-' && !driverCol.match(/^\d+$/)) {
+                    if (driverCol && driverCol !== '' && driverCol !== '-' && driverCol.toLowerCase() !== 'kierowca' && !driverCol.match(/^\d+$/)) {
                         if (!currentDrivers.includes(driverCol)) {
                             currentDrivers.push(driverCol);
                         }
                     }
                 }
-                if (currentTeam && currentDrivers.length > 0) {
+                if (currentTeam && currentDrivers.length > 0 && currentTeam.toLowerCase() !== 'team') {
                     globalTeams.push({
                         pos: currentPos,
                         name: currentTeam,
