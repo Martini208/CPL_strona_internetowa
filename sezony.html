@@ -212,6 +212,25 @@ let globalTeams = [];
 let raceHeaders = [];
 let activeTab = 'kierowcy';
 
+const BOTTOM_TEAM_GIDS = new Set([
+    '1977413477', // Sezon 15
+    '476402002',  // Sezon 14
+    '1127275876', // Sezon 14 S2
+    '113798131',  // S14 PRE SEASON Akademia
+    '830059160',  // Sezon 13
+    '423989328',  // Sezon 13 S2
+    '874501409',  // Sezon 12
+    '1216314763', // Sezon 12 S2
+    '412483433',  // Sezon 11
+    '2021228459', // Sezon 10
+    '972147265',  // Sezon 10 S2
+    '1684329818', // Sezon 9
+    '228738175',  // Sezon 8
+    '593270460',  // Sezon 8 S2
+    '1028522704', // Sezon 8 PS
+    '878950892'   // Sezon 7
+]);
+
 function parseCSVRow(row) {
     let cells = [];
     let insideQuote = false;
@@ -240,6 +259,94 @@ function onSeasonChange() {
     loadSeasonData();
 }
 
+function parseBottomTeamBlock(rawData, startSearchIdx) {
+    let teams = [];
+    let summaryHeaderIdx = -1;
+
+    for (let i = rawData.length - 1; i > startSearchIdx; i--) {
+        let r = rawData[i] || [];
+        let hasTeam = r.some(c => c && c.trim().toLowerCase() === 'team');
+        let hasPunkty = r.some(c => c && c.trim().toLowerCase() === 'punkty');
+        if (hasTeam && hasPunkty) {
+            summaryHeaderIdx = i;
+            break;
+        }
+    }
+
+    if (summaryHeaderIdx === -1 && rawData.length > 35) {
+        summaryHeaderIdx = 35;
+    }
+
+    if (summaryHeaderIdx !== -1) {
+        let hRow = rawData[summaryHeaderIdx] || [];
+        let posCol = hRow.findIndex(c => c && c.trim().toLowerCase().includes('poz'));
+        let teamCol = hRow.findIndex(c => c && c.trim().toLowerCase() === 'team');
+        let ptsCol = hRow.findIndex(c => c && c.trim().toLowerCase() === 'punkty');
+        let driverCol = hRow.findIndex(c => c && c.trim().toLowerCase() === 'kierowca');
+
+        // Exakte Spalten laut Vorgabe: Team = H (7), Kierowca/Name = J (9), Punkty = L (11)
+        if (posCol === -1) posCol = 5;
+        if (teamCol === -1) teamCol = 7;
+        if (driverCol === -1) driverCol = 9;
+        if (ptsCol === -1) ptsCol = 11;
+
+        let currentPos = '';
+        let currentTeam = '';
+        let currentDrivers = [];
+        let currentPts = 0;
+
+        for (let i = summaryHeaderIdx + 1; i < rawData.length; i++) {
+            let r = rawData[i];
+            if (!r || r.every(cell => cell === '')) continue;
+
+            let posVal = (r[posCol] || '').trim();
+            let teamVal = (r[teamCol] || '').trim();
+            let dVal = (r[driverCol] || '').trim();
+            let ptsRaw = (r[ptsCol] ?? '').trim();
+            let ptsVal = ptsRaw !== '' ? (parseFloat(ptsRaw.replace(',', '.')) || 0) : 0;
+
+            if (posVal && !isNaN(parseInt(posVal))) {
+                if (currentTeam) {
+                    teams.push({
+                        pos: currentPos,
+                        name: currentTeam,
+                        drivers: currentDrivers.join(' & '),
+                        points: currentPts
+                    });
+                }
+                currentPos = posVal;
+                currentTeam = teamVal;
+                currentDrivers = [];
+                currentPts = ptsVal;
+            } else {
+                if (teamVal && teamVal.toLowerCase() !== 'team') {
+                    currentTeam = teamVal;
+                }
+                if (ptsRaw !== '' && currentPts === 0) {
+                    currentPts = ptsVal;
+                }
+            }
+
+            if (dVal && dVal !== '-' && dVal.toLowerCase() !== 'kierowca' && !dVal.match(/^\d+$/)) {
+                if (!currentDrivers.includes(dVal)) {
+                    currentDrivers.push(dVal);
+                }
+            }
+        }
+
+        if (currentTeam) {
+            teams.push({
+                pos: currentPos,
+                name: currentTeam,
+                drivers: currentDrivers.join(' & '),
+                points: currentPts
+            });
+        }
+    }
+
+    return teams;
+}
+
 async function loadSeasonData() {
     document.getElementById('tab-content').innerHTML = `Ładowanie danych...`;
     const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${currentGid}`;
@@ -259,19 +366,19 @@ async function loadSeasonData() {
 
         let headers = rawData[headerIndex];
 
-        let colPos = headers.indexOf('Pozycja') !== -1 ? headers.indexOf('Pozycja') : (headers.indexOf('Poz') !== -1 ? headers.indexOf('Poz') : 0);
-        let colNum = headers.indexOf('Numer') !== -1 ? headers.indexOf('Numer') : (headers.indexOf('No') !== -1 ? headers.indexOf('No') : -1);
-        let colDriver = headers.indexOf('Kierowca') !== -1 ? headers.indexOf('Kierowca') : 4;
-        let colTeam = headers.indexOf('Drużyna') !== -1 ? headers.indexOf('Drużyna') : (headers.indexOf('Team') !== -1 ? headers.indexOf('Team') : 3);
+        let colPos = headers.indexOf('Pozycja') !== -1 ? headers.indexOf('Pozycja') : (headers.indexOf('Poz') !== -1 ? headers.indexOf('Poz') : 1);
+        let colNum = headers.indexOf('Numer') !== -1 ? headers.indexOf('Numer') : (headers.indexOf('No') !== -1 ? headers.indexOf('No') : 4);
+        let colDriver = headers.indexOf('Kierowca') !== -1 ? headers.indexOf('Kierowca') : 5;
+        let colTeam = headers.indexOf('Drużyna') !== -1 ? headers.indexOf('Drużyna') : (headers.indexOf('Team') !== -1 ? headers.indexOf('Team') : 6);
         
         let colPts = headers.findIndex(h => h && h.toUpperCase().includes('PUNKT'));
         if (colPts === -1) {
             headerIndex = rawData.findIndex((r, idx) => idx > 2 && r.some(cell => cell && cell.toUpperCase().includes('PUNKT')));
             if (headerIndex !== -1) {
                 headers = rawData[headerIndex];
-                colPos = headers.indexOf('Poz') !== -1 ? headers.indexOf('Poz') : 0;
-                colDriver = headers.indexOf('Kierowca') !== -1 ? headers.indexOf('Kierowca') : 4;
-                colTeam = headers.indexOf('Team') !== -1 ? headers.indexOf('Team') : 3;
+                colPos = headers.indexOf('Poz') !== -1 ? headers.indexOf('Poz') : 1;
+                colDriver = headers.indexOf('Kierowca') !== -1 ? headers.indexOf('Kierowca') : 5;
+                colTeam = headers.indexOf('Team') !== -1 ? headers.indexOf('Team') : 6;
                 colPts = headers.findIndex(h => h && h.toUpperCase().includes('PUNKT'));
             } else {
                 colPts = headers.length - 3;
@@ -326,10 +433,15 @@ async function loadSeasonData() {
             }
         }
 
+        let useBottomTeamBlock = BOTTOM_TEAM_GIDS.has(currentGid);
         let isMultiRowTeamFormat = (isSeason8Format || currentGid === '1684329818' || currentGid === '972147265' || currentGid === '2021228459' || currentGid === '412483433' || currentGid === '1216314763' || currentGid === '874501409' || currentGid === '1977413477' || currentGid === '476402002' || currentGid === '1127275876' || currentGid === '113798131' || currentGid === '830059160' || currentGid === '423989328');
 
         if (!isSeason20or20S2) {
-            if (isMultiRowTeamFormat) {
+            if (useBottomTeamBlock) {
+                globalTeams = parseBottomTeamBlock(rawData, headerIndex + 1);
+            }
+
+            if (globalTeams.length === 0 && isMultiRowTeamFormat) {
                 let teamHeaderIdx = -1;
                 for (let i = headerIndex + 1; i < rawData.length; i++) {
                     let rStr = rawData[i].join(' ');
@@ -390,7 +502,7 @@ async function loadSeasonData() {
                         points: currentPts
                     });
                 }
-            } else {
+            } else if (globalTeams.length === 0) {
                 let teamHeaderIndex = rawData.findIndex((r, idx) => idx > headerIndex && r.some(c => c && (c.toLowerCase() === 'team' || c.toLowerCase() === 'punkty')));
                 if (teamHeaderIndex !== -1) {
                     let tHeaders = rawData[teamHeaderIndex];
@@ -423,21 +535,21 @@ async function loadSeasonData() {
         });
 
         let maxDrivers = 20;
-        if (currentGid === '878950892') maxDrivers = 20;       // Sezon 7 (20 Fahrer)
-        else if (currentGid === '1028522704') maxDrivers = 20;  // Sezon 8 PS (20 Fahrer)
-        else if (currentGid === '593270460') maxDrivers = 20;   // Sezon 8 S2 (20 Fahrer)
-        else if (currentGid === '228738175') maxDrivers = 15;   // Sezon 8 (15 Fahrer)
-        else if (currentGid === '1684329818') maxDrivers = 19;  // Sezon 9 (19 Fahrer)
-        else if (currentGid === '972147265') maxDrivers = 20;   // Sezon 10 S2 (20 Fahrer)
-        else if (currentGid === '2021228459') maxDrivers = 20;  // Sezon 10 (20 Fahrer)
-        else if (currentGid === '412483433') maxDrivers = 20;   // Sezon 11 (20 Fahrer)
-        else if (currentGid === '1216314763') maxDrivers = 20;  // Sezon 12 S2 (20 Fahrer)
-        else if (currentGid === '874501409') maxDrivers = 20;   // Sezon 12 (20 Fahrer)
-        else if (currentGid === '1651963070') maxDrivers = 22;  // Sezon 20 (22 Fahrer)
-        else if (currentGid === '1869079550') maxDrivers = 14;  // Sezon 20 S2 (14 Fahrer)
-        else if (currentGid === '1127275876') maxDrivers = 14;  // Sezon 14 S2
-        else if (currentGid === '476402002') maxDrivers = 19;   // Sezon 14
-        else if (currentGid === '830059160') maxDrivers = 19;   // Sezon 13
+        if (currentGid === '878950892') maxDrivers = 20;
+        else if (currentGid === '1028522704') maxDrivers = 20;
+        else if (currentGid === '593270460') maxDrivers = 20;
+        else if (currentGid === '228738175') maxDrivers = 15;
+        else if (currentGid === '1684329818') maxDrivers = 19;
+        else if (currentGid === '972147265') maxDrivers = 20;
+        else if (currentGid === '2021228459') maxDrivers = 20;
+        else if (currentGid === '412483433') maxDrivers = 20;
+        else if (currentGid === '1216314763') maxDrivers = 20;
+        else if (currentGid === '874501409') maxDrivers = 20;
+        else if (currentGid === '1651963070') maxDrivers = 22;
+        else if (currentGid === '1869079550') maxDrivers = 14;
+        else if (currentGid === '1127275876') maxDrivers = 14;
+        else if (currentGid === '476402002') maxDrivers = 19;
+        else if (currentGid === '830059160') maxDrivers = 19;
 
         let startIndex = headerIndex + 1;
         for (let i = startIndex; i < rawData.length; i++) {
@@ -463,7 +575,7 @@ async function loadSeasonData() {
 
                 let assignedTeam = isSeason20or20S2
                     ? (row[colTeam] || 'Niezależny')
-                    : (driverToTeamMap[driverName.toLowerCase()] || 'Niezależny');
+                    : (driverToTeamMap[driverName.toLowerCase()] || (row[colTeam] || 'Niezależny'));
 
                 let driverPts = row[colPts] || '0';
 
