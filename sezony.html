@@ -192,6 +192,7 @@ footer {
                 <option value="225840227" data-name="Sezon 7 PS F3">Sezon 7 PS F3</option>
                 <option value="81119984" data-name="Sezon 7 PS F4">Sezon 7 PS F4</option>
                 <option value="224650529" data-name="Sezon 6">Sezon 6</option>
+                <option value="1422749777" data-name="Sezon 6 S2">Sezon 6 S2</option>
             </select>
         </div>
         
@@ -240,7 +241,8 @@ const BOTTOM_TEAM_GIDS = new Set([
     '1314931077', // Sezon 7 PS F2
     '225840227',  // Sezon 7 PS F3
     '81119984',   // Sezon 7 PS F4
-    '224650529'   // Sezon 6
+    '224650529',  // Sezon 6
+    '1422749777'  // Sezon 6 S2
 ]);
 
 function parseCSVRow(row) {
@@ -292,7 +294,13 @@ function parseBottomTeamBlock(rawData, startSearchIdx) {
         let ptsCol = hRow.findIndex(c => c && c.trim().toLowerCase() === 'punkty');
         let driverCol = hRow.findIndex(c => c && c.trim().toLowerCase() === 'kierowca');
 
-        if (currentGid === '224650529') {
+        if (currentGid === '1422749777') {
+            // Sezon 6 S2: Poz = C (2), Team = D (3), Kierowca = E (4), Punkty = Y (24)
+            if (posCol === -1) posCol = 2;
+            if (teamCol === -1) teamCol = 3;
+            if (driverCol === -1) driverCol = 4;
+            if (ptsCol === -1) ptsCol = 24;
+        } else if (currentGid === '224650529') {
             // Sezon 6: Poz = C (2), Team = D (3), Kierowca = E (4), Punkty = AA (26)
             if (posCol === -1) posCol = 2;
             if (teamCol === -1) teamCol = 3;
@@ -473,7 +481,7 @@ async function loadSeasonData() {
         }
 
         let useBottomTeamBlock = BOTTOM_TEAM_GIDS.has(currentGid);
-        let isMultiRowTeamFormat = (isSeason8Format || currentGid === '1684329818' || currentGid === '972147265' || currentGid === '2021228459' || currentGid === '412483433' || currentGid === '1216314763' || currentGid === '874501409' || currentGid === '1977413477' || currentGid === '476402002' || currentGid === '1127275876' || currentGid === '113798131' || currentGid === '830059160' || currentGid === '423989328' || currentGid === '14731381' || currentGid === '2126959271' || currentGid === '1314931077' || currentGid === '225840227' || currentGid === '81119984' || currentGid === '224650529');
+        let isMultiRowTeamFormat = (isSeason8Format || currentGid === '1684329818' || currentGid === '972147265' || currentGid === '2021228459' || currentGid === '412483433' || currentGid === '1216314763' || currentGid === '874501409' || currentGid === '1977413477' || currentGid === '476402002' || currentGid === '1127275876' || currentGid === '113798131' || currentGid === '830059160' || currentGid === '423989328' || currentGid === '14731381' || currentGid === '2126959271' || currentGid === '1314931077' || currentGid === '225840227' || currentGid === '81119984' || currentGid === '224650529' || currentGid === '1422749777');
 
         if (!isSeason20or20S2) {
             if (useBottomTeamBlock) {
@@ -574,7 +582,8 @@ async function loadSeasonData() {
         });
 
         let maxDrivers = 20;
-        if (currentGid === '224650529') maxDrivers = 18;
+        if (currentGid === '1422749777') maxDrivers = 20;
+        else if (currentGid === '224650529') maxDrivers = 18;
         else if (currentGid === '81119984') maxDrivers = 20;
         else if (currentGid === '225840227') maxDrivers = 20;
         else if (currentGid === '1314931077') maxDrivers = 20;
