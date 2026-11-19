@@ -204,7 +204,7 @@ nav a:hover {
     gap: 15px;
 }
 
-/* Schöne Saison-Suchleiste & Dropdown */
+/* Saison-Suchleiste & Dropdown */
 .sr-only-select {
     position: absolute;
     opacity: 0;
@@ -550,7 +550,7 @@ footer {
         <ul>
             <li><a href="kalendarz.html">Kalendarz</a></li>
             <li><a href="sezony.html">Sezony</a></li>
-            <li><a href="kierowcy.html">Klasyfikacja</a></li>
+            <li><a href="kierowcy.html">Kierowcy</a></li>
             <li><a href="zespoly.html">Zespoły</a></li>
             <li><a href="news.html">News</a></li>
             <li><a href="o-nas.html">O nas</a></li>
@@ -743,40 +743,40 @@ themeToggleBtn.addEventListener('click', () => {
 });
 
 const BOTTOM_TEAM_GIDS = new Set([
-    '1977413477', // Sezon 15
-    '476402002',  // Sezon 14
-    '1127275876', // Sezon 14 S2
-    '113798131',  // S14 PRE SEASON Akademia
-    '830059160',  // Sezon 13
-    '423989328',  // Sezon 13 S2
-    '874501409',  // Sezon 12
-    '1216314763', // Sezon 12 S2
-    '412483433',  // Sezon 11
-    '2021228459', // Sezon 10
-    '972147265',  // Sezon 10 S2
-    '1684329818', // Sezon 9
-    '228738175',  // Sezon 8
-    '593270460',  // Sezon 8 S2
-    '1028522704', // Sezon 8 PS
-    '878950892',  // Sezon 7
-    '14731381',   // Sezon 7 S2
-    '2126959271', // Sezon 7 PS F1
-    '1314931077', // Sezon 7 PS F2
-    '225840227',  // Sezon 7 PS F3
-    '81119984',   // Sezon 7 PS F4
-    '224650529',  // Sezon 6
-    '1422749777', // Sezon 6 S2
-    '1040313858', // Sezon 6 PS F1
-    '1357541010', // Sezon 6 PS F2
-    '1702830449', // Sezon 6 PS F3
-    '1174179171', // Sezon 6 PS F4
-    '1055970048', // Sezon 6 PS F5
-    '1868743576', // Sezon 5
-    '326825915',  // Sezon 5 S2
-    '1100320282', // Sezon 5 S3
-    '1093155603', // Sezon 5 S4
-    '1532929628', // Sezon 4
-    '1826862337'  // Sezon 4 F2
+    '1977413477',
+    '476402002',
+    '1127275876',
+    '113798131',
+    '830059160',
+    '423989328',
+    '874501409',
+    '1216314763',
+    '412483433',
+    '2021228459',
+    '972147265',
+    '1684329818',
+    '228738175',
+    '593270460',
+    '1028522704',
+    '878950892',
+    '14731381',
+    '2126959271',
+    '1314931077',
+    '225840227',
+    '81119984',
+    '224650529',
+    '1422749777',
+    '1040313858',
+    '1357541010',
+    '1702830449',
+    '1174179171',
+    '1055970048',
+    '1868743576',
+    '326825915',
+    '1100320282',
+    '1093155603',
+    '1532929628',
+    '1826862337'
 ]);
 
 function initSeasonSearchDropdown() {
