@@ -748,6 +748,7 @@ function renderWyscigi() {
     let html = `<table class="data-table">
         <thead>
             <tr>
+                <th class="text-center">Poz</th>
                 <th>Kierowca</th>
                 ${raceHeaders.map(h => `<th class="text-center">${h}</th>`).join('')}
             </tr>
@@ -755,6 +756,7 @@ function renderWyscigi() {
 
     globalDrivers.forEach(d => {
         html += `<tr>
+            <td class="pos-badge text-center">${d.pos}</td>
             <td><strong>${d.name}</strong></td>
             ${d.races.map(r => `<td class="text-center">${formatResult(r)}</td>`).join('')}
         </tr>`;
