@@ -11,6 +11,8 @@
     --card-bg: #181818;
     --border-color: #333333;
     --red-main: #ff3131;
+    --dropdown-bg: #151515;
+    --hover-bg: rgba(255, 49, 49, 0.16);
 }
 
 body.light-mode {
@@ -18,6 +20,8 @@ body.light-mode {
     --text-color: #111111;
     --card-bg: #ffffff;
     --border-color: #e0e0e0;
+    --dropdown-bg: #ffffff;
+    --hover-bg: rgba(255, 49, 49, 0.10);
 }
 
 * {
@@ -195,16 +199,157 @@ nav a:hover {
     gap: 15px;
 }
 
-.season-select {
-    background: var(--bg-color);
+/* Schöne Saison-Suchleiste & Dropdown */
+.sr-only-select {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    width: 1px;
+    height: 1px;
+}
+
+.season-search-dropdown {
+    position: relative;
+    min-width: 270px;
+    z-index: 50;
+}
+
+.season-search-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--dropdown-bg);
+    border: 1.5px solid rgba(255, 49, 49, 0.65);
+    border-radius: 10px;
+    padding: 6px 10px 6px 12px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.season-search-dropdown.open .season-search-box,
+.season-search-box:focus-within {
+    border-color: var(--red-main);
+    box-shadow: 0 0 0 3px rgba(255, 49, 49, 0.2);
+}
+
+.season-search-icon {
+    color: var(--red-main);
+    font-size: 14px;
+    line-height: 1;
+    user-select: none;
+}
+
+.season-search-input {
+    flex: 1;
+    min-width: 150px;
+    background: transparent;
+    border: none;
     color: var(--text-color);
-    border: 1px solid var(--red-main);
-    padding: 8px 15px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 4px 2px;
     outline: none;
+}
+
+.season-search-input::placeholder {
+    color: #888888;
+    font-weight: 500;
+}
+
+.season-clear-btn,
+.season-toggle-btn {
+    background: transparent;
+    border: none;
+    color: #aaaaaa;
+    cursor: pointer;
+    font-size: 13px;
+    padding: 4px 6px;
+    border-radius: 6px;
+    line-height: 1;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.2s ease;
+}
+
+.season-clear-btn:hover,
+.season-toggle-btn:hover {
+    background: rgba(255, 49, 49, 0.15);
+    color: var(--text-color);
+}
+
+.season-clear-btn.hidden {
+    display: none;
+}
+
+.season-search-dropdown.open .season-toggle-btn {
+    transform: rotate(180deg);
+    color: var(--red-main);
+}
+
+.season-options-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 100%;
+    max-height: 300px;
+    overflow-y: auto;
+    background: var(--dropdown-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 6px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.65);
+}
+
+.season-search-dropdown.open .season-options-menu {
+    display: block;
+}
+
+.season-options-menu::-webkit-scrollbar {
+    width: 8px;
+}
+
+.season-options-menu::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+}
+
+.season-options-menu::-webkit-scrollbar-thumb {
+    background: rgba(255, 49, 49, 0.45);
+    border-radius: 10px;
+}
+
+.season-options-menu::-webkit-scrollbar-thumb:hover {
+    background: var(--red-main);
+}
+
+.season-option-item {
+    padding: 9px 12px;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-color);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.season-option-item:hover {
+    background: var(--hover-bg);
+    color: var(--red-main);
+}
+
+.season-option-item.selected {
+    background: var(--red-main);
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.season-no-results {
+    padding: 12px;
+    text-align: center;
+    font-size: 13px;
+    color: #888888;
 }
 
 .tab-buttons {
@@ -340,6 +485,7 @@ footer {
     .nav-left { flex-direction: column; align-items: center; }
     nav ul { flex-wrap: wrap; justify-content: center; }
     .nav-right { flex-wrap: wrap; justify-content: center; }
+    .season-search-dropdown { width: 100%; min-width: 0; }
 }
 </style>
 </head>
@@ -391,7 +537,8 @@ footer {
     <div class="season-card">
         <div class="season-header">
             <h2 id="season-title">Sezon 20</h2>
-            <select id="season-picker" class="season-select" onchange="onSeasonChange()">
+
+            <select id="season-picker" class="sr-only-select" aria-hidden="true" tabindex="-1" onchange="onSeasonChange()">
                 <option value="1651963070" data-name="Sezon 20" selected>Sezon 20</option>
                 <option value="1869079550" data-name="Sezon 20 S2">Sezon 20 S2</option>
                 <option value="482383691" data-name="Sezon Letni 2026">Sezon Letni 2026</option>
@@ -435,6 +582,35 @@ footer {
                 <option value="1532929628" data-name="Sezon 4">Sezon 4</option>
                 <option value="1826862337" data-name="Sezon 4 F2">Sezon 4 F2</option>
             </select>
+
+            <div class="season-search-dropdown" id="season-dropdown">
+                <div class="season-search-box">
+                    <span class="season-search-icon">🔍</span>
+                    <input
+                        type="text"
+                        id="season-search-input"
+                        class="season-search-input"
+                        placeholder="Szukaj sezonu..."
+                        autocomplete="off"
+                        aria-label="Szukaj lub wybierz sezon"
+                    >
+                    <button
+                        type="button"
+                        id="season-clear-btn"
+                        class="season-clear-btn hidden"
+                        title="Wyczyść wyszukiwanie"
+                        aria-label="Wyczyść wyszukiwanie"
+                    >✕</button>
+                    <button
+                        type="button"
+                        id="season-toggle-btn"
+                        class="season-toggle-btn"
+                        title="Pokaż listę sezonów"
+                        aria-label="Pokaż listę sezonów"
+                    >▾</button>
+                </div>
+                <div class="season-options-menu" id="season-options-menu" role="listbox"></div>
+            </div>
         </div>
         
         <div class="tab-buttons">
@@ -534,6 +710,132 @@ const BOTTOM_TEAM_GIDS = new Set([
     '1826862337'  // Sezon 4 F2
 ]);
 
+function initSeasonSearchDropdown() {
+    const select = document.getElementById('season-picker');
+    const dropdown = document.getElementById('season-dropdown');
+    const input = document.getElementById('season-search-input');
+    const clearBtn = document.getElementById('season-clear-btn');
+    const toggleBtn = document.getElementById('season-toggle-btn');
+    const menu = document.getElementById('season-options-menu');
+
+    const seasons = Array.from(select.options).map(opt => ({
+        value: opt.value,
+        name: opt.getAttribute('data-name') || opt.textContent.trim()
+    }));
+
+    let isFiltering = false;
+
+    function syncActiveSeasonUI() {
+        const current = seasons.find(s => s.value === select.value) || seasons[0];
+        if (current && !isFiltering) {
+            input.value = current.name;
+        }
+        clearBtn.classList.toggle('hidden', !input.value.trim());
+    }
+
+    function renderOptions(filterText = '') {
+        const query = filterText.trim().toLowerCase();
+        const matches = query
+            ? seasons.filter(s => s.name.toLowerCase().includes(query))
+            : seasons;
+
+        if (matches.length === 0) {
+            menu.innerHTML = `<div class="season-no-results">Brak pasujących sezonów</div>`;
+            return;
+        }
+
+        menu.innerHTML = matches.map(s => {
+            const isSelected = s.value === select.value;
+            return `
+                <div
+                    class="season-option-item ${isSelected ? 'selected' : ''}"
+                    data-value="${s.value}"
+                    role="option"
+                    aria-selected="${isSelected}"
+                >
+                    <span>${s.name}</span>
+                    ${isSelected ? '<span>✓</span>' : ''}
+                </div>
+            `;
+        }).join('');
+
+        menu.querySelectorAll('.season-option-item').forEach(item => {
+            item.addEventListener('click', () => {
+                select.value = item.getAttribute('data-value');
+                isFiltering = false;
+                syncActiveSeasonUI();
+                dropdown.classList.remove('open');
+                onSeasonChange();
+            });
+        });
+    }
+
+    function openMenu(showAll = false) {
+        dropdown.classList.add('open');
+        renderOptions(showAll ? '' : input.value);
+    }
+
+    input.addEventListener('focus', () => {
+        input.select();
+        isFiltering = false;
+        openMenu(true);
+    });
+
+    input.addEventListener('input', () => {
+        isFiltering = true;
+        clearBtn.classList.toggle('hidden', !input.value.trim());
+        openMenu(false);
+    });
+
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            isFiltering = false;
+            syncActiveSeasonUI();
+            dropdown.classList.remove('open');
+            input.blur();
+        } else if (e.key === 'Enter') {
+            const firstMatch = menu.querySelector('.season-option-item');
+            if (firstMatch && dropdown.classList.contains('open')) {
+                e.preventDefault();
+                firstMatch.click();
+            }
+        }
+    });
+
+    clearBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        input.value = '';
+        isFiltering = true;
+        clearBtn.classList.add('hidden');
+        input.focus();
+        openMenu(true);
+    });
+
+    toggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (dropdown.classList.contains('open')) {
+            isFiltering = false;
+            syncActiveSeasonUI();
+            dropdown.classList.remove('open');
+        } else {
+            isFiltering = false;
+            openMenu(true);
+            input.focus();
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!dropdown.contains(e.target)) {
+            isFiltering = false;
+            syncActiveSeasonUI();
+            dropdown.classList.remove('open');
+        }
+    });
+
+    syncActiveSeasonUI();
+    renderOptions('');
+}
+
 function parseCSVRow(row) {
     let cells = [];
     let insideQuote = false;
@@ -559,6 +861,10 @@ function onSeasonChange() {
     currentGid = select.value;
     let selectedName = select.options[select.selectedIndex].getAttribute('data-name');
     document.getElementById('season-title').innerText = selectedName;
+    const searchInput = document.getElementById('season-search-input');
+    const clearBtn = document.getElementById('season-clear-btn');
+    if (searchInput) searchInput.value = selectedName;
+    if (clearBtn) clearBtn.classList.toggle('hidden', !selectedName);
     loadSeasonData();
 }
 
@@ -1082,6 +1388,7 @@ function formatResult(val) {
     return val;
 }
 
+initSeasonSearchDropdown();
 loadSeasonData();
 </script>
 </body>
