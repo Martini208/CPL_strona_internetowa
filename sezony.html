@@ -1047,11 +1047,35 @@ async function loadSeasonData() {
             colPts = colAbIndex;
         }
 
+        let isSummer2026 = (currentGid === '482383691');
         let isSeason20or20S2 = (currentGid === '1651963070' || currentGid === '1869079550');
         let isSeason8Format = (currentGid === '228738175' || currentGid === '593270460' || currentGid === '1028522704' || currentGid === '878950892');
         let raceStartCol = colTeam + 1;
 
-        if (isSeason20or20S2) {
+        if (isSummer2026) {
+            raceHeaders = ['AUS', 'CAT', 'WLO', 'AZE', 'MEK', 'HIS', 'BRA'];
+            let trackRow = rawData.find(r => r && r.some(c => c && c.trim().toUpperCase() === 'AUS') && r.some(c => c && c.trim().toUpperCase() === 'BRA'));
+            if (trackRow) {
+                let firstTrackCol = trackRow.findIndex(c => c && c.trim().toUpperCase() === 'AUS');
+                if (firstTrackCol !== -1) {
+                    let extracted = [];
+                    for (let c = firstTrackCol; c < trackRow.length; c++) {
+                        let code = (trackRow[c] || '').trim().toUpperCase();
+                        if (/^[A-Z]{3}$/.test(code)) {
+                            extracted.push(code);
+                        } else if (extracted.length > 0) {
+                            break;
+                        }
+                    }
+                    if (extracted.length > 0) raceHeaders = extracted;
+                    raceStartCol = firstTrackCol;
+                } else {
+                    raceStartCol = colPts + 1;
+                }
+            } else {
+                raceStartCol = colPts + 1;
+            }
+        } else if (isSeason20or20S2) {
             colTeam = colTeam + 1;
             raceStartCol = colPts + 1;
             raceHeaders = ['AUS', 'SIN', 'CHI', 'JAP', 'AZE', 'BAH', 'KSA', 'AUT', 'EMR', 'WLO', 'BEL', 'NID', 'CAT', 'WBR', 'BRA', 'MIA', 'STA', 'MEK', 'LVE', 'ABU'];
@@ -1093,7 +1117,7 @@ async function loadSeasonData() {
         let useBottomTeamBlock = BOTTOM_TEAM_GIDS.has(currentGid);
         let isMultiRowTeamFormat = (isSeason8Format || currentGid === '1684329818' || currentGid === '972147265' || currentGid === '2021228459' || currentGid === '412483433' || currentGid === '1216314763' || currentGid === '874501409' || currentGid === '1977413477' || currentGid === '476402002' || currentGid === '1127275876' || currentGid === '113798131' || currentGid === '830059160' || currentGid === '423989328' || currentGid === '14731381' || currentGid === '2126959271' || currentGid === '1314931077' || currentGid === '225840227' || currentGid === '81119984' || currentGid === '224650529' || currentGid === '1422749777' || currentGid === '1040313858' || currentGid === '1357541010' || currentGid === '1702830449' || currentGid === '1174179171' || currentGid === '1055970048' || currentGid === '1868743576' || currentGid === '326825915' || currentGid === '1100320282' || currentGid === '1093155603' || currentGid === '1532929628' || currentGid === '1826862337');
 
-        if (!isSeason20or20S2) {
+        if (!isSeason20or20S2 && !isSummer2026) {
             if (useBottomTeamBlock) {
                 globalTeams = parseBottomTeamBlock(rawData, headerIndex + 1);
             }
@@ -1192,7 +1216,8 @@ async function loadSeasonData() {
         });
 
         let maxDrivers = 20;
-        if (currentGid === '1826862337') maxDrivers = 20;
+        if (currentGid === '482383691') maxDrivers = 22;
+        else if (currentGid === '1826862337') maxDrivers = 20;
         else if (currentGid === '1532929628') maxDrivers = 20;
         else if (currentGid === '1093155603') maxDrivers = 19;
         else if (currentGid === '1100320282') maxDrivers = 19;
@@ -1248,7 +1273,7 @@ async function loadSeasonData() {
                     driverRaces.push(cellVal);
                 }
 
-                let assignedTeam = isSeason20or20S2
+                let assignedTeam = (isSeason20or20S2 || isSummer2026)
                     ? (row[colTeam] || 'Niezależny')
                     : (driverToTeamMap[driverName.toLowerCase()] || (row[colTeam] || 'Niezależny'));
 
