@@ -276,7 +276,7 @@ body.light-mode .team-search-input {
 }
 
 .team-name {
-    font-size: 26px;
+    font-size: 25px;
     font-weight: 800;
     line-height: 1.15;
     color: #ffffff;
@@ -304,7 +304,7 @@ body.light-mode .team-search-input {
     flex-wrap: wrap;
     gap: 8px;
     margin-top: 12px;
-    max-width: 68%;
+    max-width: 72%;
     z-index: 2;
 }
 
@@ -317,12 +317,6 @@ body.light-mode .team-search-input {
     font-size: 13px;
     font-weight: 700;
     backdrop-filter: blur(4px);
-}
-
-.driver-pill small {
-    opacity: 0.8;
-    font-weight: 600;
-    margin-left: 4px;
 }
 
 .team-box-bottom {
@@ -641,77 +635,66 @@ const SEASON_20_GID = '1651963070';
 
 const TEAM_STYLES = {
     'mclaren': {
-        label: 'McLaren Mastercard F1 Team',
         short: 'MCL',
         gradient: 'linear-gradient(135deg, #ff6a00 0%, #e04800 100%)',
         carMain: '#ff7b00',
         carAccent: '#111111'
     },
     'red bull': {
-        label: 'Oracle Red Bull Racing',
         short: 'RBR',
         gradient: 'linear-gradient(135deg, #1b439b 0%, #0d2359 100%)',
         carMain: '#1e41ff',
         carAccent: '#ffd400'
     },
     'williams': {
-        label: 'Atlassian Williams F1 Team',
         short: 'WIL',
         gradient: 'linear-gradient(135deg, #0077d4 0%, #004785 100%)',
         carMain: '#0082fa',
         carAccent: '#ffffff'
     },
     'ferrari': {
-        label: 'Scuderia Ferrari HP',
         short: 'FER',
         gradient: 'linear-gradient(135deg, #d91c1c 0%, #8f0a0a 100%)',
         carMain: '#e80020',
         carAccent: '#ffffff'
     },
     'alpine': {
-        label: 'BWT Alpine Formula One Team',
         short: 'ALP',
         gradient: 'linear-gradient(135deg, #0077b6 0%, #c93b8b 100%)',
         carMain: '#0082c8',
         carAccent: '#ff77b5'
     },
     'mercedes': {
-        label: 'Mercedes-AMG PETRONAS Formula One Team',
         short: 'MER',
         gradient: 'linear-gradient(135deg, #00a19b 0%, #006663 100%)',
         carMain: '#00d2be',
         carAccent: '#181818'
     },
     'aston martin': {
-        label: 'Aston Martin Aramco Formula One Team',
         short: 'AMR',
         gradient: 'linear-gradient(135deg, #006f62 0%, #003d35 100%)',
         carMain: '#006f62',
         carAccent: '#cedc00'
     },
     'haas': {
-        label: 'TGR Haas F1 Team',
         short: 'HAA',
         gradient: 'linear-gradient(135deg, #b6babd 0%, #555a60 100%)',
         carMain: '#e6e8ea',
         carAccent: '#e10600'
     },
     'racing bulls': {
-        label: 'Visa Cash App Racing Bulls Formula One Team',
         short: 'VCARB',
         gradient: 'linear-gradient(135deg, #2b45e2 0%, #15237a 100%)',
         carMain: '#3658ff',
         carAccent: '#ffffff'
     },
     'audi': {
-        label: 'Audi Revolut F1 Team',
         short: 'AUD',
         gradient: 'linear-gradient(135deg, #4b4e54 0%, #1c1d20 100%)',
         carMain: '#d8dce0',
         carAccent: '#f50537'
     },
     'cadillac': {
-        label: 'Cadillac Formula 1 Team',
         short: 'CAD',
         gradient: 'linear-gradient(135deg, #2f353d 0%, #121519 100%)',
         carMain: '#cfd6de',
@@ -786,7 +769,6 @@ function getTeamStyle(teamName) {
         .map(w => w[0].toUpperCase())
         .join('');
     return {
-        label: teamName || 'Zespół CPL',
         short: initials || 'CPL',
         gradient: 'linear-gradient(135deg, #c81e2b 0%, #680d14 100%)',
         carMain: '#ff3131',
@@ -794,7 +776,7 @@ function getTeamStyle(teamName) {
     };
 }
 
-function countDriverPodiumsAndWins(raceCells) {
+function countPodiumsAndWins(raceCells) {
     let wins = 0;
     let podiums = 0;
 
@@ -812,6 +794,14 @@ function countDriverPodiumsAndWins(raceCells) {
     });
 
     return { wins, podiums };
+}
+
+function cleanDriverName(rawName) {
+    return String(rawName || '')
+        .replace(/\s*–\s*–\s*/g, ' ')
+        .replace(/\s+–\s*$/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
 }
 
 function createF1CarSVG(styleObj) {
@@ -843,142 +833,106 @@ async function loadSeason20Teams() {
         const lines = csvText.split(/\r\n|\n/);
         const rawData = lines.map(parseCSVRow);
 
-        let headerIdx = rawData.findIndex(r =>
-            r.some(c => c && c.toLowerCase().includes('kierowca')) &&
-            r.some(c => c && c.toLowerCase().includes('punkt'))
-        );
-        if (headerIdx === -1) headerIdx = 3;
+        // Findet die Kopfzeile des unteren Team-Blocks (Spalte D = Drużyna, Spalte G = Kierowcy)
+        let teamHeaderIdx = rawData.findIndex(r => {
+            const colD = (r[3] || '').trim().toLowerCase();
+            const colG = (r[6] || '').trim().toLowerCase();
+            return colD.includes('drużyna') && colG.includes('kierowc');
+        });
 
-        const headers = rawData[headerIdx] || [];
-        const colPos = headers.findIndex(h => h && h.toLowerCase().includes('poz')) !== -1 ? headers.findIndex(h => h && h.toLowerCase().includes('poz')) : 1;
-        const colDriver = headers.findIndex(h => h && h.toLowerCase().includes('kierowca')) !== -1 ? headers.findIndex(h => h && h.toLowerCase().includes('kierowca')) : 4;
-        const colTeam = headers.findIndex(h => h && (h.toLowerCase().includes('drużyna') || h.toLowerCase() === 'team')) !== -1 ? headers.findIndex(h => h && (h.toLowerCase().includes('drużyna') || h.toLowerCase() === 'team')) : 5;
-        const colPts = headers.findIndex(h => h && h.toUpperCase().includes('PUNKT')) !== -1 ? headers.findIndex(h => h && h.toUpperCase().includes('PUNKT')) : 7;
+        const teamsMap = new Map();
 
-        const driverStatsByName = new Map();
-        const driversByTeamKey = new Map();
-        const teamPointsFromBlock = new Map();
+        if (teamHeaderIdx !== -1) {
+            const headerRow = rawData[teamHeaderIdx] || [];
+            // Spalte AC ist Index 28; falls Header vorhanden, dynamisch suchen
+            let ptsColIdx = headerRow.findIndex(h => h && h.trim().toUpperCase() === 'PUNKTY');
+            if (ptsColIdx === -1) ptsColIdx = 28;
 
-        let currentTeamBlockKey = '';
-        let inTeamSection = false;
+            // Strecken-Spalten liegen zwischen Spalte I (Index 8) und Spalte AB (Index 27)
+            let trackStartIdx = 8;
+            let trackEndIdx = 27;
 
-        for (let i = headerIdx + 1; i < rawData.length; i++) {
-            const row = rawData[i];
-            if (!row || row.every(c => !c)) continue;
+            let currentTeamKey = '';
 
-            const posText = (row[colPos] || '').trim();
-            const driverName = (row[colDriver] || '').trim();
-            const teamName = (row[colTeam] || '').trim();
-            const ptsVal = parseNumber(row[colPts]);
+            for (let i = teamHeaderIdx + 1; i < rawData.length; i++) {
+                const row = rawData[i];
+                if (!row || row.every(c => !c)) continue;
 
-            // Erkennung des unteren Team-Blocks (wo in Spalte D/E Teamnamen stehen und rechts daneben KIEROWCA + PUNKTY)
-            const hasTeamBlockHeader = row.some(c => c && c.trim().toLowerCase() === 'drużyna') &&
-                                     row.some(c => c && c.trim().toLowerCase() === 'kierowca') &&
-                                     row.some(c => c && c.trim().toLowerCase() === 'punkty');
+                const teamNameCell = (row[3] || '').trim();   // Spalte D: Drużyna
+                const driverNameCell = (row[6] || '').trim(); // Spalte G: Kierowcy
+                const teamPtsCell = row[ptsColIdx];           // Spalte AC: PUNKTY
+                const raceSlice = row.slice(trackStartIdx, trackEndIdx + 1); // Spalten I..AB: Strecken
 
-            if (hasTeamBlockHeader) {
-                inTeamSection = true;
-                currentTeamBlockKey = '';
-                continue;
-            }
+                const { wins, podiums } = countPodiumsAndWins(raceSlice);
 
-            if (!inTeamSection) {
-                if (driverName && driverName !== '-' && driverName !== '0' && !driverName.toLowerCase().includes('kierowca')) {
-                    const raceSlice = row.slice(colPts + 1);
-                    const { wins, podiums } = countDriverPodiumsAndWins(raceSlice);
-                    const tKey = normalizeTeamKey(teamName);
-
-                    const driverObj = {
-                        name: driverName,
-                        team: teamName,
-                        points: ptsVal,
-                        wins,
-                        podiums
-                    };
-
-                    driverStatsByName.set(driverName.toLowerCase(), driverObj);
-
-                    if (tKey) {
-                        if (!driversByTeamKey.has(tKey)) {
-                            driversByTeamKey.set(tKey, []);
-                        }
-                        driversByTeamKey.get(tKey).push(driverObj);
-                    }
-                }
-            } else {
-                // Unterer Team-Block aus Sezon 20
-                const blockTeamCell = (row[3] || '').trim();
-                const blockDriverCell = (row[6] || '').trim();
-                const blockPtsCell = row[8];
-
-                if (blockTeamCell && !blockTeamCell.toLowerCase().includes('drużyna')) {
-                    currentTeamBlockKey = normalizeTeamKey(blockTeamCell);
-                    if (!teamPointsFromBlock.has(currentTeamBlockKey)) {
-                        teamPointsFromBlock.set(currentTeamBlockKey, {
-                            rawName: blockTeamCell,
-                            points: parseNumber(blockPtsCell) || 0,
+                if (teamNameCell && !teamNameCell.toLowerCase().includes('drużyna')) {
+                    currentTeamKey = normalizeTeamKey(teamNameCell);
+                    if (!teamsMap.has(currentTeamKey)) {
+                        teamsMap.set(currentTeamKey, {
+                            key: currentTeamKey,
+                            name: teamNameCell,
+                            points: parseNumber(teamPtsCell),
+                            podiums: 0,
+                            wins: 0,
                             drivers: []
                         });
+                    } else if (parseNumber(teamPtsCell) > 0) {
+                        teamsMap.get(currentTeamKey).points = parseNumber(teamPtsCell);
                     }
                 }
 
-                if (currentTeamBlockKey && blockDriverCell && blockDriverCell !== '-') {
-                    const teamEntry = teamPointsFromBlock.get(currentTeamBlockKey);
-                    const matchedDriver = driverStatsByName.get(blockDriverCell.toLowerCase());
-                    const raceSlice = row.slice(9);
-                    const extraStats = countDriverPodiumsAndWins(raceSlice);
+                if (currentTeamKey && teamsMap.has(currentTeamKey)) {
+                    const teamObj = teamsMap.get(currentTeamKey);
+                    teamObj.wins += wins;
+                    teamObj.podiums += podiums;
 
-                    const dEntry = matchedDriver || {
-                        name: blockDriverCell,
-                        team: teamEntry ? teamEntry.rawName : '',
-                        points: 0,
-                        wins: extraStats.wins,
-                        podiums: extraStats.podiums
-                    };
-
-                    if (teamEntry && !teamEntry.drivers.some(d => d.name.toLowerCase() === dEntry.name.toLowerCase())) {
-                        teamEntry.drivers.push(dEntry);
+                    if (driverNameCell && driverNameCell !== '-' && !driverNameCell.toLowerCase().includes('kierowc')) {
+                        const displayDriver = cleanDriverName(driverNameCell);
+                        if (displayDriver && !teamObj.drivers.includes(displayDriver)) {
+                            teamObj.drivers.push(displayDriver);
+                        }
                     }
                 }
             }
         }
 
-        // Teams zusammenführen (sortiert nach Punkten absteigend)
-        const combinedMap = new Map();
+        // Fallback falls der untere Team-Block in einer Variante nicht erkannt wird: aus oberer Fahrertabelle aufbauen
+        if (teamsMap.size === 0) {
+            const topHeaderIdx = rawData.findIndex(r => r.includes('Kierowca') || r.includes('Drużyna'));
+            if (topHeaderIdx !== -1) {
+                const topHeaders = rawData[topHeaderIdx] || [];
+                const colD = topHeaders.findIndex(h => h && h.toLowerCase().includes('kierowca')) !== -1 ? topHeaders.findIndex(h => h && h.toLowerCase().includes('kierowca')) : 4;
+                const colT = topHeaders.findIndex(h => h && (h.toLowerCase().includes('drużyna') || h.toLowerCase() === 'team')) !== -1 ? topHeaders.findIndex(h => h && (h.toLowerCase().includes('drużyna') || h.toLowerCase() === 'team')) : 5;
+                const colP = topHeaders.findIndex(h => h && h.toUpperCase().includes('PUNKT')) !== -1 ? topHeaders.findIndex(h => h && h.toUpperCase().includes('PUNKT')) : 7;
 
-        teamPointsFromBlock.forEach((val, key) => {
-            const list = val.drivers.length > 0 ? val.drivers : (driversByTeamKey.get(key) || []);
-            const totalWins = list.reduce((sum, d) => sum + (d.wins || 0), 0);
-            const totalPodiums = list.reduce((sum, d) => sum + (d.podiums || 0), 0);
-            const sumPtsFromDrivers = list.reduce((sum, d) => sum + (d.points || 0), 0);
-
-            combinedMap.set(key, {
-                key,
-                name: val.rawName || getTeamStyle(key).label,
-                points: val.points > 0 ? val.points : sumPtsFromDrivers,
-                podiums: totalPodiums,
-                wins: totalWins,
-                drivers: list
-            });
-        });
-
-        driversByTeamKey.forEach((list, key) => {
-            if (!combinedMap.has(key)) {
-                const totalPoints = list.reduce((sum, d) => sum + (d.points || 0), 0);
-                const totalWins = list.reduce((sum, d) => sum + (d.wins || 0), 0);
-                const totalPodiums = list.reduce((sum, d) => sum + (d.podiums || 0), 0);
-                combinedMap.set(key, {
-                    key,
-                    name: list[0]?.team || getTeamStyle(key).label,
-                    points: totalPoints,
-                    podiums: totalPodiums,
-                    wins: totalWins,
-                    drivers: list
-                });
+                for (let i = topHeaderIdx + 1; i < rawData.length; i++) {
+                    const row = rawData[i];
+                    if (!row || !row[colD] || row[colD] === '#N/A') continue;
+                    const tName = (row[colT] || '').trim();
+                    if (!tName) continue;
+                    const key = normalizeTeamKey(tName);
+                    if (!teamsMap.has(key)) {
+                        teamsMap.set(key, {
+                            key,
+                            name: tName,
+                            points: 0,
+                            podiums: 0,
+                            wins: 0,
+                            drivers: []
+                        });
+                    }
+                    const obj = teamsMap.get(key);
+                    obj.points += parseNumber(row[colP]);
+                    const { wins, podiums } = countPodiumsAndWins(row.slice(colP + 1, 28));
+                    obj.wins += wins;
+                    obj.podiums += podiums;
+                    const dName = cleanDriverName(row[colD]);
+                    if (dName && !obj.drivers.includes(dName)) obj.drivers.push(dName);
+                }
             }
-        });
+        }
 
-        allTeamsComputed = Array.from(combinedMap.values()).sort((a, b) => b.points - a.points);
+        allTeamsComputed = Array.from(teamsMap.values()).sort((a, b) => b.points - a.points);
         renderTeamsGrid(document.getElementById('team-search').value);
     } catch (err) {
         console.error('Fehler beim Laden von Sezon 20:', err);
@@ -994,7 +948,7 @@ function renderTeamsGrid(filterQuery = '') {
         ? allTeamsComputed
         : allTeamsComputed.filter(team => {
             const teamMatch = team.name.toLowerCase().includes(q);
-            const driverMatch = team.drivers.some(d => d.name.toLowerCase().includes(q));
+            const driverMatch = team.drivers.some(d => d.toLowerCase().includes(q));
             return teamMatch || driverMatch;
         });
 
@@ -1006,8 +960,8 @@ function renderTeamsGrid(filterQuery = '') {
     grid.innerHTML = filtered.map(team => {
         const styleObj = getTeamStyle(team.name);
         const pillsHtml = team.drivers.length > 0
-            ? team.drivers.map(d => `<span class="driver-pill">${d.name}<small>(${d.points} pkt)</small></span>`).join('')
-            : `<span class="driver-pill">Brak przypisanych kierowców</span>`;
+            ? team.drivers.map(d => `<span class="driver-pill">${d}</span>`).join('')
+            : `<span class="driver-pill">Brak kierowców</span>`;
 
         return `
             <article class="team-box" style="background: ${styleObj.gradient};">
