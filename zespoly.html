@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zespoły Ligi CPL - Sezon 20</title>
+<title>Zespoły Ligi CPL - Sezon 20 S2</title>
 <style>
 :root {
     --bg-color: #0d0d0d;
@@ -184,7 +184,7 @@ nav a:hover {
 
 .teams-header {
     text-align: center;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
 }
 
 .teams-header h1 {
@@ -205,9 +205,64 @@ body.light-mode .teams-header p {
     color: #555555;
 }
 
+/* Liga Switcher Tabs */
+.division-tabs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.division-tab-btn {
+    padding: 10px 20px;
+    border-radius: 999px;
+    border: 1px solid #333;
+    background: #161616;
+    color: #e5e5e5;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+body.light-mode .division-tab-btn {
+    background: #ffffff;
+    color: #222222;
+    border-color: #d4d4d4;
+}
+
+.division-tab-btn:hover {
+    transform: translateY(-2px);
+    border-color: #ff3131;
+}
+
+.division-tab-btn.active-all {
+    background: linear-gradient(135deg, #ff3131 0%, #a81212 100%);
+    border-color: #ff5c5c;
+    color: #ffffff;
+    box-shadow: 0 6px 18px rgba(255, 49, 49, 0.35);
+}
+
+.division-tab-btn.active-diamond {
+    background: linear-gradient(135deg, #38bdf8 0%, #6366f1 100%);
+    border-color: #7dd3fc;
+    color: #ffffff;
+    box-shadow: 0 6px 20px rgba(56, 189, 248, 0.35);
+}
+
+.division-tab-btn.active-gold {
+    background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%);
+    border-color: #fcd34d;
+    color: #ffffff;
+    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.35);
+}
+
 .search-wrapper {
     max-width: 540px;
-    margin: 22px auto 0 auto;
+    margin: 18px auto 0 auto;
 }
 
 .team-search-input {
@@ -235,6 +290,112 @@ body.light-mode .team-search-input {
 
 .team-search-input::placeholder {
     color: #777777;
+}
+
+/* Division Sections */
+.division-section {
+    margin-top: 38px;
+    padding: 24px;
+    border-radius: 22px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+body.light-mode .division-section {
+    background: #ffffff;
+    border-color: #e2e2e2;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+.division-section.diamond-section {
+    border-color: rgba(56, 189, 248, 0.45);
+    background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.12), transparent 55%), rgba(15, 23, 42, 0.45);
+}
+
+body.light-mode .division-section.diamond-section {
+    background: linear-gradient(180deg, rgba(224, 242, 254, 0.65) 0%, #ffffff 35%);
+}
+
+.division-section.gold-section {
+    border-color: rgba(245, 158, 11, 0.45);
+    background: radial-gradient(circle at top right, rgba(245, 158, 11, 0.12), transparent 55%), rgba(30, 22, 8, 0.45);
+}
+
+body.light-mode .division-section.gold-section {
+    background: linear-gradient(180deg, rgba(254, 243, 199, 0.65) 0%, #ffffff 35%);
+}
+
+.division-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 22px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+body.light-mode .division-banner {
+    border-bottom-color: #e5e7eb;
+}
+
+.division-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.division-chip {
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.diamond-chip {
+    background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+    color: #07131f;
+}
+
+.gold-chip {
+    background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+    color: #1f1302;
+}
+
+.division-title {
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+}
+
+.diamond-title {
+    color: #7dd3fc;
+}
+
+body.light-mode .diamond-title {
+    color: #0369a1;
+}
+
+.gold-title {
+    color: #fcd34d;
+}
+
+body.light-mode .gold-title {
+    color: #b45309;
+}
+
+.division-meta {
+    font-size: 13px;
+    color: #b0b0b0;
+    font-weight: 700;
+}
+
+body.light-mode .division-meta {
+    color: #555555;
 }
 
 /* Grid der Team-Karten */
@@ -563,19 +724,26 @@ footer {
 <main class="teams-container">
     <div class="teams-header">
         <h1>ZESPOŁY LIGI CPL</h1>
-        <p>Znajdź aktualne zespoły Formuły 1 i ich kierowców w Sezonie 20</p>
+        <p>Sezon 20 S2 • Podział na Ligę Diamentową i Ligę Złotą</p>
+
+        <div class="division-tabs" role="tablist" aria-label="Podział ligowy">
+            <button type="button" class="division-tab-btn active-all" data-division="all">Wszystkie (Diamentowa + Złota)</button>
+            <button type="button" class="division-tab-btn" data-division="diamond">Liga Diamentowa</button>
+            <button type="button" class="division-tab-btn" data-division="gold">Liga Złota</button>
+        </div>
+
         <div class="search-wrapper">
             <input
                 type="text"
                 id="team-search"
                 class="team-search-input"
-                placeholder="Szukaj zespołu lub kierowcy..."
+                placeholder="Szukaj zespołu lub kierowcy w Sezonie 20 S2..."
                 autocomplete="off"
             >
         </div>
     </div>
 
-    <div class="teams-grid" id="teams-grid"></div>
+    <div id="divisions-wrapper"></div>
 </main>
 
 <footer>
@@ -633,7 +801,8 @@ footer {
 
 <script>
 const SHEET_ID = '1na_Zlv7uk9AGO3f76sqMvN5C5kT-EXnphJlTD6KKx0M';
-const SEASON_20_GID = '1651963070';
+// Falls Sezon 20 S2 einen eigenen Tab-GID im Google Sheet hat, hier eintragen (sonst wird 1651963070 genutzt)
+const SEASON_20_S2_GID = '1651963070';
 
 const TEAM_IMAGES = {
     'mercedes': {
@@ -693,9 +862,11 @@ const TEAM_IMAGES = {
     }
 };
 
-// Fallback Sezon 20 (Spalte D = Drużyna, Spalte G = Kierowcy, Spalten I..AB = Wyścigi, Spalte AC = Punkty)
-const SEASON_20_FALLBACK = [
+// Sezon 20 S2 Fallback (aufgeteilt in Liga Diamentowa & Liga Złota)
+const SEASON_20_S2_FALLBACK = [
+    // Liga Diamentowa
     {
+        division: 'diamond',
         name: 'McLaren Mastercard F1 Team',
         points: 126,
         drivers: ['Kacper Jędrzejczyk', 'Michał – Querti – Kosiorowski'],
@@ -705,6 +876,7 @@ const SEASON_20_FALLBACK = [
         ]
     },
     {
+        division: 'diamond',
         name: 'Oracle Red Bull Racing',
         points: 65,
         drivers: ['Mateusz – MatriX4 – Grygiel', 'Maciej – mejsze – Pawlak'],
@@ -714,6 +886,7 @@ const SEASON_20_FALLBACK = [
         ]
     },
     {
+        division: 'diamond',
         name: 'Atlassian Williams F1 Team',
         points: 64,
         drivers: ['Filip – Frączak', 'Jakub – Haaaamza – Pięta'],
@@ -723,6 +896,7 @@ const SEASON_20_FALLBACK = [
         ]
     },
     {
+        division: 'diamond',
         name: 'Scuderia Ferrari HP',
         points: 48,
         drivers: ['Bartłomiej – BarteX – Kloc', 'Mateusz – Klocek_09 – Klockiewicz'],
@@ -732,6 +906,7 @@ const SEASON_20_FALLBACK = [
         ]
     },
     {
+        division: 'diamond',
         name: 'BWT Alpine Formula One Team',
         points: 44,
         drivers: ['Paweł – Paw1oS – Kaczmarek', 'Wiktor – BrodacZ – Cendrowicz'],
@@ -741,6 +916,7 @@ const SEASON_20_FALLBACK = [
         ]
     },
     {
+        division: 'diamond',
         name: 'Mercedes-AMG PETRONAS Formula OneTeam',
         points: 42,
         drivers: ['Andrzej – TRAJU – Trajkowski', 'Oskar – 0sk1dz1k – Chmielowiec'],
@@ -749,7 +925,9 @@ const SEASON_20_FALLBACK = [
             ['', 'DNF', 'DNF', 'DNS', '', '2', 'DSQ', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
         ]
     },
+    // Liga Złota
     {
+        division: 'gold',
         name: 'Aston Martin Aramco Formula One Team',
         points: 30,
         drivers: ['Kacper – Piekarczyk', 'Michał – SEP1EM8ER – Wrzesień'],
@@ -759,6 +937,7 @@ const SEASON_20_FALLBACK = [
         ]
     },
     {
+        division: 'gold',
         name: 'TGR Haas F1 Team',
         points: 22,
         drivers: ['Szymon – Sokolik_99 – Sokołowski', 'Antoni – Komandor – Kierznowski'],
@@ -768,6 +947,7 @@ const SEASON_20_FALLBACK = [
         ]
     },
     {
+        division: 'gold',
         name: 'Visa Cash App Racing Bulls Formula One Team',
         points: 12,
         drivers: ['Dominik – ministerjabałko – Bekiesz', 'Dawid – Dotch – Włodarczyk'],
@@ -777,6 +957,7 @@ const SEASON_20_FALLBACK = [
         ]
     },
     {
+        division: 'gold',
         name: 'Audi Revolut F1 Team',
         points: 10,
         drivers: ['Maciej – Watek – Wącior', 'Tomasz – Teambananek – Kowalski'],
@@ -786,6 +967,7 @@ const SEASON_20_FALLBACK = [
         ]
     },
     {
+        division: 'gold',
         name: 'Cadillac Formula 1 Team',
         points: 10,
         drivers: ['Igor – Vampijyr – Szoch', 'Kamil – rand1nho – Płaskociński'],
@@ -797,7 +979,7 @@ const SEASON_20_FALLBACK = [
 ];
 
 function buildFallbackTeams() {
-    return SEASON_20_FALLBACK.map(t => {
+    return SEASON_20_S2_FALLBACK.map(t => {
         let wins = 0;
         let podiums = 0;
         t.races.forEach(row => {
@@ -807,6 +989,7 @@ function buildFallbackTeams() {
         });
         return {
             key: normalizeTeamKey(t.name),
+            division: t.division || 'diamond',
             name: t.name,
             points: t.points,
             podiums,
@@ -817,6 +1000,7 @@ function buildFallbackTeams() {
 }
 
 let allTeamsComputed = buildFallbackTeams();
+let activeDivision = 'all';
 
 const themeToggleBtn = document.getElementById('theme-toggle');
 themeToggleBtn.addEventListener('click', () => {
@@ -824,8 +1008,21 @@ themeToggleBtn.addEventListener('click', () => {
     themeToggleBtn.textContent = document.body.classList.contains('light-mode') ? '🌙' : '☀️';
 });
 
+document.querySelectorAll('.division-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        activeDivision = btn.dataset.division;
+        document.querySelectorAll('.division-tab-btn').forEach(b => {
+            b.classList.remove('active-all', 'active-diamond', 'active-gold');
+        });
+        if (activeDivision === 'all') btn.classList.add('active-all');
+        if (activeDivision === 'diamond') btn.classList.add('active-diamond');
+        if (activeDivision === 'gold') btn.classList.add('active-gold');
+        renderDivisions(document.getElementById('team-search').value);
+    });
+});
+
 document.getElementById('team-search').addEventListener('input', (e) => {
-    renderTeamsGrid(e.target.value);
+    renderDivisions(e.target.value);
 });
 
 function parseCSVRow(row) {
@@ -908,8 +1105,8 @@ function cleanDriverName(rawName) {
         .trim();
 }
 
-async function loadSeason20Teams() {
-    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SEASON_20_GID}`;
+async function loadSeason20S2Teams() {
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SEASON_20_S2_GID}`;
 
     try {
         const res = await fetch(url);
@@ -920,149 +1117,195 @@ async function loadSeason20Teams() {
         const lines = csvText.split(/\r\n|\n/);
         const rawData = lines.map(parseCSVRow);
 
-        const teamHeaderIdx = rawData.findIndex(r => {
-            const colD = (r[3] || '').trim().toLowerCase();
-            const colG = (r[6] || '').trim().toLowerCase();
-            return colD.includes('drużyna') || colG.includes('kierowc');
-        });
-
         const teamsMap = new Map();
+        let currentDivision = 'diamond';
+        let currentTeamKey = '';
 
-        if (teamHeaderIdx !== -1) {
-            const headerRow = rawData[teamHeaderIdx] || [];
-            let ptsColIdx = headerRow.findIndex(h => h && h.trim().toUpperCase() === 'PUNKTY');
-            if (ptsColIdx === -1) ptsColIdx = 28; // Spalte AC
+        for (let i = 0; i < rawData.length; i++) {
+            const row = rawData[i];
+            if (!row || row.every(c => !c)) continue;
 
-            const trackStartIdx = 8; // Spalte I
-            const trackEndIdx = 27;  // Spalte AB
+            const rowText = row.join(' ').toLowerCase();
+            if (rowText.includes('diament')) {
+                currentDivision = 'diamond';
+                currentTeamKey = '';
+                continue;
+            }
+            if (rowText.includes('złot') || rowText.includes('zlot')) {
+                currentDivision = 'gold';
+                currentTeamKey = '';
+                continue;
+            }
 
-            let currentTeamKey = '';
+            const colD = (row[3] || '').trim().toLowerCase();
+            const colG = (row[6] || '').trim().toLowerCase();
+            if (colD.includes('drużyna') || colG.includes('kierowc')) {
+                continue;
+            }
 
-            for (let i = teamHeaderIdx + 1; i < rawData.length; i++) {
-                const row = rawData[i];
-                if (!row || row.every(c => !c)) continue;
+            const teamNameCell = (row[3] || '').trim();   // Spalte D: Drużyna
+            const driverNameCell = (row[6] || '').trim(); // Spalte G: Kierowcy
+            const teamPtsCell = row[28];                  // Spalte AC: PUNKTY
+            const raceSlice = row.slice(8, 28);           // Spalten I..AB: Wyścigi
+            const { wins, podiums } = countPodiumsAndWins(raceSlice);
 
-                const teamNameCell = (row[3] || '').trim();   // Spalte D: Drużyna
-                const driverNameCell = (row[6] || '').trim(); // Spalte G: Kierowcy
-                const teamPtsCell = row[ptsColIdx];           // Spalte AC: PUNKTY
-                const raceSlice = row.slice(trackStartIdx, trackEndIdx + 1); // Spalten I..AB
-
-                const { wins, podiums } = countPodiumsAndWins(raceSlice);
-
-                if (teamNameCell && !teamNameCell.toLowerCase().includes('drużyna')) {
-                    currentTeamKey = normalizeTeamKey(teamNameCell);
-                    if (!teamsMap.has(currentTeamKey)) {
-                        teamsMap.set(currentTeamKey, {
-                            key: currentTeamKey,
-                            name: teamNameCell,
-                            points: parseNumber(teamPtsCell),
-                            podiums: 0,
-                            wins: 0,
-                            drivers: []
-                        });
-                    } else if (parseNumber(teamPtsCell) > 0) {
-                        teamsMap.get(currentTeamKey).points = parseNumber(teamPtsCell);
-                    }
+            if (teamNameCell && teamNameCell !== '#N/A' && !teamNameCell.toLowerCase().includes('drużyna')) {
+                currentTeamKey = `${currentDivision}::${normalizeTeamKey(teamNameCell)}`;
+                if (!teamsMap.has(currentTeamKey)) {
+                    teamsMap.set(currentTeamKey, {
+                        key: currentTeamKey,
+                        division: currentDivision,
+                        name: teamNameCell,
+                        points: parseNumber(teamPtsCell),
+                        podiums: 0,
+                        wins: 0,
+                        drivers: []
+                    });
+                } else if (parseNumber(teamPtsCell) > 0) {
+                    teamsMap.get(currentTeamKey).points = parseNumber(teamPtsCell);
                 }
+            }
 
-                if (currentTeamKey && teamsMap.has(currentTeamKey)) {
-                    const teamObj = teamsMap.get(currentTeamKey);
-                    teamObj.wins += wins;
-                    teamObj.podiums += podiums;
+            if (currentTeamKey && teamsMap.has(currentTeamKey)) {
+                const teamObj = teamsMap.get(currentTeamKey);
+                teamObj.wins += wins;
+                teamObj.podiums += podiums;
 
-                    if (driverNameCell && driverNameCell !== '-' && !driverNameCell.toLowerCase().includes('kierowc')) {
-                        const displayDriver = cleanDriverName(driverNameCell);
-                        if (displayDriver && !teamObj.drivers.includes(displayDriver)) {
-                            teamObj.drivers.push(displayDriver);
-                        }
+                if (driverNameCell && driverNameCell !== '-' && driverNameCell !== '#N/A' && !driverNameCell.toLowerCase().includes('kierowc')) {
+                    const displayDriver = cleanDriverName(driverNameCell);
+                    if (displayDriver && !teamObj.drivers.includes(displayDriver)) {
+                        teamObj.drivers.push(displayDriver);
                     }
                 }
             }
         }
 
-        if (teamsMap.size > 0) {
+        if (teamsMap.size >= 2) {
             allTeamsComputed = Array.from(teamsMap.values()).sort((a, b) => b.points - a.points);
         }
     } catch (err) {
-        console.warn('Nutze Sezon-20-Daten:', err);
+        console.warn('Nutze Sezon-20-S2-Daten:', err);
     }
 
-    renderTeamsGrid(document.getElementById('team-search').value);
+    renderDivisions(document.getElementById('team-search').value);
 }
 
-function renderTeamsGrid(filterQuery = '') {
-    const grid = document.getElementById('teams-grid');
+function renderTeamCard(team) {
+    const assets = getTeamAssets(team.name);
+    const pillsHtml = team.drivers.length > 0
+        ? team.drivers.map(d => `<span class="driver-pill">${d}</span>`).join('')
+        : `<span class="driver-pill">Brak kierowców</span>`;
+
+    const carHtml = assets.car
+        ? `<img src="${assets.car}" alt="${team.name} F1 car" class="f1-car-img" onerror="this.style.display='none';">`
+        : '';
+
+    return `
+        <article class="team-box" style="background: ${assets.gradient};">
+            <div class="team-box-top">
+                <div>
+                    <h2 class="team-name">${team.name}</h2>
+                    <div class="drivers-pills">
+                        ${pillsHtml}
+                    </div>
+                </div>
+                <div class="team-logo-circle">
+                    <img
+                        src="${assets.logo}"
+                        alt="${team.name} logo"
+                        class="team-logo-img"
+                        onerror="this.onerror=null; this.src='images/cpl_logo_lizard.png';"
+                    >
+                </div>
+            </div>
+
+            <div class="team-box-bottom">
+                <div class="team-stats-row">
+                    <div class="stat-item">
+                        <span class="stat-label">PUNKTY</span>
+                        <span class="stat-value">${team.points}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">PODIA</span>
+                        <span class="stat-value">${team.podiums}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">WYGRANE</span>
+                        <span class="stat-value">${team.wins}</span>
+                    </div>
+                </div>
+
+                <div class="team-car-visual">
+                    ${carHtml}
+                </div>
+            </div>
+        </article>
+    `;
+}
+
+function renderDivisions(filterQuery = '') {
+    const wrapper = document.getElementById('divisions-wrapper');
     const q = (filterQuery || '').trim().toLowerCase();
 
-    const filtered = !q
-        ? allTeamsComputed
-        : allTeamsComputed.filter(team => {
-            const teamMatch = team.name.toLowerCase().includes(q);
-            const driverMatch = team.drivers.some(d => d.toLowerCase().includes(q));
-            return teamMatch || driverMatch;
-        });
+    const matchesFilter = (team) => {
+        if (!q) return true;
+        const teamMatch = team.name.toLowerCase().includes(q);
+        const driverMatch = team.drivers.some(d => d.toLowerCase().includes(q));
+        return teamMatch || driverMatch;
+    };
 
-    if (filtered.length === 0) {
-        grid.innerHTML = `<div class="empty-state">Brak zespołów lub kierowców pasujących do wyszukiwania.</div>`;
-        return;
+    const diamondTeams = allTeamsComputed.filter(t => t.division === 'diamond' && matchesFilter(t));
+    const goldTeams = allTeamsComputed.filter(t => t.division === 'gold' && matchesFilter(t));
+
+    const sections = [];
+
+    if (activeDivision === 'all' || activeDivision === 'diamond') {
+        const diamondTotalPts = diamondTeams.reduce((acc, t) => acc + t.points, 0);
+        sections.push(`
+            <section class="division-section diamond-section">
+                <div class="division-banner">
+                    <div class="division-title-wrap">
+                        <span class="division-chip diamond-chip">💎 Dywizja I</span>
+                        <h2 class="division-title diamond-title">Liga Diamentowa</h2>
+                    </div>
+                    <div class="division-meta">${diamondTeams.length} zespołów • ${diamondTotalPts} pkt łącznie</div>
+                </div>
+                <div class="teams-grid">
+                    ${diamondTeams.length > 0
+                        ? diamondTeams.map(renderTeamCard).join('')
+                        : `<div class="empty-state">Brak zespołów w Lidze Diamentowej pasujących do wyszukiwania.</div>`
+                    }
+                </div>
+            </section>
+        `);
     }
 
-    grid.innerHTML = filtered.map(team => {
-        const assets = getTeamAssets(team.name);
-        const pillsHtml = team.drivers.length > 0
-            ? team.drivers.map(d => `<span class="driver-pill">${d}</span>`).join('')
-            : `<span class="driver-pill">Brak kierowców</span>`;
-
-        const carHtml = assets.car
-            ? `<img src="${assets.car}" alt="${team.name} F1 car" class="f1-car-img" onerror="this.style.display='none';">`
-            : '';
-
-        return `
-            <article class="team-box" style="background: ${assets.gradient};">
-                <div class="team-box-top">
-                    <div>
-                        <h2 class="team-name">${team.name}</h2>
-                        <div class="drivers-pills">
-                            ${pillsHtml}
-                        </div>
+    if (activeDivision === 'all' || activeDivision === 'gold') {
+        const goldTotalPts = goldTeams.reduce((acc, t) => acc + t.points, 0);
+        sections.push(`
+            <section class="division-section gold-section">
+                <div class="division-banner">
+                    <div class="division-title-wrap">
+                        <span class="division-chip gold-chip">🥇 Dywizja II</span>
+                        <h2 class="division-title gold-title">Liga Złota</h2>
                     </div>
-                    <div class="team-logo-circle">
-                        <img
-                            src="${assets.logo}"
-                            alt="${team.name} logo"
-                            class="team-logo-img"
-                            onerror="this.onerror=null; this.src='images/cpl_logo_lizard.png';"
-                        >
-                    </div>
+                    <div class="division-meta">${goldTeams.length} zespołów • ${goldTotalPts} pkt łącznie</div>
                 </div>
-
-                <div class="team-box-bottom">
-                    <div class="team-stats-row">
-                        <div class="stat-item">
-                            <span class="stat-label">PUNKTY</span>
-                            <span class="stat-value">${team.points}</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">PODIA</span>
-                            <span class="stat-value">${team.podiums}</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">WYGRANE</span>
-                            <span class="stat-value">${team.wins}</span>
-                        </div>
-                    </div>
-
-                    <div class="team-car-visual">
-                        ${carHtml}
-                    </div>
+                <div class="teams-grid">
+                    ${goldTeams.length > 0
+                        ? goldTeams.map(renderTeamCard).join('')
+                        : `<div class="empty-state">Brak zespołów w Lidze Złotej pasujących do wyszukiwania.</div>`
+                    }
                 </div>
-            </article>
-        `;
-    }).join('');
+            </section>
+        `);
+    }
+
+    wrapper.innerHTML = sections.join('');
 }
 
-renderTeamsGrid();
-loadSeason20Teams();
+renderDivisions();
+loadSeason20S2Teams();
 </script>
 
 </body>
