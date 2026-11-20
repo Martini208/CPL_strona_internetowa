@@ -237,7 +237,7 @@ body.light-mode .team-search-input {
     color: #777777;
 }
 
-/* Grid der Team-Karten wie auf den Original-Screenshots */
+/* Grid der Team-Karten */
 .teams-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -302,15 +302,16 @@ body.light-mode .team-search-input {
 
 .drivers-pills {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 8px;
     margin-top: 12px;
-    max-width: 74%;
+    max-width: 78%;
     z-index: 2;
 }
 
 .driver-pill {
-    background: rgba(0, 0, 0, 0.38);
+    background: rgba(0, 0, 0, 0.42);
     border: 1px solid rgba(255, 255, 255, 0.16);
     color: #ffffff;
     padding: 6px 12px;
@@ -367,8 +368,8 @@ body.light-mode .team-search-input {
 }
 
 .f1-car-img {
-    width: 225px;
-    max-height: 82px;
+    width: 230px;
+    max-height: 85px;
     object-fit: contain;
     display: block;
     filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.5));
@@ -634,61 +635,61 @@ footer {
 const SHEET_ID = '1na_Zlv7uk9AGO3f76sqMvN5C5kT-EXnphJlTD6KKx0M';
 const SEASON_20_GID = '1651963070';
 
-const TEAM_ASSETS = {
+const TEAM_IMAGES = {
     'mercedes': {
         gradient: 'linear-gradient(135deg, #00a19b 0%, #006c67 100%)',
-        logo: 'https://commons.wikimedia.org/wiki/Special:FilePath/Mercedes_AMG_Petronas_F1_Logo.svg',
-        car: 'https://commons.wikimedia.org/wiki/Special:FilePath/Mercedes_W15_side.png'
+        logo: 'images/images_mercedes_logo-removebg-preview.png',
+        car: 'images/Bolid_Mercedes.png'
     },
     'ferrari': {
         gradient: 'linear-gradient(135deg, #d91c1c 0%, #8c0909 100%)',
-        logo: 'https://commons.wikimedia.org/wiki/Special:FilePath/Scuderia_Ferrari_logo.svg',
-        car: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ferrari_SF-24_side.png'
+        logo: 'images/images_ferrari_logo-removebg-preview.png',
+        car: 'images/Bolid_Ferrari.png'
     },
     'mclaren': {
         gradient: 'linear-gradient(135deg, #ff6a00 0%, #d94800 100%)',
-        logo: 'https://commons.wikimedia.org/wiki/Special:FilePath/McLaren_Racing_logo.svg',
-        car: 'https://commons.wikimedia.org/wiki/Special:FilePath/McLaren_MCL38_side.png'
+        logo: 'images/images_mclaren_logo-removebg-preview.png',
+        car: 'images/Bolid_Mclaren.png'
     },
     'red bull': {
         gradient: 'linear-gradient(135deg, #1b439b 0%, #0d2254 100%)',
-        logo: 'https://commons.wikimedia.org/wiki/Special:FilePath/Red_Bull_Racing_logo.svg',
-        car: 'https://commons.wikimedia.org/wiki/Special:FilePath/Red_Bull_RB20_side.png'
+        logo: 'images/images_rb_logo-removebg-preview.png',
+        car: 'images/Bolid_Red_Bull.png'
     },
     'racing bulls': {
         gradient: 'linear-gradient(135deg, #2b45e2 0%, #142278 100%)',
-        logo: 'https://commons.wikimedia.org/wiki/Special:FilePath/Visa_Cash_App_RB_logo.svg',
-        car: 'https://commons.wikimedia.org/wiki/Special:FilePath/VCARB_01_side.png'
+        logo: 'images/images_Racing_Bulls_logo-removebg-preview.png',
+        car: 'images/Bolid_Visa_Cash.png'
     },
     'alpine': {
         gradient: 'linear-gradient(135deg, #0077b6 0%, #b83280 100%)',
-        logo: 'https://commons.wikimedia.org/wiki/Special:FilePath/Alpine_F1_Team_logo.svg',
-        car: 'https://commons.wikimedia.org/wiki/Special:FilePath/Alpine_A524_side.png'
+        logo: 'images/images_Alpine_logo-removebg-preview.png',
+        car: 'images/Bolid_Alpine.png'
     },
     'williams': {
         gradient: 'linear-gradient(135deg, #0077d4 0%, #004582 100%)',
-        logo: 'https://commons.wikimedia.org/wiki/Special:FilePath/Williams_Racing_logo_2022.svg',
-        car: 'https://commons.wikimedia.org/wiki/Special:FilePath/Williams_FW46_side.png'
+        logo: 'images/images_Williams_logo-removebg-preview.png',
+        car: 'images/Bolid_Williams.png'
     },
     'aston martin': {
         gradient: 'linear-gradient(135deg, #006f62 0%, #003d35 100%)',
-        logo: 'https://commons.wikimedia.org/wiki/Special:FilePath/Aston_Martin_Cognizant_F1_logo.svg',
-        car: 'https://commons.wikimedia.org/wiki/Special:FilePath/Aston_Martin_AMR24_side.png'
+        logo: 'images/images_Aston_Martin_logo-removebg-preview.png',
+        car: 'images/Bolid_Aston.png'
     },
     'haas': {
         gradient: 'linear-gradient(135deg, #9fa4a8 0%, #4a4e54 100%)',
-        logo: 'https://commons.wikimedia.org/wiki/Special:FilePath/Haas_F1_Team_logo.svg',
-        car: 'https://commons.wikimedia.org/wiki/Special:FilePath/Haas_VF-24_side.png'
+        logo: 'images/images_Haas_logo-removebg-preview.png',
+        car: 'images/Bolid_Haas.png'
     },
     'audi': {
         gradient: 'linear-gradient(135deg, #4b4e54 0%, #1a1c20 100%)',
-        logo: 'https://commons.wikimedia.org/wiki/Special:FilePath/Audi_F1_logo.svg',
-        car: 'https://commons.wikimedia.org/wiki/Special:FilePath/Kick_Sauber_C44_side.png'
+        logo: 'images/images_Audi_logo-removebg-preview.png',
+        car: 'images/Bolid_Audi.png'
     },
     'cadillac': {
         gradient: 'linear-gradient(135deg, #2e343c 0%, #121519 100%)',
-        logo: 'https://commons.wikimedia.org/wiki/Special:FilePath/Cadillac_logo.svg',
-        car: 'https://commons.wikimedia.org/wiki/Special:FilePath/Red_Bull_RB20_side.png'
+        logo: 'images/images_Cadillac_logo-removebg-preview.png',
+        car: 'images/Bolid_Cadillac.png'
     }
 };
 
@@ -697,7 +698,7 @@ const SEASON_20_FALLBACK = [
     {
         name: 'McLaren Mastercard F1 Team',
         points: 126,
-        drivers: ['Kacper Jędrzejczyk', 'Michał Querti Kosiorowski'],
+        drivers: ['Kacper Jędrzejczyk', 'Michał – Querti – Kosiorowski'],
         races: [
             ['2', '1', '1', '1', '1', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
             ['', '7', '11', '12', '9', 'DNF', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
@@ -706,7 +707,7 @@ const SEASON_20_FALLBACK = [
     {
         name: 'Oracle Red Bull Racing',
         points: 65,
-        drivers: ['Mateusz MatriX4 Grygiel', 'Maciej mejsze Pawlak'],
+        drivers: ['Mateusz – MatriX4 – Grygiel', 'Maciej – mejsze – Pawlak'],
         races: [
             ['4', '4', '4', '8', '3', '3', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
             ['', '10', 'DNS', '', 'DNS', '7', '15', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
@@ -715,7 +716,7 @@ const SEASON_20_FALLBACK = [
     {
         name: 'Atlassian Williams F1 Team',
         points: 64,
-        drivers: ['Filip Frączak', 'Jakub Haaaamza Pięta'],
+        drivers: ['Filip – Frączak', 'Jakub – Haaaamza – Pięta'],
         races: [
             ['', '1', 'DNF', '', '2', '11', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
             ['', '', '8', '6', 'DNS', '6', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
@@ -724,7 +725,7 @@ const SEASON_20_FALLBACK = [
     {
         name: 'Scuderia Ferrari HP',
         points: 48,
-        drivers: ['Bartłomiej BarteX Kloc', 'Mateusz Klocek_09 Klockiewicz'],
+        drivers: ['Bartłomiej – BarteX – Kloc', 'Mateusz – Klocek_09 – Klockiewicz'],
         races: [
             ['13', '12', '', '6', 'DNS', '', '7', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
             ['', '5', '7', 'DNF', 'BAN', '', '2', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
@@ -733,7 +734,7 @@ const SEASON_20_FALLBACK = [
     {
         name: 'BWT Alpine Formula One Team',
         points: 44,
-        drivers: ['Paweł Paw1oS Kaczmarek', 'Wiktor BrodacZ Cendrowicz'],
+        drivers: ['Paweł – Paw1oS – Kaczmarek', 'Wiktor – BrodacZ – Cendrowicz'],
         races: [
             ['DNF', '', 'DNS', 'DNF', '', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
             ['', '11', '8', '4', '8', '4', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
@@ -742,7 +743,7 @@ const SEASON_20_FALLBACK = [
     {
         name: 'Mercedes-AMG PETRONAS Formula OneTeam',
         points: 42,
-        drivers: ['Andrzej TRAJU Trajkowski', 'Oskar 0sk1dz1k Chmielowiec'],
+        drivers: ['Andrzej – TRAJU – Trajkowski', 'Oskar – 0sk1dz1k – Chmielowiec'],
         races: [
             ['6', '3', '', '10', 'DNS', '', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
             ['', 'DNF', 'DNF', 'DNS', '', '2', 'DSQ', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
@@ -751,7 +752,7 @@ const SEASON_20_FALLBACK = [
     {
         name: 'Aston Martin Aramco Formula One Team',
         points: 30,
-        drivers: ['Kacper Piekarczyk', 'Michał SEP1EM8ER Wrzesień'],
+        drivers: ['Kacper – Piekarczyk', 'Michał – SEP1EM8ER – Wrzesień'],
         races: [
             ['3', '13', '3', '', '12', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
             ['', '18', 'DNF', '', '13', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
@@ -760,7 +761,7 @@ const SEASON_20_FALLBACK = [
     {
         name: 'TGR Haas F1 Team',
         points: 22,
-        drivers: ['Szymon Sokolik_99 Sokołowski', 'Antoni Komandor Kierznowski'],
+        drivers: ['Szymon – Sokolik_99 – Sokołowski', 'Antoni – Komandor – Kierznowski'],
         races: [
             ['2', 'DNS', '', '2', '9', 'DNF', '', '6', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
             ['', 'DNF', '', '5', '18', '', '5', 'DNF', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
@@ -769,7 +770,7 @@ const SEASON_20_FALLBACK = [
     {
         name: 'Visa Cash App Racing Bulls Formula One Team',
         points: 12,
-        drivers: ['Dominik ministerjabałko Bekiesz', 'Dawid Dotch Włodarczyk'],
+        drivers: ['Dominik – ministerjabałko – Bekiesz', 'Dawid – Dotch – Włodarczyk'],
         races: [
             ['12', '12', '10', 'DNS', '', '17', '', '5', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
             ['', '17', '14', '17', '16', '', '11', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
@@ -778,7 +779,7 @@ const SEASON_20_FALLBACK = [
     {
         name: 'Audi Revolut F1 Team',
         points: 10,
-        drivers: ['Maciej Watek Wącior', 'Tomasz Teambananek Kowalski'],
+        drivers: ['Maciej – Watek – Wącior', 'Tomasz – Teambananek – Kowalski'],
         races: [
             ['10', '14', 'DNS', '', '5', '', '15', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
             ['', 'DNS', 'DNF', 'DNS', 'DNS', 'BAN', '', '14', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
@@ -787,7 +788,7 @@ const SEASON_20_FALLBACK = [
     {
         name: 'Cadillac Formula 1 Team',
         points: 10,
-        drivers: ['Igor Vampijyr Szoch', 'Kamil rand1nho Płaskociński'],
+        drivers: ['Igor – Vampijyr – Szoch', 'Kamil – rand1nho – Płaskociński'],
         races: [
             ['10', '15', '15', '11', '', '13', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
             ['', 'DNS', 'DNS', '', 'DNS', '7', 'DNS', '', '8', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
@@ -872,10 +873,10 @@ function normalizeTeamKey(name) {
 
 function getTeamAssets(teamName) {
     const key = normalizeTeamKey(teamName);
-    return TEAM_ASSETS[key] || {
+    return TEAM_IMAGES[key] || {
         gradient: 'linear-gradient(135deg, #c81e2b 0%, #680d14 100%)',
         logo: 'images/cpl_logo_lizard.png',
-        car: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ferrari_SF-24_side.png'
+        car: ''
     };
 }
 
@@ -901,7 +902,7 @@ function countPodiumsAndWins(raceCells) {
 
 function cleanDriverName(rawName) {
     return String(rawName || '')
-        .replace(/\s*–\s*–\s*/g, ' ')
+        .replace(/\s*–\s*–\s*/g, ' – ')
         .replace(/\s+–\s*$/g, '')
         .replace(/\s+/g, ' ')
         .trim();
@@ -1012,6 +1013,10 @@ function renderTeamsGrid(filterQuery = '') {
             ? team.drivers.map(d => `<span class="driver-pill">${d}</span>`).join('')
             : `<span class="driver-pill">Brak kierowców</span>`;
 
+        const carHtml = assets.car
+            ? `<img src="${assets.car}" alt="${team.name} F1 car" class="f1-car-img" onerror="this.style.display='none';">`
+            : '';
+
         return `
             <article class="team-box" style="background: ${assets.gradient};">
                 <div class="team-box-top">
@@ -1048,12 +1053,7 @@ function renderTeamsGrid(filterQuery = '') {
                     </div>
 
                     <div class="team-car-visual">
-                        <img
-                            src="${assets.car}"
-                            alt="${team.name} F1 car"
-                            class="f1-car-img"
-                            onerror="this.style.display='none';"
-                        >
+                        ${carHtml}
                     </div>
                 </div>
             </article>
