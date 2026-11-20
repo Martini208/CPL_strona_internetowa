@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zespoły - CPL F1 League</title>
-
+<title>Zespoły Ligi CPL - Sezon 20</title>
 <style>
 :root {
     --bg-color: #0d0d0d;
     --text-color: #ffffff;
     --card-bg: #181818;
     --border-color: #333333;
+    --red-main: #ff3131;
 }
 
 body.light-mode {
@@ -31,21 +31,21 @@ body {
     background: var(--bg-color);
     color: var(--text-color);
     transition: background 0.3s ease, color 0.3s ease;
-    padding-top: 80px; /* Perfekter Abstand für die größere Nav-Leiste */
+    padding-top: 80px;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
-/* Navigation - Exakte 1:1 Kopie der Hauptseite (Rote Box mit Transparenz) */
+/* Navigation */
 nav {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 80px; /* Größere Box */
+    height: 80px;
     background: linear-gradient(135deg, rgba(180, 40, 50, 0.60) 0%, rgba(100, 15, 25, 0.70) 100%);
-    backdrop-filter: blur(15px); /* Starker Milchglas-Effekt */
+    backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     display: flex;
     justify-content: space-between;
@@ -99,7 +99,6 @@ nav a:hover {
     color: #ffffff;
 }
 
-/* Spezieller "Zapisy" Button in der Nav */
 .nav-zapisy-btn {
     background: #ff3131 !important;
     color: white !important;
@@ -121,7 +120,6 @@ nav a:hover {
     gap: 15px;
 }
 
-/* Social Media Icons in der Leiste (Vergrößert & Deutlich sichtbar) */
 .nav-socials {
     display: flex;
     align-items: center;
@@ -175,206 +173,219 @@ nav a:hover {
     transform: scale(1.2);
 }
 
-/* Container */
-.zespoly-page-container {
-    padding: 30px 5% 50px 5%;
-    max-width: 1400px;
+/* Main Content */
+.teams-container {
+    max-width: 1240px;
     width: 100%;
     margin: 0 auto;
+    padding: 36px 5% 60px 5%;
     flex: 1 0 auto;
 }
 
-.page-title {
+.teams-header {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 28px;
 }
 
-.page-title h1 {
-    font-size: 34px;
-    color: #ff3131;
+.teams-header h1 {
+    font-size: 36px;
+    color: #ffffff;
     text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 900;
 }
 
-.page-title p {
-    font-size: 15px;
-    margin-top: 5px;
+body.light-mode .teams-header h1 {
+    color: #111111;
 }
 
-/* Suche */
-.search-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 35px;
+.teams-header p {
+    color: #a5a5a5;
+    font-size: 14px;
+    margin-top: 8px;
 }
 
-.search-input {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    color: var(--text-color);
-    padding: 14px 20px;
+body.light-mode .teams-header p {
+    color: #555555;
+}
+
+.search-wrapper {
+    max-width: 540px;
+    margin: 22px auto 0 auto;
+}
+
+.team-search-input {
+    width: 100%;
+    padding: 13px 18px;
     border-radius: 10px;
+    border: 1px solid #2b2b2b;
+    background: #141414;
+    color: #ffffff;
     font-size: 15px;
     outline: none;
-    width: 100%;
-    max-width: 500px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.search-input:focus {
-    border-color: #ff3131;
-    box-shadow: 0 4px 20px rgba(255, 49, 49, 0.25);
+body.light-mode .team-search-input {
+    background: #ffffff;
+    color: #111111;
+    border-color: #d5d5d5;
 }
 
-/* Grid Layout */
+.team-search-input:focus {
+    border-color: #ff3131;
+    box-shadow: 0 0 0 3px rgba(255, 49, 49, 0.2);
+}
+
+.team-search-input::placeholder {
+    color: #777777;
+}
+
+/* Grid der Team-Karten */
 .teams-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
-    min-height: 300px;
+    gap: 24px;
 }
 
-/* Team Card Design */
-.f1-team-card {
-    border-radius: 16px;
-    overflow: hidden;
+.team-box {
     position: relative;
+    border-radius: 18px;
     padding: 24px 26px;
-    min-height: 265px;
+    min-height: 225px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid rgba(255,255,255,0.1);
+    overflow: hidden;
+    color: #ffffff;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
 }
 
-.f1-team-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.7);
+.team-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65);
 }
 
-.team-card-top {
+.team-box-top {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    gap: 15px;
     z-index: 2;
 }
 
-.team-info h2 {
+.team-name {
     font-size: 26px;
     font-weight: 800;
+    line-height: 1.15;
     color: #ffffff;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.4);
-    margin-bottom: 12px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
 }
 
-.team-drivers-list {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-.driver-pill {
-    background: rgba(0, 0, 0, 0.35);
-    backdrop-filter: blur(6px);
-    padding: 5px 12px;
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    font-size: 13px;
-    font-weight: bold;
-    color: #ffffff;
-}
-
-/* Logo Kreis Badge */
-.team-logo-badge {
-    width: 48px;
-    height: 48px;
-    background: rgba(0, 0, 0, 0.35);
+.team-badge-mark {
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid rgba(255, 255, 255, 0.28);
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(4px);
+    font-weight: 900;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    color: #ffffff;
     flex-shrink: 0;
-    padding: 8px;
 }
 
-.team-logo-badge img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    display: block;
-    filter: brightness(0) invert(1);
+.drivers-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+    max-width: 68%;
+    z-index: 2;
 }
 
-.team-card-bottom {
+.driver-pill {
+    background: rgba(0, 0, 0, 0.38);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    color: #ffffff;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    backdrop-filter: blur(4px);
+}
+
+.driver-pill small {
+    opacity: 0.8;
+    font-weight: 600;
+    margin-left: 4px;
+}
+
+.team-box-bottom {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin-top: 15px;
+    margin-top: 22px;
     z-index: 2;
-    gap: 15px;
-}
-
-/* Stats */
-.team-stats {
-    display: flex;
     gap: 12px;
-    background: rgba(0, 0, 0, 0.35);
-    backdrop-filter: blur(6px);
-    padding: 8px 14px;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    flex-shrink: 0;
 }
 
-.stat-box {
-    text-align: center;
-}
-
-.stat-box span {
-    display: block;
-    font-size: 10px;
-    color: rgba(255, 255, 255, 0.75);
-    text-transform: uppercase;
-    font-weight: bold;
-}
-
-.stat-box strong {
-    font-size: 15px;
-    color: #ffffff;
-}
-
-/* Boliden-Bilder Container */
-.team-car-container {
+.team-stats-row {
     display: flex;
-    justify-content: flex-end;
+    gap: 22px;
     align-items: flex-end;
-    max-width: 65%;
-    width: 100%;
 }
 
-.team-car-img {
-    max-height: 88px;
-    max-width: 310px;
-    width: auto;
-    object-fit: contain;
-    transition: transform 0.3s ease;
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 56px;
 }
 
-.f1-team-card:hover .team-car-img {
-    transform: translateX(-4px) scale(1.03);
+.stat-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 3px;
 }
 
-.team-card-bg-pattern {
-    position: absolute;
-    inset: 0;
-    background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
-    background-size: 12px 12px;
-    opacity: 0.3;
-    pointer-events: none;
+.stat-value {
+    font-size: 20px;
+    font-weight: 900;
+    color: #ffffff;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.team-car-visual {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-end;
+    margin-left: auto;
+}
+
+.f1-car-svg {
+    width: 195px;
+    height: auto;
+    filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.45));
+}
+
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 45px 20px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    color: #999999;
+    font-size: 15px;
 }
 
 /* Footer */
@@ -427,7 +438,6 @@ footer {
     color: #ff3131;
 }
 
-/* Social Icons Links mit SVG Logos */
 .social-links {
     display: flex;
     gap: 12px;
@@ -491,16 +501,22 @@ footer {
     color: #ffffff;
 }
 
-@media(max-width:1024px){
-    .teams-grid { grid-template-columns: 1fr; }
+@media (max-width: 980px) {
+    .teams-grid {
+        grid-template-columns: 1fr;
+    }
+    .drivers-pills {
+        max-width: 100%;
+    }
 }
 
-@media(max-width:900px){
-    nav{ flex-direction:column; height: auto; gap:12px; padding:15px; }
+@media (max-width: 900px) {
+    nav { flex-direction: column; height: auto; gap: 12px; padding: 15px; }
     .nav-left { flex-direction: column; align-items: center; }
-    nav ul{ flex-wrap:wrap; justify-content:center; }
-    .team-card-bottom { flex-direction: column-reverse; align-items: flex-start; gap: 15px; }
-    .team-car-container { max-width: 100%; width: 100%; justify-content: center; }
+    nav ul { flex-wrap: wrap; justify-content: center; }
+    .nav-right { flex-wrap: wrap; justify-content: center; }
+    .team-box-bottom { flex-direction: column; align-items: flex-start; }
+    .f1-car-svg { width: 170px; }
 }
 </style>
 </head>
@@ -508,12 +524,9 @@ footer {
 
 <nav>
     <div class="nav-left">
-        <!-- CPL Logo ganz links -->
         <a href="index.html">
             <img class="cpl-logo-img" src="images/cpl_logo_lizard.png" alt="CPL Logo">
         </a>
-        
-        <!-- Menüpunkte -->
         <ul>
             <li><a href="kalendarz.html">Kalendarz</a></li>
             <li><a href="sezony.html">Sezony</a></li>
@@ -525,7 +538,6 @@ footer {
         </ul>
     </div>
     
-    <!-- Socials & Rechten Bereich -->
     <div class="nav-right">
         <div class="nav-socials">
             <a href="https://discord.com/invite/szt7rHnFSj" target="_blank" class="nav-social-icon" title="Discord">
@@ -550,18 +562,25 @@ footer {
     </div>
 </nav>
 
-<div class="zespoly-page-container">
-    <div class="page-title">
-        <h1>Zespoły Ligi CPL</h1>
-        <p>Znajdź aktualne zespoły Formuły 1 i ich kierowców w Sezonie 2026</p>
+<main class="teams-container">
+    <div class="teams-header">
+        <h1>ZESPOŁY LIGI CPL</h1>
+        <p>Kierowcy, punkty, podia i wygrane na podstawie danych z Sezonu 20</p>
+        <div class="search-wrapper">
+            <input
+                type="text"
+                id="team-search"
+                class="team-search-input"
+                placeholder="Szukaj zespołu lub kierowcy..."
+                autocomplete="off"
+            >
+        </div>
     </div>
 
-    <div class="search-container">
-        <input type="text" id="teamSearch" class="search-input" placeholder="Szukaj zespołu lub kierowcy...">
+    <div class="teams-grid" id="teams-grid">
+        <div class="empty-state">Ładowanie danych Sezonu 20 z Google Sheets...</div>
     </div>
-
-    <div class="teams-grid" id="teamsGrid"></div>
-</div>
+</main>
 
 <footer>
     <div class="footer-container">
@@ -617,198 +636,417 @@ footer {
 </footer>
 
 <script>
-    const teamsData = [
-        { 
-            name: "Mercedes", 
-            driver1: "George RUSSELL", 
-            driver2: "Kimi ANTONELLI", 
-            points: 0, podiums: 0, wins: 0,
-            bgGradient: "linear-gradient(135deg, #13ca9d 0%, #089a77 100%)", 
-            logo: "images/images_mercedes_logo-removebg-preview.png",
-            carImg: "https://martini208.github.io/CPL-/Bolid_Mercedes.png" 
-        },
-        { 
-            name: "Ferrari", 
-            driver1: "Charles LECLERC", 
-            driver2: "Lewis HAMILTON", 
-            points: 0, podiums: 0, wins: 0,
-            bgGradient: "linear-gradient(135deg, #d30623 0%, #a10018 100%)", 
-            logo: "images/images_ferrari_logo-removebg-preview.png",
-            carImg: "https://martini208.github.io/CPL-/Bolid_Ferrari.png" 
-        },
-        { 
-            name: "McLaren", 
-            driver1: "Lando NORRIS", 
-            driver2: "Oscar PIASTRI", 
-            points: 0, podiums: 0, wins: 0,
-            bgGradient: "linear-gradient(135deg, #e67300 0%, #bd5900 100%)", 
-            logo: "images/images_mclaren_logo-removebg-preview.png",
-            carImg: "https://martini208.github.io/CPL-/Bolid_Mclaren.png" 
-        },
-        { 
-            name: "Red Bull Racing", 
-            driver1: "Max VERSTAPPEN", 
-            driver2: "Isack HADJAR", 
-            points: 0, podiums: 0, wins: 0,
-            bgGradient: "linear-gradient(135deg, #2c63c6 0%, #173d87 100%)", 
-            logo: "images/images_rb_logo-removebg-preview.png",
-            carImg: "https://martini208.github.io/CPL-/Bolid_Red_Bull.png" 
-        },
-        { 
-            name: "Racing Bulls", 
-            driver1: "Liam LAWSON", 
-            driver2: "Arvid LINDBLAD", 
-            points: 0, podiums: 0, wins: 0,
-            bgGradient: "linear-gradient(135deg, #4872f2 0%, #2948b8 100%)", 
-            logo: "images/images_Racing_Bulls_logo-removebg-preview.png",
-            carImg: "https://martini208.github.io/CPL-/Bolid_Visa_Cash.png" 
-        },
-        { 
-            name: "Alpine", 
-            driver1: "Pierre GASLY", 
-            driver2: "Franco COLAPINTO", 
-            points: 0, podiums: 0, wins: 0,
-            bgGradient: "linear-gradient(135deg, #0093c9 0%, #006087 100%)", 
-            logo: "images/images_Alpine_logo-removebg-preview.png",
-            carImg: "https://martini208.github.io/CPL-/Bolid_Alpine.png" 
-        },
-        { 
-            name: "Haas F1 Team", 
-            driver1: "Esteban OCON", 
-            driver2: "Oliver BEARMAN", 
-            points: 0, podiums: 0, wins: 0,
-            bgGradient: "linear-gradient(135deg, #d3d7db 0%, #9ba1a6 100%)", 
-            logo: "images/images_Haas_logo-removebg-preview.png",
-            carImg: "https://martini208.github.io/CPL-/Bolid_Haas.png" 
-        },
-        { 
-            name: "Audi", 
-            driver1: "Nico HÜLKENBERG", 
-            driver2: "Gabriel BORTOLETO", 
-            points: 0, podiums: 0, wins: 0,
-            bgGradient: "linear-gradient(135deg, #e93309 0%, #b32100 100%)", 
-            logo: "images/images_Audi_logo-removebg-preview.png",
-            carImg: "https://martini208.github.io/CPL-/Bolid_Audi.png" 
-        },
-        { 
-            name: "Williams", 
-            driver1: "Carlos SAINZ", 
-            driver2: "Alexander ALBON", 
-            points: 0, podiums: 0, wins: 0,
-            bgGradient: "linear-gradient(135deg, #1852c0 0%, #0d317b 100%)", 
-            logo: "images/images_Williams_logo-removebg-preview.png",
-            carImg: "https://martini208.github.io/CPL-/Bolid_Williams.png" 
-        },
-        { 
-            name: "Aston Martin", 
-            driver1: "Fernando ALONSO", 
-            driver2: "Lance STROLL", 
-            points: 0, podiums: 0, wins: 0,
-            bgGradient: "linear-gradient(135deg, #228b61 0%, #11573c 100%)", 
-            logo: "images/images_Aston_Martin_logo-removebg-preview.png",
-            carImg: "https://martini208.github.io/CPL-/Bolid_Aston.png" 
-        },
-        { 
-            name: "Cadillac", 
-            driver1: "Sergio PÉRÈZ", 
-            driver2: "Valtteri BOTTAS", 
-            points: 0, podiums: 0, wins: 0,
-            bgGradient: "linear-gradient(135deg, #bbbdbf 0%, #838689 100%)", 
-            logo: "images/images_Cadillac_logo-removebg-preview.png",
-            carImg: "https://martini208.github.io/CPL-/Bolid_Cadillac.png" 
+const SHEET_ID = '1na_Zlv7uk9AGO3f76sqMvN5C5kT-EXnphJlTD6KKx0M';
+const SEASON_20_GID = '1651963070';
+
+const TEAM_STYLES = {
+    'mclaren': {
+        label: 'McLaren Mastercard F1 Team',
+        short: 'MCL',
+        gradient: 'linear-gradient(135deg, #ff6a00 0%, #e04800 100%)',
+        carMain: '#ff7b00',
+        carAccent: '#111111'
+    },
+    'red bull': {
+        label: 'Oracle Red Bull Racing',
+        short: 'RBR',
+        gradient: 'linear-gradient(135deg, #1b439b 0%, #0d2359 100%)',
+        carMain: '#1e41ff',
+        carAccent: '#ffd400'
+    },
+    'williams': {
+        label: 'Atlassian Williams F1 Team',
+        short: 'WIL',
+        gradient: 'linear-gradient(135deg, #0077d4 0%, #004785 100%)',
+        carMain: '#0082fa',
+        carAccent: '#ffffff'
+    },
+    'ferrari': {
+        label: 'Scuderia Ferrari HP',
+        short: 'FER',
+        gradient: 'linear-gradient(135deg, #d91c1c 0%, #8f0a0a 100%)',
+        carMain: '#e80020',
+        carAccent: '#ffffff'
+    },
+    'alpine': {
+        label: 'BWT Alpine Formula One Team',
+        short: 'ALP',
+        gradient: 'linear-gradient(135deg, #0077b6 0%, #c93b8b 100%)',
+        carMain: '#0082c8',
+        carAccent: '#ff77b5'
+    },
+    'mercedes': {
+        label: 'Mercedes-AMG PETRONAS Formula One Team',
+        short: 'MER',
+        gradient: 'linear-gradient(135deg, #00a19b 0%, #006663 100%)',
+        carMain: '#00d2be',
+        carAccent: '#181818'
+    },
+    'aston martin': {
+        label: 'Aston Martin Aramco Formula One Team',
+        short: 'AMR',
+        gradient: 'linear-gradient(135deg, #006f62 0%, #003d35 100%)',
+        carMain: '#006f62',
+        carAccent: '#cedc00'
+    },
+    'haas': {
+        label: 'TGR Haas F1 Team',
+        short: 'HAA',
+        gradient: 'linear-gradient(135deg, #b6babd 0%, #555a60 100%)',
+        carMain: '#e6e8ea',
+        carAccent: '#e10600'
+    },
+    'racing bulls': {
+        label: 'Visa Cash App Racing Bulls Formula One Team',
+        short: 'VCARB',
+        gradient: 'linear-gradient(135deg, #2b45e2 0%, #15237a 100%)',
+        carMain: '#3658ff',
+        carAccent: '#ffffff'
+    },
+    'audi': {
+        label: 'Audi Revolut F1 Team',
+        short: 'AUD',
+        gradient: 'linear-gradient(135deg, #4b4e54 0%, #1c1d20 100%)',
+        carMain: '#d8dce0',
+        carAccent: '#f50537'
+    },
+    'cadillac': {
+        label: 'Cadillac Formula 1 Team',
+        short: 'CAD',
+        gradient: 'linear-gradient(135deg, #2f353d 0%, #121519 100%)',
+        carMain: '#cfd6de',
+        carAccent: '#b8963f'
+    }
+};
+
+let allTeamsComputed = [];
+
+const themeToggleBtn = document.getElementById('theme-toggle');
+themeToggleBtn.addEventListener('click', () => {
+    document.body.classList.toggle('light-mode');
+    themeToggleBtn.textContent = document.body.classList.contains('light-mode') ? '🌙' : '☀️';
+});
+
+document.getElementById('team-search').addEventListener('input', (e) => {
+    renderTeamsGrid(e.target.value);
+});
+
+function parseCSVRow(row) {
+    const cells = [];
+    let insideQuote = false;
+    let currentCell = '';
+
+    for (let i = 0; i < row.length; i++) {
+        const char = row[i];
+        if (char === '"') {
+            insideQuote = !insideQuote;
+        } else if (char === ',' && !insideQuote) {
+            cells.push(currentCell.trim().replace(/^"|"$/g, ''));
+            currentCell = '';
+        } else {
+            currentCell += char;
         }
-    ];
+    }
+    cells.push(currentCell.trim().replace(/^"|"$/g, ''));
+    return cells;
+}
 
-    function renderTeams(teams) {
-        const teamsGrid = document.getElementById('teamsGrid');
-        if (!teamsGrid) return;
-        
-        teamsGrid.innerHTML = '';
+function parseNumber(val) {
+    if (val === undefined || val === null) return 0;
+    const cleaned = String(val).replace(',', '.').replace(/[^\d.-]/g, '');
+    const num = parseFloat(cleaned);
+    return isNaN(num) ? 0 : num;
+}
 
-        if (!teams || teams.length === 0) {
-            teamsGrid.innerHTML = '<p style="color:#888; grid-column: 1/-1; text-align:center;">Brak wyników spełniających kryteria wyszukiwania.</p>';
+function normalizeTeamKey(name) {
+    const n = (name || '').toLowerCase();
+    if (n.includes('mclaren')) return 'mclaren';
+    if (n.includes('red bull') || n.includes('oracle')) return 'red bull';
+    if (n.includes('williams')) return 'williams';
+    if (n.includes('ferrari')) return 'ferrari';
+    if (n.includes('alpine')) return 'alpine';
+    if (n.includes('mercedes')) return 'mercedes';
+    if (n.includes('aston')) return 'aston martin';
+    if (n.includes('haas')) return 'haas';
+    if (n.includes('racing bulls') || n.includes('vcarb') || n.includes('visa cash app')) return 'racing bulls';
+    if (n.includes('audi')) return 'audi';
+    if (n.includes('cadillac')) return 'cadillac';
+    return n.trim();
+}
+
+function getTeamStyle(teamName) {
+    const key = normalizeTeamKey(teamName);
+    if (TEAM_STYLES[key]) {
+        return TEAM_STYLES[key];
+    }
+    const initials = (teamName || 'CPL')
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map(w => w[0].toUpperCase())
+        .join('');
+    return {
+        label: teamName || 'Zespół CPL',
+        short: initials || 'CPL',
+        gradient: 'linear-gradient(135deg, #c81e2b 0%, #680d14 100%)',
+        carMain: '#ff3131',
+        carAccent: '#ffffff'
+    };
+}
+
+function countDriverPodiumsAndWins(raceCells) {
+    let wins = 0;
+    let podiums = 0;
+
+    raceCells.forEach(cell => {
+        const val = String(cell || '').trim().toUpperCase();
+        if (!val || val === '-' || val === '0' || val === 'DNS' || val === 'DNF' || val === 'DSC' || val === 'DSQ' || val === 'BAN') {
             return;
         }
+        const match = val.match(/^P?([123])(?:\b|$)/);
+        if (match) {
+            const pos = parseInt(match[1], 10);
+            if (pos === 1) wins += 1;
+            if (pos >= 1 && pos <= 3) podiums += 1;
+        }
+    });
 
-        teams.forEach(team => {
-            const card = document.createElement('div');
-            card.className = 'f1-team-card';
-            card.style.background = team.bgGradient;
+    return { wins, podiums };
+}
 
-            card.innerHTML = `
-                <div class="team-card-bg-pattern"></div>
-                <div class="team-card-top">
-                    <div class="team-info">
-                        <h2>${team.name}</h2>
-                        <div class="team-drivers-list">
-                            <span class="driver-pill">${team.driver1}</span>
-                            <span class="driver-pill">${team.driver2}</span>
-                        </div>
-                    </div>
-                    <div class="team-logo-badge">
-                        <img src="${team.logo}" alt="${team.name} Logo" onerror="this.style.display='none'">
-                    </div>
-                </div>
-                <div class="team-card-bottom">
-                    <div class="team-stats">
-                        <div class="stat-box">
-                            <span>Punkty</span>
-                            <strong>${team.points}</strong>
-                        </div>
-                        <div class="stat-box">
-                            <span>Podia</span>
-                            <strong>${team.podiums}</strong>
-                        </div>
-                        <div class="stat-box">
-                            <span>Wygrane</span>
-                            <strong>${team.wins}</strong>
-                        </div>
-                    </div>
-                    <div class="team-car-container">
-                        <img class="team-car-img" src="${team.carImg}" alt="${team.name} Bolid" onerror="this.style.display='none'">
-                    </div>
-                </div>
-            `;
-            teamsGrid.appendChild(card);
+function createF1CarSVG(styleObj) {
+    return `
+        <svg class="f1-car-svg" viewBox="0 0 240 72" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M22 46L34 42L66 37L118 33L168 35L204 39L218 44L214 50L188 51L152 50L92 50L44 51L22 49V46Z" fill="${styleObj.carMain}"/>
+            <path d="M84 35L106 25L134 26L146 35H84Z" fill="#181818"/>
+            <path d="M94 33L110 27L129 28L137 33H94Z" fill="#2c333d"/>
+            <path d="M52 40L186 40L182 44L56 44L52 40Z" fill="${styleObj.carAccent}"/>
+            <path d="M26 36L42 36L40 46L24 46L26 36Z" fill="${styleObj.carAccent}"/>
+            <path d="M204 38L222 36L220 49L202 48L204 38Z" fill="${styleObj.carAccent}"/>
+            <circle cx="64" cy="50" r="12" fill="#121212"/>
+            <circle cx="64" cy="50" r="6" fill="#4a4e54"/>
+            <circle cx="64" cy="50" r="2.5" fill="#d0d4da"/>
+            <circle cx="182" cy="50" r="12" fill="#121212"/>
+            <circle cx="182" cy="50" r="6" fill="#4a4e54"/>
+            <circle cx="182" cy="50" r="2.5" fill="#d0d4da"/>
+        </svg>
+    `;
+}
+
+async function loadSeason20Teams() {
+    const grid = document.getElementById('teams-grid');
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SEASON_20_GID}`;
+
+    try {
+        const res = await fetch(url);
+        const csvText = await res.text();
+        const lines = csvText.split(/\r\n|\n/);
+        const rawData = lines.map(parseCSVRow);
+
+        let headerIdx = rawData.findIndex(r =>
+            r.some(c => c && c.toLowerCase().includes('kierowca')) &&
+            r.some(c => c && c.toLowerCase().includes('punkt'))
+        );
+        if (headerIdx === -1) headerIdx = 3;
+
+        const headers = rawData[headerIdx] || [];
+        const colPos = headers.findIndex(h => h && h.toLowerCase().includes('poz')) !== -1 ? headers.findIndex(h => h && h.toLowerCase().includes('poz')) : 1;
+        const colDriver = headers.findIndex(h => h && h.toLowerCase().includes('kierowca')) !== -1 ? headers.findIndex(h => h && h.toLowerCase().includes('kierowca')) : 4;
+        const colTeam = headers.findIndex(h => h && (h.toLowerCase().includes('drużyna') || h.toLowerCase() === 'team')) !== -1 ? headers.findIndex(h => h && (h.toLowerCase().includes('drużyna') || h.toLowerCase() === 'team')) : 5;
+        const colPts = headers.findIndex(h => h && h.toUpperCase().includes('PUNKT')) !== -1 ? headers.findIndex(h => h && h.toUpperCase().includes('PUNKT')) : 7;
+
+        const driverStatsByName = new Map();
+        const driversByTeamKey = new Map();
+        const teamPointsFromBlock = new Map();
+
+        let currentTeamBlockKey = '';
+        let inTeamSection = false;
+
+        for (let i = headerIdx + 1; i < rawData.length; i++) {
+            const row = rawData[i];
+            if (!row || row.every(c => !c)) continue;
+
+            const posText = (row[colPos] || '').trim();
+            const driverName = (row[colDriver] || '').trim();
+            const teamName = (row[colTeam] || '').trim();
+            const ptsVal = parseNumber(row[colPts]);
+
+            // Erkennung des unteren Team-Blocks (wo in Spalte D/E Teamnamen stehen und rechts daneben KIEROWCA + PUNKTY)
+            const hasTeamBlockHeader = row.some(c => c && c.trim().toLowerCase() === 'drużyna') &&
+                                     row.some(c => c && c.trim().toLowerCase() === 'kierowca') &&
+                                     row.some(c => c && c.trim().toLowerCase() === 'punkty');
+
+            if (hasTeamBlockHeader) {
+                inTeamSection = true;
+                currentTeamBlockKey = '';
+                continue;
+            }
+
+            if (!inTeamSection) {
+                if (driverName && driverName !== '-' && driverName !== '0' && !driverName.toLowerCase().includes('kierowca')) {
+                    const raceSlice = row.slice(colPts + 1);
+                    const { wins, podiums } = countDriverPodiumsAndWins(raceSlice);
+                    const tKey = normalizeTeamKey(teamName);
+
+                    const driverObj = {
+                        name: driverName,
+                        team: teamName,
+                        points: ptsVal,
+                        wins,
+                        podiums
+                    };
+
+                    driverStatsByName.set(driverName.toLowerCase(), driverObj);
+
+                    if (tKey) {
+                        if (!driversByTeamKey.has(tKey)) {
+                            driversByTeamKey.set(tKey, []);
+                        }
+                        driversByTeamKey.get(tKey).push(driverObj);
+                    }
+                }
+            } else {
+                // Unterer Team-Block aus Sezon 20
+                const blockTeamCell = (row[3] || '').trim();
+                const blockDriverCell = (row[6] || '').trim();
+                const blockPtsCell = row[8];
+
+                if (blockTeamCell && !blockTeamCell.toLowerCase().includes('drużyna')) {
+                    currentTeamBlockKey = normalizeTeamKey(blockTeamCell);
+                    if (!teamPointsFromBlock.has(currentTeamBlockKey)) {
+                        teamPointsFromBlock.set(currentTeamBlockKey, {
+                            rawName: blockTeamCell,
+                            points: parseNumber(blockPtsCell) || 0,
+                            drivers: []
+                        });
+                    }
+                }
+
+                if (currentTeamBlockKey && blockDriverCell && blockDriverCell !== '-') {
+                    const teamEntry = teamPointsFromBlock.get(currentTeamBlockKey);
+                    const matchedDriver = driverStatsByName.get(blockDriverCell.toLowerCase());
+                    const raceSlice = row.slice(9);
+                    const extraStats = countDriverPodiumsAndWins(raceSlice);
+
+                    const dEntry = matchedDriver || {
+                        name: blockDriverCell,
+                        team: teamEntry ? teamEntry.rawName : '',
+                        points: 0,
+                        wins: extraStats.wins,
+                        podiums: extraStats.podiums
+                    };
+
+                    if (teamEntry && !teamEntry.drivers.some(d => d.name.toLowerCase() === dEntry.name.toLowerCase())) {
+                        teamEntry.drivers.push(dEntry);
+                    }
+                }
+            }
+        }
+
+        // Teams zusammenführen (sortiert nach Punkten absteigend)
+        const combinedMap = new Map();
+
+        teamPointsFromBlock.forEach((val, key) => {
+            const list = val.drivers.length > 0 ? val.drivers : (driversByTeamKey.get(key) || []);
+            const totalWins = list.reduce((sum, d) => sum + (d.wins || 0), 0);
+            const totalPodiums = list.reduce((sum, d) => sum + (d.podiums || 0), 0);
+            const sumPtsFromDrivers = list.reduce((sum, d) => sum + (d.points || 0), 0);
+
+            combinedMap.set(key, {
+                key,
+                name: val.rawName || getTeamStyle(key).label,
+                points: val.points > 0 ? val.points : sumPtsFromDrivers,
+                podiums: totalPodiums,
+                wins: totalWins,
+                drivers: list
+            });
         });
-    }
 
-    function initPage() {
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        if (themeToggleBtn) {
-            themeToggleBtn.addEventListener('click', () => {
-                document.body.classList.toggle('light-mode');
-                themeToggleBtn.textContent = document.body.classList.contains('light-mode') ? '🌙' : '☀️';
-            });
-        }
-
-        const teamSearch = document.getElementById('teamSearch');
-        if (teamSearch) {
-            teamSearch.addEventListener('input', () => {
-                const query = teamSearch.value.toLowerCase().trim();
-                const filteredTeams = teamsData.filter(team => {
-                    const nameStarts = team.name.toLowerCase().startsWith(query);
-                    
-                    const d1Parts = team.driver1.toLowerCase().split(' ');
-                    const d1Starts = d1Parts.some(part => part.startsWith(query));
-
-                    const d2Parts = team.driver2.toLowerCase().split(' ');
-                    const d2Starts = d2Parts.some(part => part.startsWith(query));
-
-                    return nameStarts || d1Starts || d2Starts;
+        driversByTeamKey.forEach((list, key) => {
+            if (!combinedMap.has(key)) {
+                const totalPoints = list.reduce((sum, d) => sum + (d.points || 0), 0);
+                const totalWins = list.reduce((sum, d) => sum + (d.wins || 0), 0);
+                const totalPodiums = list.reduce((sum, d) => sum + (d.podiums || 0), 0);
+                combinedMap.set(key, {
+                    key,
+                    name: list[0]?.team || getTeamStyle(key).label,
+                    points: totalPoints,
+                    podiums: totalPodiums,
+                    wins: totalWins,
+                    drivers: list
                 });
-                renderTeams(filteredTeams);
-            });
-        }
+            }
+        });
 
-        renderTeams(teamsData);
+        allTeamsComputed = Array.from(combinedMap.values()).sort((a, b) => b.points - a.points);
+        renderTeamsGrid(document.getElementById('team-search').value);
+    } catch (err) {
+        console.error('Fehler beim Laden von Sezon 20:', err);
+        grid.innerHTML = `<div class="empty-state" style="color:#ff3131;">Nie udało się pobrać danych Sezonu 20 z Google Sheets.</div>`;
+    }
+}
+
+function renderTeamsGrid(filterQuery = '') {
+    const grid = document.getElementById('teams-grid');
+    const q = (filterQuery || '').trim().toLowerCase();
+
+    const filtered = !q
+        ? allTeamsComputed
+        : allTeamsComputed.filter(team => {
+            const teamMatch = team.name.toLowerCase().includes(q);
+            const driverMatch = team.drivers.some(d => d.name.toLowerCase().includes(q));
+            return teamMatch || driverMatch;
+        });
+
+    if (filtered.length === 0) {
+        grid.innerHTML = `<div class="empty-state">Brak zespołów lub kierowców pasujących do wyszukiwania.</div>`;
+        return;
     }
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initPage);
-    } else {
-        initPage();
-    }
+    grid.innerHTML = filtered.map(team => {
+        const styleObj = getTeamStyle(team.name);
+        const pillsHtml = team.drivers.length > 0
+            ? team.drivers.map(d => `<span class="driver-pill">${d.name}<small>(${d.points} pkt)</small></span>`).join('')
+            : `<span class="driver-pill">Brak przypisanych kierowców</span>`;
+
+        return `
+            <article class="team-box" style="background: ${styleObj.gradient};">
+                <div class="team-box-top">
+                    <div>
+                        <h2 class="team-name">${team.name}</h2>
+                        <div class="drivers-pills">
+                            ${pillsHtml}
+                        </div>
+                    </div>
+                    <div class="team-badge-mark">${styleObj.short}</div>
+                </div>
+
+                <div class="team-box-bottom">
+                    <div class="team-stats-row">
+                        <div class="stat-item">
+                            <span class="stat-label">PUNKTY</span>
+                            <span class="stat-value">${team.points}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">PODIA</span>
+                            <span class="stat-value">${team.podiums}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">WYGRANE</span>
+                            <span class="stat-value">${team.wins}</span>
+                        </div>
+                    </div>
+
+                    <div class="team-car-visual">
+                        ${createF1CarSVG(styleObj)}
+                    </div>
+                </div>
+            </article>
+        `;
+    }).join('');
+}
+
+loadSeason20Teams();
 </script>
 
 </body>
