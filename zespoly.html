@@ -713,7 +713,7 @@ footer {
 
         <div class="division-tabs" role="tablist" aria-label="Wybór ligi">
             <button type="button" class="division-tab-btn active-diamond" data-division="diamond">💎 Liga Diamentowa</button>
-            <button type="button" class="division-tab-btn" data-division="gold">🥇 Liga Złota</button>
+            <button type="button" class="division-tab-btn" data-division="gold">🏆 Liga Złota</button>
         </div>
 
         <div class="search-wrapper">
@@ -1082,7 +1082,6 @@ function extractTeamsFromCSV(csvText) {
     const lines = csvText.split(/\r\n|\n/);
     const rawData = lines.map(parseCSVRow);
 
-    // Nur die Team-Tabelle suchen: Spalte C = "Pozycja", Spalte D = "Drużyna", Spalte G = "Kierowcy"
     const teamTableHeaderIdx = rawData.findIndex(r => {
         const colC = (r[2] || '').trim().toLowerCase();
         const colD = (r[3] || '').trim().toLowerCase();
@@ -1100,12 +1099,11 @@ function extractTeamsFromCSV(csvText) {
         if (!row || row.every(c => !c)) continue;
 
         const posCell = (row[2] || '').trim();
-        const teamNameCell = (row[3] || '').trim();   // Spalte D: Drużyna
-        const driverNameCell = (row[6] || '').trim(); // Spalte G: Kierowcy
-        const teamPtsCell = row[7] !== '' && row[7] !== undefined ? row[7] : row[28]; // Spalte H (oder AC)
-        const raceSlice = row.slice(8, 28);           // Spalten I..AB: Wyścigi
+        const teamNameCell = (row[3] || '').trim();
+        const driverNameCell = (row[6] || '').trim();
+        const teamPtsCell = row[7] !== '' && row[7] !== undefined ? row[7] : row[28];
+        const raceSlice = row.slice(8, 28);
 
-        // Stoppt, falls eine neue Tabellen-Sektion beginnt
         if (posCell.toLowerCase() === 'pozycja' && teamNameCell.toLowerCase() === 'drużyna') {
             break;
         }
@@ -1252,7 +1250,7 @@ function renderActiveDivision(filterQuery = '') {
     const sectionClass = isGold ? 'gold-section' : 'diamond-section';
     const chipClass = isGold ? 'gold-chip' : 'diamond-chip';
     const titleClass = isGold ? 'gold-title' : 'diamond-title';
-    const chipText = isGold ? '🥇 Dywizja II' : '💎 Dywizja I';
+    const chipText = isGold ? '🏆 Dywizja II' : '💎 Dywizja I';
     const titleText = isGold ? 'Liga Złota' : 'Liga Diamentowa';
     const totalPts = filtered.reduce((sum, t) => sum + t.points, 0);
 
