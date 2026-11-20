@@ -571,9 +571,7 @@ footer {
         </div>
     </div>
 
-    <div class="teams-grid" id="teams-grid">
-        <div class="empty-state">Ładowanie danych Sezonu 20 z Google Sheets...</div>
-    </div>
+    <div class="teams-grid" id="teams-grid"></div>
 </main>
 
 <footer>
@@ -702,7 +700,130 @@ const TEAM_STYLES = {
     }
 };
 
-let allTeamsComputed = [];
+// Fallback aus deinen Sezon-20-Screenshots (Spalte D = Drużyna, Spalte G = Kierowcy, Spalten I..AB = Wyścigi, Spalte AC = Punkty)
+const SEASON_20_FALLBACK = [
+    {
+        name: 'McLaren Mastercard F1 Team',
+        points: 126,
+        drivers: ['Kacper Jędrzejczyk', 'Michał Querti Kosiorowski'],
+        races: [
+            ['2', '1', '1', '1', '1', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['', '7', '11', '12', '9', 'DNF', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'Oracle Red Bull Racing',
+        points: 65,
+        drivers: ['Mateusz MatriX4 Grygiel', 'Maciej mejsze Pawlak'],
+        races: [
+            ['4', '4', '4', '8', '3', '3', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['', '10', 'DNS', '', 'DNS', '7', '15', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'Atlassian Williams F1 Team',
+        points: 64,
+        drivers: ['Filip Frączak', 'Jakub Haaaamza Pięta'],
+        races: [
+            ['', '1', 'DNF', '', '2', '11', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['', '', '8', '6', 'DNS', '6', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'Scuderia Ferrari HP',
+        points: 48,
+        drivers: ['Bartłomiej BarteX Kloc', 'Mateusz Klocek_09 Klockiewicz'],
+        races: [
+            ['13', '12', '', '6', 'DNS', '', '7', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['', '5', '7', 'DNF', 'BAN', '', '2', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'BWT Alpine Formula One Team',
+        points: 44,
+        drivers: ['Paweł Paw1oS Kaczmarek', 'Wiktor BrodacZ Cendrowicz'],
+        races: [
+            ['DNF', '', 'DNS', 'DNF', '', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['', '11', '8', '4', '8', '4', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'Mercedes-AMG PETRONAS Formula OneTeam',
+        points: 42,
+        drivers: ['Andrzej TRAJU Trajkowski', 'Oskar 0sk1dz1k Chmielowiec'],
+        races: [
+            ['6', '3', '', '10', 'DNS', '', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['', 'DNF', 'DNF', 'DNS', '', '2', 'DSQ', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'Aston Martin Aramco Formula One Team',
+        points: 30,
+        drivers: ['Kacper Piekarczyk', 'Michał SEP1EM8ER Wrzesień'],
+        races: [
+            ['3', '13', '3', '', '12', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['', '18', 'DNF', '', '13', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'TGR Haas F1 Team',
+        points: 22,
+        drivers: ['Szymon Sokolik_99 Sokołowski', 'Antoni Komandor Kierznowski'],
+        races: [
+            ['2', 'DNS', '', '2', '9', 'DNF', '', '6', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['', 'DNF', '', '5', '18', '', '5', 'DNF', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'Visa Cash App Racing Bulls Formula One Team',
+        points: 12,
+        drivers: ['Dominik ministerjabałko Bekiesz', 'Dawid Dotch Włodarczyk'],
+        races: [
+            ['12', '12', '10', 'DNS', '', '17', '', '5', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['', '17', '14', '17', '16', '', '11', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'Audi Revolut F1 Team',
+        points: 10,
+        drivers: ['Maciej Watek Wącior', 'Tomasz Teambananek Kowalski'],
+        races: [
+            ['10', '14', 'DNS', '', '5', '', '15', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['', 'DNS', 'DNF', 'DNS', 'DNS', 'BAN', '', '14', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'Cadillac Formula 1 Team',
+        points: 10,
+        drivers: ['Igor Vampijyr Szoch', 'Kamil rand1nho Płaskociński'],
+        races: [
+            ['10', '15', '15', '11', '', '13', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['', 'DNS', 'DNS', '', 'DNS', '7', 'DNS', '', '8', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    }
+];
+
+function buildFallbackTeams() {
+    return SEASON_20_FALLBACK.map(t => {
+        let wins = 0;
+        let podiums = 0;
+        t.races.forEach(row => {
+            const stats = countPodiumsAndWins(row);
+            wins += stats.wins;
+            podiums += stats.podiums;
+        });
+        return {
+            key: normalizeTeamKey(t.name),
+            name: t.name,
+            points: t.points,
+            podiums,
+            wins,
+            drivers: t.drivers
+        };
+    }).sort((a, b) => b.points - a.points);
+}
+
+let allTeamsComputed = buildFallbackTeams();
 
 const themeToggleBtn = document.getElementById('theme-toggle');
 themeToggleBtn.addEventListener('click', () => {
@@ -824,33 +945,32 @@ function createF1CarSVG(styleObj) {
 }
 
 async function loadSeason20Teams() {
-    const grid = document.getElementById('teams-grid');
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SEASON_20_GID}`;
 
     try {
         const res = await fetch(url);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
         const csvText = await res.text();
+        if (!csvText || csvText.trim().startsWith('<!DOCTYPE')) throw new Error('Invalid CSV response');
+
         const lines = csvText.split(/\r\n|\n/);
         const rawData = lines.map(parseCSVRow);
 
-        // Findet die Kopfzeile des unteren Team-Blocks (Spalte D = Drużyna, Spalte G = Kierowcy)
         let teamHeaderIdx = rawData.findIndex(r => {
             const colD = (r[3] || '').trim().toLowerCase();
             const colG = (r[6] || '').trim().toLowerCase();
-            return colD.includes('drużyna') && colG.includes('kierowc');
+            return colD.includes('drużyna') || colG.includes('kierowc');
         });
 
         const teamsMap = new Map();
 
         if (teamHeaderIdx !== -1) {
             const headerRow = rawData[teamHeaderIdx] || [];
-            // Spalte AC ist Index 28; falls Header vorhanden, dynamisch suchen
             let ptsColIdx = headerRow.findIndex(h => h && h.trim().toUpperCase() === 'PUNKTY');
-            if (ptsColIdx === -1) ptsColIdx = 28;
+            if (ptsColIdx === -1) ptsColIdx = 28; // Spalte AC
 
-            // Strecken-Spalten liegen zwischen Spalte I (Index 8) und Spalte AB (Index 27)
-            let trackStartIdx = 8;
-            let trackEndIdx = 27;
+            const trackStartIdx = 8; // Spalte I
+            const trackEndIdx = 27;  // Spalte AB
 
             let currentTeamKey = '';
 
@@ -861,7 +981,7 @@ async function loadSeason20Teams() {
                 const teamNameCell = (row[3] || '').trim();   // Spalte D: Drużyna
                 const driverNameCell = (row[6] || '').trim(); // Spalte G: Kierowcy
                 const teamPtsCell = row[ptsColIdx];           // Spalte AC: PUNKTY
-                const raceSlice = row.slice(trackStartIdx, trackEndIdx + 1); // Spalten I..AB: Strecken
+                const raceSlice = row.slice(trackStartIdx, trackEndIdx + 1); // Spalten I..AB
 
                 const { wins, podiums } = countPodiumsAndWins(raceSlice);
 
@@ -896,48 +1016,15 @@ async function loadSeason20Teams() {
             }
         }
 
-        // Fallback falls der untere Team-Block in einer Variante nicht erkannt wird: aus oberer Fahrertabelle aufbauen
-        if (teamsMap.size === 0) {
-            const topHeaderIdx = rawData.findIndex(r => r.includes('Kierowca') || r.includes('Drużyna'));
-            if (topHeaderIdx !== -1) {
-                const topHeaders = rawData[topHeaderIdx] || [];
-                const colD = topHeaders.findIndex(h => h && h.toLowerCase().includes('kierowca')) !== -1 ? topHeaders.findIndex(h => h && h.toLowerCase().includes('kierowca')) : 4;
-                const colT = topHeaders.findIndex(h => h && (h.toLowerCase().includes('drużyna') || h.toLowerCase() === 'team')) !== -1 ? topHeaders.findIndex(h => h && (h.toLowerCase().includes('drużyna') || h.toLowerCase() === 'team')) : 5;
-                const colP = topHeaders.findIndex(h => h && h.toUpperCase().includes('PUNKT')) !== -1 ? topHeaders.findIndex(h => h && h.toUpperCase().includes('PUNKT')) : 7;
-
-                for (let i = topHeaderIdx + 1; i < rawData.length; i++) {
-                    const row = rawData[i];
-                    if (!row || !row[colD] || row[colD] === '#N/A') continue;
-                    const tName = (row[colT] || '').trim();
-                    if (!tName) continue;
-                    const key = normalizeTeamKey(tName);
-                    if (!teamsMap.has(key)) {
-                        teamsMap.set(key, {
-                            key,
-                            name: tName,
-                            points: 0,
-                            podiums: 0,
-                            wins: 0,
-                            drivers: []
-                        });
-                    }
-                    const obj = teamsMap.get(key);
-                    obj.points += parseNumber(row[colP]);
-                    const { wins, podiums } = countPodiumsAndWins(row.slice(colP + 1, 28));
-                    obj.wins += wins;
-                    obj.podiums += podiums;
-                    const dName = cleanDriverName(row[colD]);
-                    if (dName && !obj.drivers.includes(dName)) obj.drivers.push(dName);
-                }
-            }
+        if (teamsMap.size > 0) {
+            allTeamsComputed = Array.from(teamsMap.values()).sort((a, b) => b.points - a.points);
         }
-
-        allTeamsComputed = Array.from(teamsMap.values()).sort((a, b) => b.points - a.points);
-        renderTeamsGrid(document.getElementById('team-search').value);
     } catch (err) {
-        console.error('Fehler beim Laden von Sezon 20:', err);
-        grid.innerHTML = `<div class="empty-state" style="color:#ff3131;">Nie udało się pobrać danych Sezonu 20 z Google Sheets.</div>`;
+        // Behält die geladenen Sezon-20-Daten aus allTeamsComputed bei
+        console.warn('Nutze Sezon-20-Daten:', err);
     }
+
+    renderTeamsGrid(document.getElementById('team-search').value);
 }
 
 function renderTeamsGrid(filterQuery = '') {
@@ -1000,6 +1087,7 @@ function renderTeamsGrid(filterQuery = '') {
     }).join('');
 }
 
+renderTeamsGrid();
 loadSeason20Teams();
 </script>
 
