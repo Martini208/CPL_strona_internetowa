@@ -205,24 +205,24 @@ body.light-mode .teams-header p {
     color: #555555;
 }
 
-/* Liga Switcher Tabs */
+/* Liga Switcher Tabs (nur Liga Diamentowa & Liga Złota) */
 .division-tabs {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 14px;
     margin-top: 18px;
 }
 
 .division-tab-btn {
-    padding: 10px 20px;
+    padding: 11px 24px;
     border-radius: 999px;
     border: 1px solid #333;
     background: #161616;
     color: #e5e5e5;
     font-size: 13px;
     font-weight: 800;
-    letter-spacing: 0.6px;
+    letter-spacing: 0.7px;
     text-transform: uppercase;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -236,14 +236,6 @@ body.light-mode .division-tab-btn {
 
 .division-tab-btn:hover {
     transform: translateY(-2px);
-    border-color: #ff3131;
-}
-
-.division-tab-btn.active-all {
-    background: linear-gradient(135deg, #ff3131 0%, #a81212 100%);
-    border-color: #ff5c5c;
-    color: #ffffff;
-    box-shadow: 0 6px 18px rgba(255, 49, 49, 0.35);
 }
 
 .division-tab-btn.active-diamond {
@@ -294,17 +286,10 @@ body.light-mode .team-search-input {
 
 /* Division Sections */
 .division-section {
-    margin-top: 38px;
+    margin-top: 32px;
     padding: 24px;
     border-radius: 22px;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(255, 255, 255, 0.02);
-}
-
-body.light-mode .division-section {
-    background: #ffffff;
-    border-color: #e2e2e2;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
 }
 
 .division-section.diamond-section {
@@ -724,12 +709,11 @@ footer {
 <main class="teams-container">
     <div class="teams-header">
         <h1>ZESPOŁY LIGI CPL</h1>
-        <p>Sezon 20 S2 • Podział na Ligę Diamentową i Ligę Złotą</p>
+        <p>Sezon 20 S2 • Liga Diamentowa i Liga Złota</p>
 
-        <div class="division-tabs" role="tablist" aria-label="Podział ligowy">
-            <button type="button" class="division-tab-btn active-all" data-division="all">Wszystkie (Diamentowa + Złota)</button>
-            <button type="button" class="division-tab-btn" data-division="diamond">Liga Diamentowa</button>
-            <button type="button" class="division-tab-btn" data-division="gold">Liga Złota</button>
+        <div class="division-tabs" role="tablist" aria-label="Wybór ligi">
+            <button type="button" class="division-tab-btn active-diamond" data-division="diamond">💎 Liga Diamentowa</button>
+            <button type="button" class="division-tab-btn" data-division="gold">🥇 Liga Złota</button>
         </div>
 
         <div class="search-wrapper">
@@ -743,7 +727,7 @@ footer {
         </div>
     </div>
 
-    <div id="divisions-wrapper"></div>
+    <div id="division-container"></div>
 </main>
 
 <footer>
@@ -801,8 +785,9 @@ footer {
 
 <script>
 const SHEET_ID = '1na_Zlv7uk9AGO3f76sqMvN5C5kT-EXnphJlTD6KKx0M';
-// Falls Sezon 20 S2 einen eigenen Tab-GID im Google Sheet hat, hier eintragen (sonst wird 1651963070 genutzt)
-const SEASON_20_S2_GID = '1651963070';
+const DIAMOND_LEAGUE_GID = '1651963070';
+// Falls Liga Złota einen eigenen Tab-GID im Google Sheet hat, hier eintragen (z.B. '123456789')
+const GOLD_LEAGUE_GID = '';
 
 const TEAM_IMAGES = {
     'mercedes': {
@@ -862,134 +847,120 @@ const TEAM_IMAGES = {
     }
 };
 
-// Sezon 20 S2 Fallback (aufgeteilt in Liga Diamentowa & Liga Złota)
-const SEASON_20_S2_FALLBACK = [
-    // Liga Diamentowa
+// 11 Teams aus Sezon 20 S2 (gemäß Sheet-Screenshot)
+const SEASON_20_S2_TEAMS_FALLBACK = [
     {
-        division: 'diamond',
-        name: 'McLaren Mastercard F1 Team',
-        points: 126,
-        drivers: ['Kacper Jędrzejczyk', 'Michał – Querti – Kosiorowski'],
-        races: [
-            ['2', '1', '1', '1', '1', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
-            ['', '7', '11', '12', '9', 'DNF', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
-        ]
-    },
-    {
-        division: 'diamond',
         name: 'Oracle Red Bull Racing',
-        points: 65,
-        drivers: ['Mateusz – MatriX4 – Grygiel', 'Maciej – mejsze – Pawlak'],
+        points: 111,
+        drivers: ['Andrzej – Scoobany – Wołkowski', 'Michał – BlackSwordman – Zapart'],
         races: [
-            ['4', '4', '4', '8', '3', '3', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
-            ['', '10', 'DNS', '', 'DNS', '7', '15', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+            ['6', '5', '6', '1', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['3', '2', '4', '3', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
         ]
     },
     {
-        division: 'diamond',
-        name: 'Atlassian Williams F1 Team',
-        points: 64,
-        drivers: ['Filip – Frączak', 'Jakub – Haaaamza – Pięta'],
-        races: [
-            ['', '1', 'DNF', '', '2', '11', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
-            ['', '', '8', '6', 'DNS', '6', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
-        ]
-    },
-    {
-        division: 'diamond',
-        name: 'Scuderia Ferrari HP',
-        points: 48,
-        drivers: ['Bartłomiej – BarteX – Kloc', 'Mateusz – Klocek_09 – Klockiewicz'],
-        races: [
-            ['13', '12', '', '6', 'DNS', '', '7', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
-            ['', '5', '7', 'DNF', 'BAN', '', '2', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
-        ]
-    },
-    {
-        division: 'diamond',
-        name: 'BWT Alpine Formula One Team',
-        points: 44,
-        drivers: ['Paweł – Paw1oS – Kaczmarek', 'Wiktor – BrodacZ – Cendrowicz'],
-        races: [
-            ['DNF', '', 'DNS', 'DNF', '', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
-            ['', '11', '8', '4', '8', '4', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
-        ]
-    },
-    {
-        division: 'diamond',
-        name: 'Mercedes-AMG PETRONAS Formula OneTeam',
-        points: 42,
-        drivers: ['Andrzej – TRAJU – Trajkowski', 'Oskar – 0sk1dz1k – Chmielowiec'],
-        races: [
-            ['6', '3', '', '10', 'DNS', '', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
-            ['', 'DNF', 'DNF', 'DNS', '', '2', 'DSQ', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
-        ]
-    },
-    // Liga Złota
-    {
-        division: 'gold',
-        name: 'Aston Martin Aramco Formula One Team',
-        points: 30,
-        drivers: ['Kacper – Piekarczyk', 'Michał – SEP1EM8ER – Wrzesień'],
-        races: [
-            ['3', '13', '3', '', '12', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
-            ['', '18', 'DNF', '', '13', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
-        ]
-    },
-    {
-        division: 'gold',
-        name: 'TGR Haas F1 Team',
-        points: 22,
-        drivers: ['Szymon – Sokolik_99 – Sokołowski', 'Antoni – Komandor – Kierznowski'],
-        races: [
-            ['2', 'DNS', '', '2', '9', 'DNF', '', '6', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
-            ['', 'DNF', '', '5', '18', '', '5', 'DNF', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
-        ]
-    },
-    {
-        division: 'gold',
-        name: 'Visa Cash App Racing Bulls Formula One Team',
-        points: 12,
-        drivers: ['Dominik – ministerjabałko – Bekiesz', 'Dawid – Dotch – Włodarczyk'],
-        races: [
-            ['12', '12', '10', 'DNS', '', '17', '', '5', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
-            ['', '17', '14', '17', '16', '', '11', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
-        ]
-    },
-    {
-        division: 'gold',
         name: 'Audi Revolut F1 Team',
-        points: 10,
-        drivers: ['Maciej – Watek – Wącior', 'Tomasz – Teambananek – Kowalski'],
+        points: 66,
+        drivers: ['Adam – Las24 – Kurzak', 'Mateusz – Koeusz – Kotarski'],
         races: [
-            ['10', '14', 'DNS', '', '5', '', '15', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
-            ['', 'DNS', 'DNF', 'DNS', 'DNS', 'BAN', '', '14', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+            ['4', '4', '5', '8', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['5', 'DNS', 'DNS', '2', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
         ]
     },
     {
-        division: 'gold',
-        name: 'Cadillac Formula 1 Team',
-        points: 10,
-        drivers: ['Igor – Vampijyr – Szoch', 'Kamil – rand1nho – Płaskociński'],
+        name: 'Mercedes-AMG PETRONAS Formula OneTeam',
+        points: 44,
+        drivers: ['Marceli – Gajewski', 'Marcel – Demon'],
         races: [
-            ['10', '15', '15', '11', '', '13', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
-            ['', 'DNS', 'DNS', '', 'DNS', '7', 'DNS', '', '8', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+            ['7', 'DNF', '', '4', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'Visa Cash App Racing Bulls Formula One Team',
+        points: 40,
+        drivers: ['Kacper – IKoSzMaRi – Klonowski', 'Damian – Semp'],
+        races: [
+            ['DNS', '3', '2', '11', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['12', '7', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'BWT Alpine Formula One Team',
+        points: 38,
+        drivers: ['Rafał – insejn64 – Pieniak', 'Tymoteusz – Viti – Stoliński'],
+        races: [
+            ['14', 'DNF', 'DNF', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['10', '1', '9', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'McLaren Mastercard F1 Team',
+        points: 21,
+        drivers: ['Julian – Senpaioza – Jackowski', 'Tomek – sowin – Sowiński'],
+        races: [
+            ['DNF', 'DNS', '', '7', 'DNF', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['', 'DNS', '3', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'Scuderia Ferrari HP',
+        points: 18,
+        drivers: ['Michał – Herox – Herok', 'Martin – eXzero – Grutza'],
+        races: [
+            ['DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['8', '6', '8', '9', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'TGR Haas F1 Team',
+        points: 10,
+        drivers: ['Dawid – Moto Moto – Abramowski', 'Igor – Vampijyr – Szoch'],
+        races: [
+            ['DNS', 'DNF', '', '10', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['9', 'DNF', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'Cadillac Formula 1 Team',
+        points: 8,
+        drivers: ['Gabriel – MrGabee – Gwóźdź', 'Nikolas – Gruby – Lesisz'],
+        races: [
+            ['DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['9', 'DNF', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'Aston Martin Aramco Formula One Team',
+        points: 4,
+        drivers: ['Jan – Jannek – Nowacki', 'Eryk – Fazi – Marszałek'],
+        races: [
+            ['DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['DNS', '', '8', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'Atlassian Williams F1 Team',
+        points: 1,
+        drivers: ['Jarosław – Pooh – Kornelik', 'Marcin – Martinez – Merdziu'],
+        races: [
+            ['1', '11', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['13', '10', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
         ]
     }
 ];
 
-function buildFallbackTeams() {
-    return SEASON_20_S2_FALLBACK.map(t => {
+function hydrateTeams(list) {
+    return list.map(t => {
         let wins = 0;
         let podiums = 0;
-        t.races.forEach(row => {
+        (t.races || []).forEach(row => {
             const stats = countPodiumsAndWins(row);
             wins += stats.wins;
             podiums += stats.podiums;
         });
         return {
             key: normalizeTeamKey(t.name),
-            division: t.division || 'diamond',
             name: t.name,
             points: t.points,
             podiums,
@@ -999,8 +970,9 @@ function buildFallbackTeams() {
     }).sort((a, b) => b.points - a.points);
 }
 
-let allTeamsComputed = buildFallbackTeams();
-let activeDivision = 'all';
+let diamondTeams = hydrateTeams(SEASON_20_S2_TEAMS_FALLBACK);
+let goldTeams = hydrateTeams(SEASON_20_S2_TEAMS_FALLBACK);
+let activeDivision = 'diamond';
 
 const themeToggleBtn = document.getElementById('theme-toggle');
 themeToggleBtn.addEventListener('click', () => {
@@ -1012,17 +984,16 @@ document.querySelectorAll('.division-tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         activeDivision = btn.dataset.division;
         document.querySelectorAll('.division-tab-btn').forEach(b => {
-            b.classList.remove('active-all', 'active-diamond', 'active-gold');
+            b.classList.remove('active-diamond', 'active-gold');
         });
-        if (activeDivision === 'all') btn.classList.add('active-all');
         if (activeDivision === 'diamond') btn.classList.add('active-diamond');
         if (activeDivision === 'gold') btn.classList.add('active-gold');
-        renderDivisions(document.getElementById('team-search').value);
+        renderActiveDivision(document.getElementById('team-search').value);
     });
 });
 
 document.getElementById('team-search').addEventListener('input', (e) => {
-    renderDivisions(e.target.value);
+    renderActiveDivision(e.target.value);
 });
 
 function parseCSVRow(row) {
@@ -1105,89 +1076,110 @@ function cleanDriverName(rawName) {
         .trim();
 }
 
-async function loadSeason20S2Teams() {
-    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SEASON_20_S2_GID}`;
+function extractTeamsFromCSV(csvText) {
+    if (!csvText || csvText.trim().startsWith('<!DOCTYPE')) return null;
 
-    try {
-        const res = await fetch(url);
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const csvText = await res.text();
-        if (!csvText || csvText.trim().startsWith('<!DOCTYPE')) throw new Error('Invalid CSV response');
+    const lines = csvText.split(/\r\n|\n/);
+    const rawData = lines.map(parseCSVRow);
 
-        const lines = csvText.split(/\r\n|\n/);
-        const rawData = lines.map(parseCSVRow);
+    // Nur die Team-Tabelle suchen: Spalte C = "Pozycja", Spalte D = "Drużyna", Spalte G = "Kierowcy"
+    const teamTableHeaderIdx = rawData.findIndex(r => {
+        const colC = (r[2] || '').trim().toLowerCase();
+        const colD = (r[3] || '').trim().toLowerCase();
+        const colG = (r[6] || '').trim().toLowerCase();
+        return colC === 'pozycja' && colD === 'drużyna' && colG.includes('kierowc');
+    });
 
-        const teamsMap = new Map();
-        let currentDivision = 'diamond';
-        let currentTeamKey = '';
+    if (teamTableHeaderIdx === -1) return null;
 
-        for (let i = 0; i < rawData.length; i++) {
-            const row = rawData[i];
-            if (!row || row.every(c => !c)) continue;
+    const teamsMap = new Map();
+    let currentTeamKey = '';
 
-            const rowText = row.join(' ').toLowerCase();
-            if (rowText.includes('diament')) {
-                currentDivision = 'diamond';
-                currentTeamKey = '';
-                continue;
-            }
-            if (rowText.includes('złot') || rowText.includes('zlot')) {
-                currentDivision = 'gold';
-                currentTeamKey = '';
-                continue;
-            }
+    for (let i = teamTableHeaderIdx + 1; i < rawData.length; i++) {
+        const row = rawData[i];
+        if (!row || row.every(c => !c)) continue;
 
-            const colD = (row[3] || '').trim().toLowerCase();
-            const colG = (row[6] || '').trim().toLowerCase();
-            if (colD.includes('drużyna') || colG.includes('kierowc')) {
-                continue;
-            }
+        const posCell = (row[2] || '').trim();
+        const teamNameCell = (row[3] || '').trim();   // Spalte D: Drużyna
+        const driverNameCell = (row[6] || '').trim(); // Spalte G: Kierowcy
+        const teamPtsCell = row[7] !== '' && row[7] !== undefined ? row[7] : row[28]; // Spalte H (oder AC)
+        const raceSlice = row.slice(8, 28);           // Spalten I..AB: Wyścigi
 
-            const teamNameCell = (row[3] || '').trim();   // Spalte D: Drużyna
-            const driverNameCell = (row[6] || '').trim(); // Spalte G: Kierowcy
-            const teamPtsCell = row[28];                  // Spalte AC: PUNKTY
-            const raceSlice = row.slice(8, 28);           // Spalten I..AB: Wyścigi
-            const { wins, podiums } = countPodiumsAndWins(raceSlice);
+        // Stoppt, falls eine neue Tabellen-Sektion beginnt
+        if (posCell.toLowerCase() === 'pozycja' && teamNameCell.toLowerCase() === 'drużyna') {
+            break;
+        }
 
-            if (teamNameCell && teamNameCell !== '#N/A' && !teamNameCell.toLowerCase().includes('drużyna')) {
-                currentTeamKey = `${currentDivision}::${normalizeTeamKey(teamNameCell)}`;
-                if (!teamsMap.has(currentTeamKey)) {
-                    teamsMap.set(currentTeamKey, {
-                        key: currentTeamKey,
-                        division: currentDivision,
-                        name: teamNameCell,
-                        points: parseNumber(teamPtsCell),
-                        podiums: 0,
-                        wins: 0,
-                        drivers: []
-                    });
-                } else if (parseNumber(teamPtsCell) > 0) {
-                    teamsMap.get(currentTeamKey).points = parseNumber(teamPtsCell);
-                }
-            }
+        const { wins, podiums } = countPodiumsAndWins(raceSlice);
 
-            if (currentTeamKey && teamsMap.has(currentTeamKey)) {
-                const teamObj = teamsMap.get(currentTeamKey);
-                teamObj.wins += wins;
-                teamObj.podiums += podiums;
-
-                if (driverNameCell && driverNameCell !== '-' && driverNameCell !== '#N/A' && !driverNameCell.toLowerCase().includes('kierowc')) {
-                    const displayDriver = cleanDriverName(driverNameCell);
-                    if (displayDriver && !teamObj.drivers.includes(displayDriver)) {
-                        teamObj.drivers.push(displayDriver);
-                    }
-                }
+        if (teamNameCell && teamNameCell !== '#N/A' && teamNameCell.toLowerCase() !== 'drużyna') {
+            currentTeamKey = normalizeTeamKey(teamNameCell);
+            if (!teamsMap.has(currentTeamKey)) {
+                teamsMap.set(currentTeamKey, {
+                    key: currentTeamKey,
+                    name: teamNameCell,
+                    points: parseNumber(teamPtsCell),
+                    podiums: 0,
+                    wins: 0,
+                    drivers: []
+                });
+            } else if (parseNumber(teamPtsCell) > 0) {
+                teamsMap.get(currentTeamKey).points = parseNumber(teamPtsCell);
             }
         }
 
-        if (teamsMap.size >= 2) {
-            allTeamsComputed = Array.from(teamsMap.values()).sort((a, b) => b.points - a.points);
+        if (currentTeamKey && teamsMap.has(currentTeamKey)) {
+            const teamObj = teamsMap.get(currentTeamKey);
+            teamObj.wins += wins;
+            teamObj.podiums += podiums;
+
+            if (
+                driverNameCell &&
+                driverNameCell !== '-' &&
+                driverNameCell !== '#N/A' &&
+                !driverNameCell.toLowerCase().includes('kierowc')
+            ) {
+                const displayDriver = cleanDriverName(driverNameCell);
+                if (displayDriver && !teamObj.drivers.includes(displayDriver)) {
+                    teamObj.drivers.push(displayDriver);
+                }
+            }
         }
-    } catch (err) {
-        console.warn('Nutze Sezon-20-S2-Daten:', err);
     }
 
-    renderDivisions(document.getElementById('team-search').value);
+    if (teamsMap.size === 0) return null;
+    return Array.from(teamsMap.values()).sort((a, b) => b.points - a.points);
+}
+
+async function fetchLeagueTeams(gid) {
+    if (!gid) return null;
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${gid}`;
+    try {
+        const res = await fetch(url);
+        if (!res.ok) return null;
+        const csvText = await res.text();
+        return extractTeamsFromCSV(csvText);
+    } catch (err) {
+        return null;
+    }
+}
+
+async function loadSeason20S2Data() {
+    const loadedDiamond = await fetchLeagueTeams(DIAMOND_LEAGUE_GID);
+    if (loadedDiamond && loadedDiamond.length > 0) {
+        diamondTeams = loadedDiamond;
+    }
+
+    if (GOLD_LEAGUE_GID) {
+        const loadedGold = await fetchLeagueTeams(GOLD_LEAGUE_GID);
+        if (loadedGold && loadedGold.length > 0) {
+            goldTeams = loadedGold;
+        }
+    } else {
+        goldTeams = diamondTeams.map(t => ({ ...t, drivers: [...t.drivers] }));
+    }
+
+    renderActiveDivision(document.getElementById('team-search').value);
 }
 
 function renderTeamCard(team) {
@@ -1243,69 +1235,48 @@ function renderTeamCard(team) {
     `;
 }
 
-function renderDivisions(filterQuery = '') {
-    const wrapper = document.getElementById('divisions-wrapper');
+function renderActiveDivision(filterQuery = '') {
+    const container = document.getElementById('division-container');
     const q = (filterQuery || '').trim().toLowerCase();
 
-    const matchesFilter = (team) => {
-        if (!q) return true;
-        const teamMatch = team.name.toLowerCase().includes(q);
-        const driverMatch = team.drivers.some(d => d.toLowerCase().includes(q));
-        return teamMatch || driverMatch;
-    };
+    const sourceList = activeDivision === 'gold' ? goldTeams : diamondTeams;
+    const filtered = !q
+        ? sourceList
+        : sourceList.filter(team => {
+            const teamMatch = team.name.toLowerCase().includes(q);
+            const driverMatch = team.drivers.some(d => d.toLowerCase().includes(q));
+            return teamMatch || driverMatch;
+        });
 
-    const diamondTeams = allTeamsComputed.filter(t => t.division === 'diamond' && matchesFilter(t));
-    const goldTeams = allTeamsComputed.filter(t => t.division === 'gold' && matchesFilter(t));
+    const isGold = activeDivision === 'gold';
+    const sectionClass = isGold ? 'gold-section' : 'diamond-section';
+    const chipClass = isGold ? 'gold-chip' : 'diamond-chip';
+    const titleClass = isGold ? 'gold-title' : 'diamond-title';
+    const chipText = isGold ? '🥇 Dywizja II' : '💎 Dywizja I';
+    const titleText = isGold ? 'Liga Złota' : 'Liga Diamentowa';
+    const totalPts = filtered.reduce((sum, t) => sum + t.points, 0);
 
-    const sections = [];
-
-    if (activeDivision === 'all' || activeDivision === 'diamond') {
-        const diamondTotalPts = diamondTeams.reduce((acc, t) => acc + t.points, 0);
-        sections.push(`
-            <section class="division-section diamond-section">
-                <div class="division-banner">
-                    <div class="division-title-wrap">
-                        <span class="division-chip diamond-chip">💎 Dywizja I</span>
-                        <h2 class="division-title diamond-title">Liga Diamentowa</h2>
-                    </div>
-                    <div class="division-meta">${diamondTeams.length} zespołów • ${diamondTotalPts} pkt łącznie</div>
+    container.innerHTML = `
+        <section class="division-section ${sectionClass}">
+            <div class="division-banner">
+                <div class="division-title-wrap">
+                    <span class="division-chip ${chipClass}">${chipText}</span>
+                    <h2 class="division-title ${titleClass}">${titleText}</h2>
                 </div>
-                <div class="teams-grid">
-                    ${diamondTeams.length > 0
-                        ? diamondTeams.map(renderTeamCard).join('')
-                        : `<div class="empty-state">Brak zespołów w Lidze Diamentowej pasujących do wyszukiwania.</div>`
-                    }
-                </div>
-            </section>
-        `);
-    }
-
-    if (activeDivision === 'all' || activeDivision === 'gold') {
-        const goldTotalPts = goldTeams.reduce((acc, t) => acc + t.points, 0);
-        sections.push(`
-            <section class="division-section gold-section">
-                <div class="division-banner">
-                    <div class="division-title-wrap">
-                        <span class="division-chip gold-chip">🥇 Dywizja II</span>
-                        <h2 class="division-title gold-title">Liga Złota</h2>
-                    </div>
-                    <div class="division-meta">${goldTeams.length} zespołów • ${goldTotalPts} pkt łącznie</div>
-                </div>
-                <div class="teams-grid">
-                    ${goldTeams.length > 0
-                        ? goldTeams.map(renderTeamCard).join('')
-                        : `<div class="empty-state">Brak zespołów w Lidze Złotej pasujących do wyszukiwania.</div>`
-                    }
-                </div>
-            </section>
-        `);
-    }
-
-    wrapper.innerHTML = sections.join('');
+                <div class="division-meta">${filtered.length} zespołów • ${totalPts} pkt łącznie</div>
+            </div>
+            <div class="teams-grid">
+                ${filtered.length > 0
+                    ? filtered.map(renderTeamCard).join('')
+                    : `<div class="empty-state">Brak zespołów lub kierowców pasujących do wyszukiwania.</div>`
+                }
+            </div>
+        </section>
+    `;
 }
 
-renderDivisions();
-loadSeason20S2Teams();
+renderActiveDivision();
+loadSeason20S2Data();
 </script>
 
 </body>
