@@ -189,18 +189,14 @@ nav a:hover {
 
 .teams-header h1 {
     font-size: 36px;
-    color: #ffffff;
+    color: #ff3131;
     text-transform: uppercase;
     letter-spacing: 1px;
     font-weight: 900;
 }
 
-body.light-mode .teams-header h1 {
-    color: #111111;
-}
-
 .teams-header p {
-    color: #a5a5a5;
+    color: #b5b5b5;
     font-size: 14px;
     margin-top: 8px;
 }
@@ -241,7 +237,7 @@ body.light-mode .team-search-input {
     color: #777777;
 }
 
-/* Grid der Team-Karten */
+/* Grid der Team-Karten wie auf den Original-Screenshots */
 .teams-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -252,7 +248,7 @@ body.light-mode .team-search-input {
     position: relative;
     border-radius: 18px;
     padding: 24px 26px;
-    min-height: 225px;
+    min-height: 235px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -283,20 +279,25 @@ body.light-mode .team-search-input {
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
 }
 
-.team-badge-mark {
+.team-logo-circle {
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background: rgba(0, 0, 0, 0.28);
+    background: rgba(0, 0, 0, 0.32);
     border: 1px solid rgba(255, 255, 255, 0.28);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 900;
-    font-size: 13px;
-    letter-spacing: 0.5px;
-    color: #ffffff;
+    padding: 7px;
     flex-shrink: 0;
+    overflow: hidden;
+}
+
+.team-logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
 }
 
 .drivers-pills {
@@ -304,7 +305,7 @@ body.light-mode .team-search-input {
     flex-wrap: wrap;
     gap: 8px;
     margin-top: 12px;
-    max-width: 72%;
+    max-width: 74%;
     z-index: 2;
 }
 
@@ -323,7 +324,7 @@ body.light-mode .team-search-input {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin-top: 22px;
+    margin-top: 20px;
     z-index: 2;
     gap: 12px;
 }
@@ -346,7 +347,7 @@ body.light-mode .team-search-input {
     font-weight: 800;
     letter-spacing: 0.8px;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.82);
     margin-bottom: 3px;
 }
 
@@ -365,10 +366,12 @@ body.light-mode .team-search-input {
     margin-left: auto;
 }
 
-.f1-car-svg {
-    width: 195px;
-    height: auto;
-    filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.45));
+.f1-car-img {
+    width: 225px;
+    max-height: 82px;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.5));
 }
 
 .empty-state {
@@ -510,7 +513,7 @@ footer {
     nav ul { flex-wrap: wrap; justify-content: center; }
     .nav-right { flex-wrap: wrap; justify-content: center; }
     .team-box-bottom { flex-direction: column; align-items: flex-start; }
-    .f1-car-svg { width: 170px; }
+    .f1-car-img { width: 190px; }
 }
 </style>
 </head>
@@ -559,7 +562,7 @@ footer {
 <main class="teams-container">
     <div class="teams-header">
         <h1>ZESPOŁY LIGI CPL</h1>
-        <p>Kierowcy, punkty, podia i wygrane na podstawie danych z Sezonu 20</p>
+        <p>Znajdź aktualne zespoły Formuły 1 i ich kierowców w Sezonie 20</p>
         <div class="search-wrapper">
             <input
                 type="text"
@@ -631,76 +634,65 @@ footer {
 const SHEET_ID = '1na_Zlv7uk9AGO3f76sqMvN5C5kT-EXnphJlTD6KKx0M';
 const SEASON_20_GID = '1651963070';
 
-const TEAM_STYLES = {
-    'mclaren': {
-        short: 'MCL',
-        gradient: 'linear-gradient(135deg, #ff6a00 0%, #e04800 100%)',
-        carMain: '#ff7b00',
-        carAccent: '#111111'
-    },
-    'red bull': {
-        short: 'RBR',
-        gradient: 'linear-gradient(135deg, #1b439b 0%, #0d2359 100%)',
-        carMain: '#1e41ff',
-        carAccent: '#ffd400'
-    },
-    'williams': {
-        short: 'WIL',
-        gradient: 'linear-gradient(135deg, #0077d4 0%, #004785 100%)',
-        carMain: '#0082fa',
-        carAccent: '#ffffff'
+const TEAM_ASSETS = {
+    'mercedes': {
+        gradient: 'linear-gradient(135deg, #00a19b 0%, #006c67 100%)',
+        logo: 'https://commons.wikimedia.org/wiki/Special:FilePath/Mercedes_AMG_Petronas_F1_Logo.svg',
+        car: 'https://commons.wikimedia.org/wiki/Special:FilePath/Mercedes_W15_side.png'
     },
     'ferrari': {
-        short: 'FER',
-        gradient: 'linear-gradient(135deg, #d91c1c 0%, #8f0a0a 100%)',
-        carMain: '#e80020',
-        carAccent: '#ffffff'
+        gradient: 'linear-gradient(135deg, #d91c1c 0%, #8c0909 100%)',
+        logo: 'https://commons.wikimedia.org/wiki/Special:FilePath/Scuderia_Ferrari_logo.svg',
+        car: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ferrari_SF-24_side.png'
     },
-    'alpine': {
-        short: 'ALP',
-        gradient: 'linear-gradient(135deg, #0077b6 0%, #c93b8b 100%)',
-        carMain: '#0082c8',
-        carAccent: '#ff77b5'
+    'mclaren': {
+        gradient: 'linear-gradient(135deg, #ff6a00 0%, #d94800 100%)',
+        logo: 'https://commons.wikimedia.org/wiki/Special:FilePath/McLaren_Racing_logo.svg',
+        car: 'https://commons.wikimedia.org/wiki/Special:FilePath/McLaren_MCL38_side.png'
     },
-    'mercedes': {
-        short: 'MER',
-        gradient: 'linear-gradient(135deg, #00a19b 0%, #006663 100%)',
-        carMain: '#00d2be',
-        carAccent: '#181818'
-    },
-    'aston martin': {
-        short: 'AMR',
-        gradient: 'linear-gradient(135deg, #006f62 0%, #003d35 100%)',
-        carMain: '#006f62',
-        carAccent: '#cedc00'
-    },
-    'haas': {
-        short: 'HAA',
-        gradient: 'linear-gradient(135deg, #b6babd 0%, #555a60 100%)',
-        carMain: '#e6e8ea',
-        carAccent: '#e10600'
+    'red bull': {
+        gradient: 'linear-gradient(135deg, #1b439b 0%, #0d2254 100%)',
+        logo: 'https://commons.wikimedia.org/wiki/Special:FilePath/Red_Bull_Racing_logo.svg',
+        car: 'https://commons.wikimedia.org/wiki/Special:FilePath/Red_Bull_RB20_side.png'
     },
     'racing bulls': {
-        short: 'VCARB',
-        gradient: 'linear-gradient(135deg, #2b45e2 0%, #15237a 100%)',
-        carMain: '#3658ff',
-        carAccent: '#ffffff'
+        gradient: 'linear-gradient(135deg, #2b45e2 0%, #142278 100%)',
+        logo: 'https://commons.wikimedia.org/wiki/Special:FilePath/Visa_Cash_App_RB_logo.svg',
+        car: 'https://commons.wikimedia.org/wiki/Special:FilePath/VCARB_01_side.png'
+    },
+    'alpine': {
+        gradient: 'linear-gradient(135deg, #0077b6 0%, #b83280 100%)',
+        logo: 'https://commons.wikimedia.org/wiki/Special:FilePath/Alpine_F1_Team_logo.svg',
+        car: 'https://commons.wikimedia.org/wiki/Special:FilePath/Alpine_A524_side.png'
+    },
+    'williams': {
+        gradient: 'linear-gradient(135deg, #0077d4 0%, #004582 100%)',
+        logo: 'https://commons.wikimedia.org/wiki/Special:FilePath/Williams_Racing_logo_2022.svg',
+        car: 'https://commons.wikimedia.org/wiki/Special:FilePath/Williams_FW46_side.png'
+    },
+    'aston martin': {
+        gradient: 'linear-gradient(135deg, #006f62 0%, #003d35 100%)',
+        logo: 'https://commons.wikimedia.org/wiki/Special:FilePath/Aston_Martin_Cognizant_F1_logo.svg',
+        car: 'https://commons.wikimedia.org/wiki/Special:FilePath/Aston_Martin_AMR24_side.png'
+    },
+    'haas': {
+        gradient: 'linear-gradient(135deg, #9fa4a8 0%, #4a4e54 100%)',
+        logo: 'https://commons.wikimedia.org/wiki/Special:FilePath/Haas_F1_Team_logo.svg',
+        car: 'https://commons.wikimedia.org/wiki/Special:FilePath/Haas_VF-24_side.png'
     },
     'audi': {
-        short: 'AUD',
-        gradient: 'linear-gradient(135deg, #4b4e54 0%, #1c1d20 100%)',
-        carMain: '#d8dce0',
-        carAccent: '#f50537'
+        gradient: 'linear-gradient(135deg, #4b4e54 0%, #1a1c20 100%)',
+        logo: 'https://commons.wikimedia.org/wiki/Special:FilePath/Audi_F1_logo.svg',
+        car: 'https://commons.wikimedia.org/wiki/Special:FilePath/Kick_Sauber_C44_side.png'
     },
     'cadillac': {
-        short: 'CAD',
-        gradient: 'linear-gradient(135deg, #2f353d 0%, #121519 100%)',
-        carMain: '#cfd6de',
-        carAccent: '#b8963f'
+        gradient: 'linear-gradient(135deg, #2e343c 0%, #121519 100%)',
+        logo: 'https://commons.wikimedia.org/wiki/Special:FilePath/Cadillac_logo.svg',
+        car: 'https://commons.wikimedia.org/wiki/Special:FilePath/Red_Bull_RB20_side.png'
     }
 };
 
-// Fallback aus deinen Sezon-20-Screenshots (Spalte D = Drużyna, Spalte G = Kierowcy, Spalten I..AB = Wyścigi, Spalte AC = Punkty)
+// Fallback Sezon 20 (Spalte D = Drużyna, Spalte G = Kierowcy, Spalten I..AB = Wyścigi, Spalte AC = Punkty)
 const SEASON_20_FALLBACK = [
     {
         name: 'McLaren Mastercard F1 Team',
@@ -878,22 +870,12 @@ function normalizeTeamKey(name) {
     return n.trim();
 }
 
-function getTeamStyle(teamName) {
+function getTeamAssets(teamName) {
     const key = normalizeTeamKey(teamName);
-    if (TEAM_STYLES[key]) {
-        return TEAM_STYLES[key];
-    }
-    const initials = (teamName || 'CPL')
-        .split(/\s+/)
-        .filter(Boolean)
-        .slice(0, 2)
-        .map(w => w[0].toUpperCase())
-        .join('');
-    return {
-        short: initials || 'CPL',
+    return TEAM_ASSETS[key] || {
         gradient: 'linear-gradient(135deg, #c81e2b 0%, #680d14 100%)',
-        carMain: '#ff3131',
-        carAccent: '#ffffff'
+        logo: 'images/cpl_logo_lizard.png',
+        car: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ferrari_SF-24_side.png'
     };
 }
 
@@ -925,25 +907,6 @@ function cleanDriverName(rawName) {
         .trim();
 }
 
-function createF1CarSVG(styleObj) {
-    return `
-        <svg class="f1-car-svg" viewBox="0 0 240 72" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M22 46L34 42L66 37L118 33L168 35L204 39L218 44L214 50L188 51L152 50L92 50L44 51L22 49V46Z" fill="${styleObj.carMain}"/>
-            <path d="M84 35L106 25L134 26L146 35H84Z" fill="#181818"/>
-            <path d="M94 33L110 27L129 28L137 33H94Z" fill="#2c333d"/>
-            <path d="M52 40L186 40L182 44L56 44L52 40Z" fill="${styleObj.carAccent}"/>
-            <path d="M26 36L42 36L40 46L24 46L26 36Z" fill="${styleObj.carAccent}"/>
-            <path d="M204 38L222 36L220 49L202 48L204 38Z" fill="${styleObj.carAccent}"/>
-            <circle cx="64" cy="50" r="12" fill="#121212"/>
-            <circle cx="64" cy="50" r="6" fill="#4a4e54"/>
-            <circle cx="64" cy="50" r="2.5" fill="#d0d4da"/>
-            <circle cx="182" cy="50" r="12" fill="#121212"/>
-            <circle cx="182" cy="50" r="6" fill="#4a4e54"/>
-            <circle cx="182" cy="50" r="2.5" fill="#d0d4da"/>
-        </svg>
-    `;
-}
-
 async function loadSeason20Teams() {
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SEASON_20_GID}`;
 
@@ -956,7 +919,7 @@ async function loadSeason20Teams() {
         const lines = csvText.split(/\r\n|\n/);
         const rawData = lines.map(parseCSVRow);
 
-        let teamHeaderIdx = rawData.findIndex(r => {
+        const teamHeaderIdx = rawData.findIndex(r => {
             const colD = (r[3] || '').trim().toLowerCase();
             const colG = (r[6] || '').trim().toLowerCase();
             return colD.includes('drużyna') || colG.includes('kierowc');
@@ -1020,7 +983,6 @@ async function loadSeason20Teams() {
             allTeamsComputed = Array.from(teamsMap.values()).sort((a, b) => b.points - a.points);
         }
     } catch (err) {
-        // Behält die geladenen Sezon-20-Daten aus allTeamsComputed bei
         console.warn('Nutze Sezon-20-Daten:', err);
     }
 
@@ -1045,13 +1007,13 @@ function renderTeamsGrid(filterQuery = '') {
     }
 
     grid.innerHTML = filtered.map(team => {
-        const styleObj = getTeamStyle(team.name);
+        const assets = getTeamAssets(team.name);
         const pillsHtml = team.drivers.length > 0
             ? team.drivers.map(d => `<span class="driver-pill">${d}</span>`).join('')
             : `<span class="driver-pill">Brak kierowców</span>`;
 
         return `
-            <article class="team-box" style="background: ${styleObj.gradient};">
+            <article class="team-box" style="background: ${assets.gradient};">
                 <div class="team-box-top">
                     <div>
                         <h2 class="team-name">${team.name}</h2>
@@ -1059,7 +1021,14 @@ function renderTeamsGrid(filterQuery = '') {
                             ${pillsHtml}
                         </div>
                     </div>
-                    <div class="team-badge-mark">${styleObj.short}</div>
+                    <div class="team-logo-circle">
+                        <img
+                            src="${assets.logo}"
+                            alt="${team.name} logo"
+                            class="team-logo-img"
+                            onerror="this.onerror=null; this.src='images/cpl_logo_lizard.png';"
+                        >
+                    </div>
                 </div>
 
                 <div class="team-box-bottom">
@@ -1079,7 +1048,12 @@ function renderTeamsGrid(filterQuery = '') {
                     </div>
 
                     <div class="team-car-visual">
-                        ${createF1CarSVG(styleObj)}
+                        <img
+                            src="${assets.car}"
+                            alt="${team.name} F1 car"
+                            class="f1-car-img"
+                            onerror="this.style.display='none';"
+                        >
                     </div>
                 </div>
             </article>
