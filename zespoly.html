@@ -846,6 +846,7 @@ const TEAM_IMAGES = {
     }
 };
 
+// Liga Diamentowa = Sezon 20
 const SEASON_20_TEAMS_FALLBACK = [
     {
         name: 'McLaren Mastercard F1 Team',
@@ -948,6 +949,109 @@ const SEASON_20_TEAMS_FALLBACK = [
     }
 ];
 
+// Liga Złota = Sezon 20 S2
+const SEASON_20_S2_TEAMS_FALLBACK = [
+    {
+        name: 'Oracle Red Bull Racing',
+        points: 111,
+        drivers: ['Andrzej – Scoobany – Wołkowski', 'Michał – BlackSwordman – Zapart'],
+        races: [
+            ['6', '5', '6', '1', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['3', '2', '4', '3', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'Audi Revolut F1 Team',
+        points: 66,
+        drivers: ['Adam – Las24 – Kurzak', 'Mateusz – Koeusz – Kotarski'],
+        races: [
+            ['4', '4', '5', '8', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['5', 'DNS', 'DNS', '2', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'Mercedes-AMG PETRONAS Formula OneTeam',
+        points: 44,
+        drivers: ['Marceli – Gajewski', 'Marcel – Demon'],
+        races: [
+            ['7', 'DNF', '', '4', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'Visa Cash App Racing Bulls Formula One Team',
+        points: 40,
+        drivers: ['Kacper – IKoSzMaRi – Klonowski', 'Damian – Semp'],
+        races: [
+            ['DNS', '3', '2', '11', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['12', '7', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'BWT Alpine Formula One Team',
+        points: 38,
+        drivers: ['Rafał – insejn64 – Pieniak', 'Tymoteusz – Viti – Stoliński'],
+        races: [
+            ['14', 'DNF', 'DNF', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['10', '1', '9', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'McLaren Mastercard F1 Team',
+        points: 21,
+        drivers: ['Julian – Senpaioza – Jackowski', 'Tomek – sowin – Sowiński'],
+        races: [
+            ['DNF', 'DNS', '', '7', 'DNF', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['', 'DNS', '3', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'Scuderia Ferrari HP',
+        points: 18,
+        drivers: ['Michał – Herox – Herok', 'Martin – eXzero – Grutza'],
+        races: [
+            ['DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['8', '6', '8', '9', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'TGR Haas F1 Team',
+        points: 10,
+        drivers: ['Dawid – Moto Moto – Abramowski', 'Igor – Vampijyr – Szoch'],
+        races: [
+            ['DNS', 'DNF', '', '10', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['9', 'DNF', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'Cadillac Formula 1 Team',
+        points: 8,
+        drivers: ['Gabriel – MrGabee – Gwóźdź', 'Nikolas – Gruby – Lesisz'],
+        races: [
+            ['DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['9', 'DNF', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'Aston Martin Aramco Formula One Team',
+        points: 4,
+        drivers: ['Jan – Jannek – Nowacki', 'Eryk – Fazi – Marszałek'],
+        races: [
+            ['DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['DNS', '', '8', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    },
+    {
+        name: 'Atlassian Williams F1 Team',
+        points: 1,
+        drivers: ['Jarosław – Pooh – Kornelik', 'Marcin – Martinez – Merdziu'],
+        races: [
+            ['1', '11', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS'],
+            ['13', '10', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS', 'DNS']
+        ]
+    }
+];
+
 function hydrateTeams(list) {
     return list.map(t => {
         let wins = 0;
@@ -969,7 +1073,7 @@ function hydrateTeams(list) {
 }
 
 let diamondTeams = hydrateTeams(SEASON_20_TEAMS_FALLBACK);
-let goldTeams = hydrateTeams(SEASON_20_TEAMS_FALLBACK);
+let goldTeams = hydrateTeams(SEASON_20_S2_TEAMS_FALLBACK);
 let dataSourceLabel = 'Fallback';
 let activeDivision = 'diamond';
 
@@ -1075,11 +1179,8 @@ function cleanDriverName(rawName) {
         .trim();
 }
 
-function extractTeamsFromCSV(csvText) {
-    if (!csvText || csvText.trim().startsWith('<!DOCTYPE') || csvText.trim().startsWith('<html')) return null;
-
-    const lines = csvText.split(/\r\n|\n/);
-    const rawData = lines.map(parseCSVRow);
+function extractTeamsFromRows(rawData) {
+    if (!Array.isArray(rawData) || rawData.length === 0) return null;
 
     const teamTableHeaderIdx = rawData.findIndex(r => {
         const colC = (r[2] || '').trim().toLowerCase();
@@ -1148,17 +1249,67 @@ function extractTeamsFromCSV(csvText) {
     return Array.from(teamsMap.values()).sort((a, b) => b.points - a.points);
 }
 
+function extractTeamsFromCSV(csvText) {
+    if (!csvText || csvText.trim().startsWith('<!DOCTYPE') || csvText.trim().startsWith('<html')) return null;
+    const lines = csvText.split(/\r\n|\n/);
+    const rawData = lines.map(parseCSVRow);
+    return extractTeamsFromRows(rawData);
+}
+
+function fetchLeagueTeamsViaGviz(gid) {
+    return new Promise((resolve) => {
+        const callbackName = 'gvizCb_' + gid + '_' + Math.floor(Math.random() * 1e6);
+        const script = document.createElement('script');
+        const timeout = setTimeout(() => {
+            cleanup();
+            resolve(null);
+        }, 6000);
+
+        function cleanup() {
+            clearTimeout(timeout);
+            delete window[callbackName];
+            if (script.parentNode) script.parentNode.removeChild(script);
+        }
+
+        window[callbackName] = function(resp) {
+            cleanup();
+            try {
+                if (!resp || !resp.table || !Array.isArray(resp.table.rows)) {
+                    resolve(null);
+                    return;
+                }
+                const rows = resp.table.rows.map(r =>
+                    (r.c || []).map(cell => (cell && cell.v !== null && cell.v !== undefined ? String(cell.v) : ''))
+                );
+                resolve(extractTeamsFromRows(rows));
+            } catch (e) {
+                resolve(null);
+            }
+        };
+
+        script.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?gid=${gid}&tqx=responseHandler:${callbackName}&t=${Date.now()}`;
+        script.onerror = () => {
+            cleanup();
+            resolve(null);
+        };
+        document.body.appendChild(script);
+    });
+}
+
 async function fetchLeagueTeams(gid) {
     if (gid === '' || gid === null || gid === undefined) return null;
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${gid}&t=${Date.now()}`;
     try {
         const res = await fetch(url, { cache: 'no-store' });
-        if (!res.ok) return null;
-        const csvText = await res.text();
-        return extractTeamsFromCSV(csvText);
+        if (res.ok) {
+            const csvText = await res.text();
+            const parsed = extractTeamsFromCSV(csvText);
+            if (parsed && parsed.length > 0) return parsed;
+        }
     } catch (err) {
-        return null;
+        // Fallback auf GViz JSONP
     }
+    return await fetchLeagueTeamsViaGviz(gid);
 }
 
 async function loadLeaguesData() {
