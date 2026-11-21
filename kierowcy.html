@@ -200,6 +200,31 @@ body.light-mode .page-title p {
     color: #555555;
 }
 
+/* Kleines CPL-Logo in Buttons, Headern & Badges */
+.mini-cpl-logo {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.section-cpl-logo {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.badge-cpl-logo {
+    width: 12px;
+    height: 12px;
+    object-fit: contain;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
 /* League & Reserve Filter Tabs */
 .league-tabs {
     display: flex;
@@ -210,6 +235,9 @@ body.light-mode .page-title p {
 }
 
 .league-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
     background: var(--card-bg);
     border: 1px solid var(--border-color);
     color: var(--text-color);
@@ -277,9 +305,9 @@ body.light-mode .page-title p {
 .league-section-title {
     font-size: 21px;
     font-weight: 800;
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 10px;
+    gap: 9px;
 }
 
 .league-count-pill {
@@ -341,7 +369,9 @@ body.light-mode .league-count-pill {
 }
 
 .driver-league-tag {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
     font-size: 10px;
     font-weight: 800;
     letter-spacing: 0.7px;
@@ -627,10 +657,18 @@ footer {
 
     <div class="league-tabs">
         <button class="league-tab-btn active" onclick="switchLeagueFilter('All', this)">Wszystkie</button>
-        <button class="league-tab-btn" onclick="switchLeagueFilter('Diamond', this)">💎 Liga Diamentowa</button>
-        <button class="league-tab-btn" onclick="switchLeagueFilter('Gold', this)">🏆 Liga Złota</button>
-        <button class="league-tab-btn" onclick="switchLeagueFilter('ReserveDiamond', this)">🛡️ Rezerwa Diamentowa</button>
-        <button class="league-tab-btn" onclick="switchLeagueFilter('ReserveGold', this)">🛡️ Rezerwa Złota</button>
+        <button class="league-tab-btn" onclick="switchLeagueFilter('Diamond', this)">
+            <img class="mini-cpl-logo" src="images/cpl_logo_lizard.png" alt="CPL"> Liga Diamentowa
+        </button>
+        <button class="league-tab-btn" onclick="switchLeagueFilter('Gold', this)">
+            <img class="mini-cpl-logo" src="images/cpl_logo_lizard.png" alt="CPL"> Liga Złota
+        </button>
+        <button class="league-tab-btn" onclick="switchLeagueFilter('ReserveDiamond', this)">
+            <img class="mini-cpl-logo" src="images/cpl_logo_lizard.png" alt="CPL"> Rezerwa Diamentowa
+        </button>
+        <button class="league-tab-btn" onclick="switchLeagueFilter('ReserveGold', this)">
+            <img class="mini-cpl-logo" src="images/cpl_logo_lizard.png" alt="CPL"> Rezerwa Złota
+        </button>
     </div>
 
     <div class="search-wrapper">
@@ -695,40 +733,41 @@ footer {
 
 <script>
     const SHEET_ID = "1na_Zlv7uk9AGO3f76sqMvN5C5kT-EXnphJlTD6KKx0M";
+    const CPL_LOGO_SRC = "images/cpl_logo_lizard.png";
 
     const CATEGORY_CONFIG = {
         Diamond: {
             gid: "1651963070",
-            title: "💎 Liga Diamentowa",
+            title: "Liga Diamentowa",
             badgeClass: "diamond",
-            badgeText: "💎 Liga Diamentowa",
+            badgeText: "Liga Diamentowa",
             defaultTeam: "CPL",
             defaultColor: "#38bdf8",
             isReserve: false
         },
         Gold: {
             gid: "1869079550",
-            title: "🏆 Liga Złota",
+            title: "Liga Złota",
             badgeClass: "gold",
-            badgeText: "🏆 Liga Złota",
+            badgeText: "Liga Złota",
             defaultTeam: "CPL",
             defaultColor: "#fbbf24",
             isReserve: false
         },
         ReserveDiamond: {
             gid: "595943071",
-            title: "🛡️ Rezerwa Ligi Diamentowej",
+            title: "Rezerwa Ligi Diamentowej",
             badgeClass: "reserve-diamond",
-            badgeText: "🛡️ Rezerwa Diamentowa",
+            badgeText: "Rezerwa Diamentowa",
             defaultTeam: "REZERWA LD",
             defaultColor: "#818cf8",
             isReserve: true
         },
         ReserveGold: {
             gid: "1869317160",
-            title: "🛡️ Rezerwa Ligi Złotej",
+            title: "Rezerwa Ligi Złotej",
             badgeClass: "reserve-gold",
-            badgeText: "🛡️ Rezerwa Złota",
+            badgeText: "Rezerwa Złota",
             defaultTeam: "REZERWA LZ",
             defaultColor: "#f59e0b",
             isReserve: true
@@ -783,7 +822,6 @@ footer {
         return !s || s === "#N/A" || s === "#REF!" || s === "#VALUE!" || s === "#NAME?" || s === "N/A";
     }
 
-    // Filtert leere Platzhalter-Zeilen wie "— – —" oder reine Trennzeichen heraus
     function isPlaceholderDriverName(name) {
         const cleaned = String(name || "")
             .replace(/[—–\-•·\s]/g, "")
@@ -869,7 +907,6 @@ footer {
         const colPodia = headers.findIndex(h => h === "podia" || h === "podium" || h === "podiums");
         const colWins = headers.findIndex(h => h === "wygrane" || h === "zwyciestwa" || h === "wins");
 
-        // In Reserve-Tabellen folgt nach "Wyścigi" die erste GP-Spalte
         let raceColStart = -1;
         if (colPoints >= 0) {
             const colAfterPoints = headers[colPoints + 1] || "";
@@ -1007,7 +1044,9 @@ footer {
         card.innerHTML = `
             <div class="driver-card-top">
                 <div class="driver-identity">
-                    <span class="driver-league-tag ${cfg.badgeClass}">${cfg.badgeText}</span>
+                    <span class="driver-league-tag ${cfg.badgeClass}">
+                        <img class="badge-cpl-logo" src="${CPL_LOGO_SRC}" alt="CPL">${cfg.badgeText}
+                    </span>
                     <div class="driver-name">${driver.name}</div>
                     <div class="driver-team">${driver.team}</div>
                 </div>
@@ -1041,7 +1080,9 @@ footer {
         const header = document.createElement("div");
         header.className = "league-section-header";
         header.innerHTML = `
-            <h2 class="league-section-title">${cfg.title}</h2>
+            <h2 class="league-section-title">
+                <img class="section-cpl-logo" src="${CPL_LOGO_SRC}" alt="CPL">${cfg.title}
+            </h2>
             <span class="league-count-pill">${sorted.length} ${sorted.length === 1 ? "kierowca" : "kierowców"}</span>
         `;
 
