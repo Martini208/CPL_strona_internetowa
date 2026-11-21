@@ -408,27 +408,44 @@ h2{
     font-size:40px;
 }
 
-/* Top 3 Standings Showcase - Clean Motorsport Board */
+/* Top 3 Standings Showcase (Liga Diamentowa & Liga Złota) */
 .standings-showcase {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px;
+    gap: 28px;
 }
 
 .league-podium-card {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 20px;
-    transition: background 0.25s ease, border-color 0.25s ease;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.league-podium-card:hover {
+    transform: translateY(-4px);
 }
 
 .league-podium-card.diamond-card {
-    border-left: 4px solid #38bdf8;
+    border-top: 4px solid #38bdf8;
+    background: linear-gradient(180deg, rgba(56, 189, 248, 0.08) 0%, var(--card-bg) 42%);
+}
+
+.league-podium-card.diamond-card:hover {
+    box-shadow: 0 14px 34px rgba(56, 189, 248, 0.18);
 }
 
 .league-podium-card.gold-card {
-    border-left: 4px solid #eab308;
+    border-top: 4px solid #eab308;
+    background: linear-gradient(180deg, rgba(234, 179, 8, 0.08) 0%, var(--card-bg) 42%);
+}
+
+.league-podium-card.gold-card:hover {
+    box-shadow: 0 14px 34px rgba(234, 179, 8, 0.18);
 }
 
 .league-card-header {
@@ -436,18 +453,18 @@ h2{
     justify-content: space-between;
     align-items: center;
     gap: 12px;
-    margin-bottom: 14px;
-    padding-bottom: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
     border-bottom: 1px solid var(--border-color);
 }
 
 .league-card-title {
-    font-size: 18px;
-    font-weight: 800;
-    letter-spacing: 0.3px;
+    font-size: 21px;
+    font-weight: 900;
+    letter-spacing: 0.4px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
 
 .diamond-card .league-card-title {
@@ -468,81 +485,109 @@ body.light-mode .gold-card .league-card-title {
 
 .league-top3-tag {
     font-size: 11px;
-    font-weight: 700;
+    font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.8px;
-    padding: 3px 8px;
-    border-radius: 4px;
-    background: rgba(255, 255, 255, 0.06);
-    color: #a1a1aa;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.07);
+    color: #b5b5b5;
 }
 
 body.light-mode .league-top3-tag {
     background: rgba(0, 0, 0, 0.06);
-    color: #4b5563;
+    color: #444444;
 }
 
 .podium-list {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
 }
 
 .podium-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
-    padding: 11px 14px;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.025);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    transition: transform 0.2s ease, background 0.2s ease;
 }
 
 body.light-mode .podium-row {
-    background: rgba(0, 0, 0, 0.02);
-    border-color: rgba(0, 0, 0, 0.08);
+    background: rgba(0, 0, 0, 0.025);
+    border-color: rgba(0, 0, 0, 0.07);
+}
+
+.podium-row:hover {
+    transform: translateX(3px);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+body.light-mode .podium-row:hover {
+    background: rgba(0, 0, 0, 0.045);
+}
+
+.podium-row.rank-1 {
+    border-width: 1px;
+}
+
+.diamond-card .podium-row.rank-1 {
+    background: linear-gradient(90deg, rgba(56, 189, 248, 0.16) 0%, rgba(255, 255, 255, 0.03) 100%);
+    border-color: rgba(56, 189, 248, 0.42);
+}
+
+.gold-card .podium-row.rank-1 {
+    background: linear-gradient(90deg, rgba(234, 179, 8, 0.16) 0%, rgba(255, 255, 255, 0.03) 100%);
+    border-color: rgba(234, 179, 8, 0.42);
 }
 
 .podium-left {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
     min-width: 0;
 }
 
 .rank-badge {
-    width: 34px;
-    height: 34px;
-    border-radius: 6px;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-weight: 800;
+    font-weight: 900;
     font-size: 13px;
     flex-shrink: 0;
+    letter-spacing: 0.3px;
 }
 
 /* P1 = Gold, P2 = Silber, P3 = Bronze */
 .rank-badge.pos-1 {
-    background: #eab308;
+    background: linear-gradient(135deg, #facc15, #ca8a04);
     color: #111111;
+    box-shadow: 0 4px 12px rgba(234, 179, 8, 0.32);
 }
 
 .rank-badge.pos-2 {
-    background: #cbd5e1;
-    color: #111111;
+    background: linear-gradient(135deg, #e2e8f0, #64748b);
+    color: #0f172a;
+    box-shadow: 0 4px 12px rgba(148, 163, 184, 0.25);
 }
 
 .rank-badge.pos-3 {
-    background: #b45309;
+    background: linear-gradient(135deg, #d97706, #78350f);
     color: #ffffff;
+    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.28);
 }
 
 .driver-meta {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 3px;
     min-width: 0;
 }
 
@@ -554,24 +599,24 @@ body.light-mode .podium-row {
 }
 
 .driver-name {
-    font-size: 15px;
-    font-weight: 700;
+    font-size: 16px;
+    font-weight: 800;
     color: var(--text-color);
     line-height: 1.25;
 }
 
 .driver-number {
     font-size: 11px;
-    font-weight: 700;
-    padding: 1px 6px;
-    border-radius: 4px;
-    background: rgba(255, 255, 255, 0.07);
-    color: #a1a1aa;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #cbd5e1;
 }
 
 body.light-mode .driver-number {
-    background: rgba(0, 0, 0, 0.06);
-    color: #4b5563;
+    background: rgba(0, 0, 0, 0.07);
+    color: #334155;
 }
 
 .driver-team {
@@ -588,23 +633,32 @@ body.light-mode .driver-team {
 
 .points-pill {
     font-family: monospace, monospace;
-    font-size: 15px;
-    font-weight: 800;
-    padding: 6px 11px;
-    border-radius: 6px;
-    background: rgba(255, 255, 255, 0.05);
+    font-size: 16px;
+    font-weight: 900;
+    padding: 7px 13px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.07);
     border: 1px solid var(--border-color);
     color: var(--text-color);
     white-space: nowrap;
     flex-shrink: 0;
 }
 
-.podium-row.rank-1 .points-pill {
+.diamond-card .podium-row.rank-1 .points-pill {
+    color: #7dd3fc;
+    border-color: rgba(56, 189, 248, 0.45);
+}
+
+.gold-card .podium-row.rank-1 .points-pill {
     color: #facc15;
     border-color: rgba(234, 179, 8, 0.45);
 }
 
-body.light-mode .podium-row.rank-1 .points-pill {
+body.light-mode .diamond-card .podium-row.rank-1 .points-pill {
+    color: #0369a1;
+}
+
+body.light-mode .gold-card .podium-row.rank-1 .points-pill {
     color: #a16207;
 }
 
@@ -920,7 +974,7 @@ footer {
         <div class="league-podium-card diamond-card">
             <div class="league-card-header">
                 <div class="league-card-title">
-                    <span>Liga Diamentowa</span>
+                    <span>💎 Liga Diamentowa</span>
                 </div>
                 <span class="league-top3-tag">TOP 3</span>
             </div>
@@ -933,7 +987,7 @@ footer {
         <div class="league-podium-card gold-card">
             <div class="league-card-header">
                 <div class="league-card-title">
-                    <span>Liga Złota</span>
+                    <span>🏆 Liga Złota</span>
                 </div>
                 <span class="league-top3-tag">TOP 3</span>
             </div>
