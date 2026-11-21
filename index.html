@@ -256,7 +256,7 @@ nav a:hover {
 .f1-race-bar {
     background: var(--card-bg);
     color: var(--text-color);
-    border-left: 6px solid #ff3131;
+    border-left: 6px solid #38bdf8;
     border-radius: 12px;
     padding: 16px 25px;
     display: flex;
@@ -266,6 +266,10 @@ nav a:hover {
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     font-size: 14px;
     transition: background 0.3s ease;
+}
+
+.f1-race-bar.diamond-bar {
+    border-left-color: #38bdf8;
 }
 
 .f1-race-bar.gold-bar {
@@ -292,19 +296,23 @@ nav a:hover {
     letter-spacing: 0.6px;
     padding: 2px 8px;
     border-radius: 999px;
-    background: rgba(255, 49, 49, 0.16);
-    color: #ff6b6b;
-    border: 1px solid rgba(255, 49, 49, 0.35);
+}
+
+.f1-race-bar.diamond-bar .f1-league-badge {
+    background: rgba(56, 189, 248, 0.16);
+    color: #7dd3fc;
+    border: 1px solid rgba(56, 189, 248, 0.38);
 }
 
 .f1-race-bar.gold-bar .f1-league-badge {
     background: rgba(234, 179, 8, 0.16);
     color: #facc15;
-    border-color: rgba(234, 179, 8, 0.38);
+    border: 1px solid rgba(234, 179, 8, 0.38);
 }
 
-body.light-mode .f1-league-badge {
-    color: #b91c1c;
+body.light-mode .f1-race-bar.diamond-bar .f1-league-badge {
+    color: #0369a1;
+    background: rgba(2, 132, 199, 0.12);
 }
 
 body.light-mode .f1-race-bar.gold-bar .f1-league-badge {
@@ -314,12 +322,19 @@ body.light-mode .f1-race-bar.gold-bar .f1-league-badge {
 .f1-race-meta {
     font-size: 12px;
     font-weight: 700;
-    color: #ff3131;
     letter-spacing: 1px;
+}
+
+.f1-race-bar.diamond-bar .f1-race-meta {
+    color: #38bdf8;
 }
 
 .f1-race-bar.gold-bar .f1-race-meta {
     color: #eab308;
+}
+
+body.light-mode .f1-race-bar.diamond-bar .f1-race-meta {
+    color: #0284c7;
 }
 
 .f1-race-title {
@@ -1005,7 +1020,6 @@ footer {
                     return;
                 }
 
-                // Erstes Rennen, das noch nicht gestartet ist; falls alle vorbei sind, das letzte Rennen anzeigen
                 const upcoming = list.find(r => r.timestamp >= now) || list[list.length - 1];
                 nextRaceTargets[splitKey] = upcoming.timestamp;
                 applyRaceToUI(splitKey, upcoming);
@@ -1037,7 +1051,6 @@ footer {
         const distance = targetTime - now;
 
         if (distance <= 0) {
-            // Wenn der Startzeitpunkt erreicht ist, kurz "WYŚCIG TRWA!" zeigen und ggf. nächsten Eintrag prüfen
             if (Math.abs(distance) > 3 * 60 * 60 * 1000) {
                 loadNextRacesFromSheet();
                 return;
