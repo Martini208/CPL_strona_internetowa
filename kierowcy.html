@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kierowcy - CPL F1 League</title>
-    
+
 <style>
 :root {
     --bg-color: #0d0d0d;
@@ -20,33 +20,29 @@ body.light-mode {
     --border-color: #e0e0e0;
 }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     font-family: Arial, sans-serif;
 }
 
-/* Sticky Footer Layout */
 body {
     background: var(--bg-color);
     color: var(--text-color);
     transition: background 0.3s ease, color 0.3s ease;
-    padding-top: 80px; /* Perfekter Abstand für die größere Nav-Leiste */
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    padding-top: 80px;
 }
 
-/* Navigation - Exakte 1:1 Kopie der Hauptseite (Rote Box mit Transparenz) */
+/* Navigation - Exakte 1:1 Kopie der Hauptseite */
 nav {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 80px; /* Größere Box */
+    height: 80px;
     background: linear-gradient(135deg, rgba(180, 40, 50, 0.60) 0%, rgba(100, 15, 25, 0.70) 100%);
-    backdrop-filter: blur(15px); /* Starker Milchglas-Effekt */
+    backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     display: flex;
     justify-content: space-between;
@@ -100,7 +96,6 @@ nav a:hover {
     color: #ffffff;
 }
 
-/* Spezieller "Zapisy" Button in der Nav */
 .nav-zapisy-btn {
     background: #ff3131 !important;
     color: white !important;
@@ -122,7 +117,6 @@ nav a:hover {
     gap: 15px;
 }
 
-/* Social Media Icons in der Leiste (Vergrößert & Deutlich sichtbar) */
 .nav-socials {
     display: flex;
     align-items: center;
@@ -176,147 +170,287 @@ nav a:hover {
     transform: scale(1.2);
 }
 
-/* Page Container */
-.kierowcy-page-container {
-    padding: 30px 5% 50px 5%;
-    max-width: 1200px;
-    width: 100%;
+/* Container Layout */
+.drivers-page-container {
+    padding: 36px 5% 60px 5%;
+    max-width: 1240px;
     margin: 0 auto;
-    flex: 1 0 auto;
 }
 
 .page-title {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 24px;
 }
 
 .page-title h1 {
-    font-size: 34px;
+    font-size: 36px;
+    font-weight: 900;
     color: #ff3131;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .page-title p {
     font-size: 15px;
-    margin-top: 5px;
+    color: #b5b5b5;
+    margin-top: 6px;
 }
 
-/* Suchbereich */
-.search-container {
+body.light-mode .page-title p {
+    color: #555555;
+}
+
+/* League Filter Tabs */
+.league-tabs {
     display: flex;
     justify-content: center;
-    margin-bottom: 35px;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 22px;
 }
 
-.search-input {
+.league-tab-btn {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
     color: var(--text-color);
-    padding: 14px 20px;
-    border-radius: 10px;
-    font-size: 15px;
-    outline: none;
+    padding: 10px 22px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.league-tab-btn.active,
+.league-tab-btn:hover {
+    background: #ff3131;
+    border-color: #ff3131;
+    color: #ffffff;
+    box-shadow: 0 4px 16px rgba(255, 49, 49, 0.35);
+}
+
+/* Search Input */
+.search-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 34px;
+}
+
+.driver-search-input {
     width: 100%;
-    max-width: 500px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    max-width: 440px;
+    padding: 13px 18px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    color: var(--text-color);
+    font-size: 14px;
+    outline: none;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.search-input:focus {
+.driver-search-input::placeholder {
+    color: #7c7c7c;
+}
+
+.driver-search-input:focus {
     border-color: #ff3131;
-    box-shadow: 0 4px 20px rgba(255, 49, 49, 0.25);
+    box-shadow: 0 0 0 3px rgba(255, 49, 49, 0.16);
+}
+
+/* League Section */
+.league-section {
+    margin-bottom: 44px;
+}
+
+.league-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+    flex-wrap: wrap;
+}
+
+.league-section-title {
+    font-size: 21px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.league-count-pill {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #bbbbbb;
+}
+
+body.light-mode .league-count-pill {
+    background: rgba(0, 0, 0, 0.06);
+    color: #444444;
 }
 
 /* Drivers Grid */
 .drivers-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
 }
 
 /* Driver Card */
 .driver-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    overflow: hidden;
+    --team-color: #ff3131;
     position: relative;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    transition: transform 0.3s ease, border-color 0.3s ease;
-    display: flex;
-    flex-direction: column;
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 20px 22px 18px 22px;
+    border: 1px solid var(--border-color);
+    border-top: 3px solid var(--team-color);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    overflow: hidden;
 }
 
 .driver-card:hover {
-    transform: translateY(-5px);
-    border-color: #ff3131;
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.42);
 }
 
-.driver-card-stripe {
-    height: 6px;
-    width: 100%;
+.driver-card.is-leader {
+    border: 1.5px solid rgba(255, 49, 49, 0.75);
+    border-top: 3px solid var(--team-color);
+    box-shadow: 0 8px 26px rgba(255, 49, 49, 0.14);
 }
 
-.driver-card-body {
-    padding: 22px;
+.driver-card-top {
     display: flex;
-    flex-direction: column;
     justify-content: space-between;
-    flex-grow: 1;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 18px;
 }
 
-.driver-number {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 34px;
-    font-weight: 900;
-    opacity: 0.2;
+.driver-identity {
+    min-width: 0;
+}
+
+.driver-league-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 999px;
+    margin-bottom: 7px;
+}
+
+.driver-league-tag.diamond {
+    background: rgba(56, 189, 248, 0.15);
+    color: #7dd3fc;
+    border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.driver-league-tag.gold {
+    background: rgba(251, 191, 36, 0.16);
+    color: #fcd34d;
+    border: 1px solid rgba(251, 191, 36, 0.38);
+}
+
+body.light-mode .driver-league-tag.diamond {
+    color: #0369a1;
+    background: rgba(2, 132, 199, 0.1);
+}
+
+body.light-mode .driver-league-tag.gold {
+    color: #b45309;
+    background: rgba(217, 119, 6, 0.12);
+}
+
+.driver-name {
+    font-size: 19px;
+    font-weight: 800;
     color: var(--text-color);
-}
-
-.driver-name h2 {
-    font-size: 20px;
-    margin-bottom: 4px;
+    line-height: 1.25;
 }
 
 .driver-team {
-    color: #ff3131;
-    font-weight: bold;
-    font-size: 13px;
+    font-size: 12px;
+    font-weight: 800;
     text-transform: uppercase;
-    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+    color: var(--team-color);
+    margin-top: 4px;
 }
 
+.driver-number {
+    font-size: 28px;
+    font-weight: 900;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.22);
+    flex-shrink: 0;
+}
+
+body.light-mode .driver-number {
+    color: rgba(0, 0, 0, 0.18);
+}
+
+/* Stats Row */
 .driver-stats {
-    border-top: 1px solid var(--border-color);
-    padding-top: 14px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
     text-align: center;
-    gap: 8px;
 }
 
-.stat-box span {
-    display: block;
-    font-size: 11px;
-    color: #888;
+body.light-mode .driver-stats {
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.stat-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.stat-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
     text-transform: uppercase;
+    color: #8f8f8f;
 }
 
-.stat-box strong {
+.stat-value {
     font-size: 16px;
+    font-weight: 900;
     color: var(--text-color);
 }
 
-/* Footer - Exakte Kopie der anderen Seiten */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    border-radius: 12px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    color: #999999;
+}
+
+/* Footer */
 footer {
     background: #080808;
     color: #e0e0e0;
     padding: 60px 10% 20px 10%;
+    margin-top: 80px;
     border-top: 1px solid var(--border-color);
-    margin-top: auto;
-    width: 100%;
 }
 
 .footer-container {
@@ -334,32 +468,12 @@ footer {
     letter-spacing: 0.5px;
 }
 
-.footer-col p {
-    font-size: 14px;
-    line-height: 1.6;
-    color: #a0a0a0;
-}
+.footer-col p { font-size: 14px; line-height: 1.6; color: #a0a0a0; }
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 10px; }
+.footer-col ul li a { color: #a0a0a0; text-decoration: none; font-size: 14px; transition: color 0.2s ease; }
+.footer-col ul li a:hover { color: #ff3131; }
 
-.footer-col ul {
-    list-style: none;
-}
-
-.footer-col ul li {
-    margin-bottom: 10px;
-}
-
-.footer-col ul li a {
-    color: #a0a0a0;
-    text-decoration: none;
-    font-size: 14px;
-    transition: color 0.2s ease;
-}
-
-.footer-col ul li a:hover {
-    color: #ff3131;
-}
-
-/* Social Icons Links mit SVG Logos */
 .social-links {
     display: flex;
     gap: 12px;
@@ -423,24 +537,35 @@ footer {
     color: #ffffff;
 }
 
-@media(max-width:900px){
-    nav{ flex-direction:column; height: auto; gap:12px; padding:15px; }
+@media (max-width: 1024px) {
+    .drivers-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    nav { flex-direction: column; height: auto; gap: 12px; padding: 15px; }
     .nav-left { flex-direction: column; align-items: center; }
-    nav ul{ flex-wrap:wrap; justify-content:center; }
+    nav ul { flex-wrap: wrap; justify-content: center; }
+}
+
+@media (max-width: 640px) {
+    .drivers-grid {
+        grid-template-columns: 1fr;
+    }
+    .page-title h1 {
+        font-size: 28px;
+    }
 }
 </style>
-
 </head>
 <body>
 
 <nav>
     <div class="nav-left">
-        <!-- CPL Logo ganz links -->
         <a href="index.html">
             <img class="cpl-logo-img" src="images/cpl_logo_lizard.png" alt="CPL Logo">
         </a>
-        
-        <!-- Menüpunkte -->
         <ul>
             <li><a href="kalendarz.html">Kalendarz</a></li>
             <li><a href="sezony.html">Sezony</a></li>
@@ -451,8 +576,7 @@ footer {
             <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSfLSj3z30_t1cdEPyULm26suCN8jpB8NOT9JsXNYE8ikeVUZg/viewform" target="_blank" class="nav-zapisy-btn">Zapisy</a></li>
         </ul>
     </div>
-    
-    <!-- Socials & Rechten Bereich -->
+
     <div class="nav-right">
         <div class="nav-socials">
             <a href="https://discord.com/invite/szt7rHnFSj" target="_blank" class="nav-social-icon" title="Discord">
@@ -462,14 +586,11 @@ footer {
                 <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
             </a>
             <a href="https://www.instagram.com/cpl_liga/" target="_blank" class="nav-social-icon" title="Instagram">
-                <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            </a>
+                <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
             <a href="https://www.facebook.com/CPLeSport" target="_blank" class="nav-social-icon" title="Facebook">
-                <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-            </a>
+                <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
             <a href="https://www.tiktok.com/@cpl_f1_league" target="_blank" class="nav-social-icon" title="TikTok">
-                <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.82.56-1.33 1.51-1.3 2.51.01.88.48 1.72 1.2 2.22 1.05.74 2.48.74 3.53-.02.82-.58 1.34-1.54 1.34-2.55.02-5.63.01-11.25.01-16.88z"/></svg>
-            </a>
+                <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.82.56-1.33 1.51-1.3 2.51.01.88.48 1.72 1.2 2.22 1.05.74 2.48.74 3.53-.02.82-.58 1.34-1.54 1.34-2.55.02-5.63.01-11.25.01-16.88z"/></svg></a>
         </div>
         <a href="index.html#zaloguj">Zaloguj</a>
         <a href="index.html#rejestracja">Rejestracja</a>
@@ -477,19 +598,29 @@ footer {
     </div>
 </nav>
 
-<div class="kierowcy-page-container">
+<div class="drivers-page-container">
     <div class="page-title">
         <h1>Kierowcy Ligi CPL</h1>
-        <p>Poznaj wszystkich kierowców rywalizujących w obecnym sezonie</p>
+        <p>Poznaj wszystkich kierowców rywalizujących w obecnym sezonie – Liga Diamentowa oraz Liga Złota</p>
     </div>
 
-    <!-- Suchfeld für Namen, Nummern und Teams -->
-    <div class="search-container">
-        <input type="text" id="driverSearch" class="search-input" placeholder="Szukaj kierowcy, numeru lub zespołu...">
+    <div class="league-tabs">
+        <button class="league-tab-btn active" onclick="switchLeagueFilter('All', this)">Wszystkie ligi</button>
+        <button class="league-tab-btn" onclick="switchLeagueFilter('Diamond', this)">💎 Liga Diamentowa</button>
+        <button class="league-tab-btn" onclick="switchLeagueFilter('Gold', this)">🏆 Liga Złota</button>
     </div>
 
-    <!-- Grid für Fahrerkarten -->
-    <div class="drivers-grid" id="driversGrid"></div>
+    <div class="search-wrapper">
+        <input
+            type="text"
+            id="driver-search"
+            class="driver-search-input"
+            placeholder="Szukaj kierowcy, numeru lub zespołu..."
+            oninput="renderDrivers()"
+        >
+    </div>
+
+    <div id="drivers-content"></div>
 </div>
 
 <footer>
@@ -520,18 +651,10 @@ footer {
             <h4>Social Media</h4>
             <p style="margin-bottom: 12px;">Zaobserwuj nas w sieci:</p>
             <div class="social-links">
-                <a href="https://www.youtube.com/@CPLeague" target="_blank" class="social-btn" title="YouTube">
-                    <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                </a>
-                <a href="https://www.instagram.com/cpl_liga/" target="_blank" class="social-btn" title="Instagram">
-                    <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                </a>
-                <a href="https://www.facebook.com/CPLeSport" target="_blank" class="social-btn" title="Facebook">
-                    <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                </a>
-                <a href="https://www.tiktok.com/@cpl_f1_league" target="_blank" class="social-btn" title="TikTok">
-                    <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.82.56-1.33 1.51-1.3 2.51.01.88.48 1.72 1.2 2.22 1.05.74 2.48.74 3.53-.02.82-.58 1.34-1.54 1.34-2.55.02-5.63.01-11.25.01-16.88z"/></svg>
-                </a>
+                <a href="https://www.youtube.com/@CPLeague" target="_blank" class="social-btn" title="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+                <a href="https://www.instagram.com/cpl_liga/" target="_blank" class="social-btn" title="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                <a href="https://www.facebook.com/CPLeSport" target="_blank" class="social-btn" title="Facebook"><svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+                <a href="https://www.tiktok.com/@cpl_f1_league" target="_blank" class="social-btn" title="TikTok"><svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.82.56-1.33 1.51-1.3 2.51.01.88.48 1.72 1.2 2.22 1.05.74 2.48.74 3.53-.02.82-.58 1.34-1.54 1.34-2.55.02-5.63.01-11.25.01-16.88z"/></svg></a>
             </div>
         </div>
     </div>
@@ -546,106 +669,281 @@ footer {
 </footer>
 
 <script>
-    // Theme Toggle
-    const themeToggleBtn = document.getElementById('theme-toggle');
-    themeToggleBtn.addEventListener('click', () => {
-        document.body.classList.toggle('light-mode');
-        themeToggleBtn.textContent = document.body.classList.contains('light-mode') ? '🌙' : '☀️';
-    });
+    // Falls du einen eigenen Google-Sheets-Tab für Fahrer hast, trage hier ggf. &gid=DEINE_GID ein
+    const SHEET_ID = "1na_Zlv7uk9AGO3f76sqMvN5C5kT-EXnphJlTD6KKx0M";
+    const DRIVERS_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
 
-    // Alle 22 Fahrer aus der Liste der aktuellen Saison
-    const driversData = [
-        { name: "Lando Norris", team: "McLaren", number: "1", points: 0, podiums: 0, wins: 0, color: "#FF8000" },
-        { name: "Oscar Piastri", team: "McLaren", number: "81", points: 0, podiums: 0, wins: 0, color: "#FF8000" },
-        
-        { name: "Andrea Kimi Antonelli", team: "Mercedes", number: "12", points: 0, podiums: 0, wins: 0, color: "#27F4D2" },
-        { name: "George Russell", team: "Mercedes", number: "63", points: 0, podiums: 0, wins: 0, color: "#27F4D2" },
-        
-        { name: "Max Verstappen", team: "Red Bull Racing", number: "3", points: 0, podiums: 0, wins: 0, color: "#3671C6" },
-        { name: "Isack Hadjar", team: "Red Bull Racing", number: "6", points: 0, podiums: 0, wins: 0, color: "#3671C6" },
-        
-        { name: "Charles Leclerc", team: "Ferrari", number: "16", points: 0, podiums: 0, wins: 0, color: "#E80020" },
-        { name: "Lewis Hamilton", team: "Ferrari", number: "44", points: 0, podiums: 0, wins: 0, color: "#E80020" },
-        
-        { name: "Fernando Alonso", team: "Aston Martin", number: "-", points: 0, podiums: 0, wins: 0, color: "#229971" },
-        { name: "Lance Stroll", team: "Aston Martin", number: "-", points: 0, podiums: 0, wins: 0, color: "#229971" },
-        
-        { name: "Carlos Sainz", team: "Williams", number: "-", points: 0, podiums: 0, wins: 0, color: "#64C4FF" },
-        { name: "Alexander Albon", team: "Williams", number: "-", points: 0, podiums: 0, wins: 0, color: "#64C4FF" },
-        
-        { name: "Pierre Gasly", team: "Alpine", number: "-", points: 0, podiums: 0, wins: 0, color: "#FF87BC" },
-        { name: "Franco Colapinto", team: "Alpine", number: "-", points: 0, podiums: 0, wins: 0, color: "#FF87BC" },
-        
-        { name: "Liam Lawson", team: "Racing Bulls", number: "-", points: 0, podiums: 0, wins: 0, color: "#6692FF" },
-        { name: "Arvid Lindblad", team: "Racing Bulls", number: "-", points: 0, podiums: 0, wins: 0, color: "#6692FF" },
-        
-        { name: "Esteban Ocon", team: "Haas F1 Team", number: "-", points: 0, podiums: 0, wins: 0, color: "#B6BABD" },
-        { name: "Oliver Bearman", team: "Haas F1 Team", number: "-", points: 0, podiums: 0, wins: 0, color: "#B6BABD" },
-        
-        { name: "Nico Hülkenberg", team: "Audi Revolut F1 Team", number: "-", points: 0, podiums: 0, wins: 0, color: "#F50500" },
-        { name: "Gabriel Bortoleto", team: "Audi Revolut F1 Team", number: "-", points: 0, podiums: 0, wins: 0, color: "#F50500" },
-        
-        { name: "Sergio Pérez", team: "Cadillac", number: "-", points: 0, podiums: 0, wins: 0, color: "#D1AB61" },
-        { name: "Valtteri Bottas", team: "Cadillac", number: "-", points: 0, podiums: 0, wins: 0, color: "#D1AB61" }
+    const TEAM_COLORS = {
+        mclaren: "#ff8000",
+        mercedes: "#00d2be",
+        "red bull racing": "#3671c6",
+        redbull: "#3671c6",
+        ferrari: "#e8002d",
+        "aston martin": "#229971",
+        williams: "#37a1ff",
+        alpine: "#ff87bc",
+        "racing bulls": "#6692ff",
+        "rb": "#6692ff",
+        haas: "#b6babd",
+        audi: "#e11d48",
+        cadillac: "#eab308"
+    };
+
+    // Startdaten für beide Ligen, falls das Sheet noch keine Fahrerzeilen liefert
+    const FALLBACK_DRIVERS = [
+        // Liga Diamentowa
+        { league: "Diamond", name: "Lando Norris", team: "MCLAREN", number: "1", points: 0, podiums: 0, wins: 0 },
+        { league: "Diamond", name: "Oscar Piastri", team: "MCLAREN", number: "81", points: 0, podiums: 0, wins: 0 },
+        { league: "Diamond", name: "Andrea Kimi Antonelli", team: "MERCEDES", number: "12", points: 0, podiums: 0, wins: 0 },
+        { league: "Diamond", name: "George Russell", team: "MERCEDES", number: "63", points: 0, podiums: 0, wins: 0 },
+        { league: "Diamond", name: "Max Verstappen", team: "RED BULL RACING", number: "3", points: 0, podiums: 0, wins: 0 },
+        { league: "Diamond", name: "Isack Hadjar", team: "RED BULL RACING", number: "6", points: 0, podiums: 0, wins: 0 },
+        { league: "Diamond", name: "Charles Leclerc", team: "FERRARI", number: "16", points: 0, podiums: 0, wins: 0 },
+        { league: "Diamond", name: "Lewis Hamilton", team: "FERRARI", number: "44", points: 0, podiums: 0, wins: 0 },
+        { league: "Diamond", name: "Fernando Alonso", team: "ASTON MARTIN", number: "-", points: 0, podiums: 0, wins: 0 },
+        { league: "Diamond", name: "Lance Stroll", team: "ASTON MARTIN", number: "-", points: 0, podiums: 0, wins: 0 },
+        { league: "Diamond", name: "Carlos Sainz", team: "WILLIAMS", number: "-", points: 0, podiums: 0, wins: 0 },
+        { league: "Diamond", name: "Alexander Albon", team: "WILLIAMS", number: "-", points: 0, podiums: 0, wins: 0 },
+        { league: "Diamond", name: "Pierre Gasly", team: "ALPINE", number: "-", points: 0, podiums: 0, wins: 0 },
+        { league: "Diamond", name: "Franco Colapinto", team: "ALPINE", number: "-", points: 0, podiums: 0, wins: 0 },
+        { league: "Diamond", name: "Liam Lawson", team: "RACING BULLS", number: "-", points: 0, podiums: 0, wins: 0 },
+
+        // Liga Złota
+        { league: "Gold", name: "Kierowca LZ #1", team: "MCLAREN", number: "4", points: 0, podiums: 0, wins: 0 },
+        { league: "Gold", name: "Kierowca LZ #2", team: "FERRARI", number: "55", points: 0, podiums: 0, wins: 0 },
+        { league: "Gold", name: "Kierowca LZ #3", team: "RED BULL RACING", number: "11", points: 0, podiums: 0, wins: 0 },
+        { league: "Gold", name: "Kierowca LZ #4", team: "MERCEDES", number: "77", points: 0, podiums: 0, wins: 0 },
+        { league: "Gold", name: "Kierowca LZ #5", team: "ASTON MARTIN", number: "14", points: 0, podiums: 0, wins: 0 },
+        { league: "Gold", name: "Kierowca LZ #6", team: "WILLIAMS", number: "23", points: 0, podiums: 0, wins: 0 }
     ];
 
-    const driversGrid = document.getElementById('driversGrid');
-    const driverSearch = document.getElementById('driverSearch');
+    let driversData = [...FALLBACK_DRIVERS];
+    let activeLeague = "All";
 
-    function renderDrivers(drivers) {
-        driversGrid.innerHTML = '';
+    const themeToggleBtn = document.getElementById("theme-toggle");
+    themeToggleBtn.addEventListener("click", () => {
+        document.body.classList.toggle("light-mode");
+        themeToggleBtn.textContent = document.body.classList.contains("light-mode") ? "🌙" : "☀️";
+    });
 
-        if (drivers.length === 0) {
-            driversGrid.innerHTML = '<p style="color:#888; grid-column: 1/-1; text-align:center;">Brak wyników spełniających kryteria wyszukiwania.</p>';
-            return;
+    function normalizeStr(val) {
+        return String(val || "")
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/\u0142/g, "l")
+            .trim();
+    }
+
+    function detectLeague(raw) {
+        const s = normalizeStr(raw).replace(/\s+/g, "");
+        if (s.includes("zlot") || s.includes("gold") || s === "2" || s === "split2" || s === "lz") {
+            return "Gold";
         }
+        return "Diamond";
+    }
 
-        drivers.forEach(driver => {
-            const card = document.createElement('div');
-            card.className = 'driver-card';
-            card.innerHTML = `
-                <div class="driver-card-stripe" style="background-color: ${driver.color};"></div>
-                <div class="driver-card-body">
-                    <span class="driver-number">${driver.number}</span>
-                    <div class="driver-name">
-                        <h2>${driver.name}</h2>
-                        <div class="driver-team">${driver.team}</div>
-                    </div>
-                    <div class="driver-stats">
-                        <div class="stat-box">
-                            <span>Punkty</span>
-                            <strong>${driver.points}</strong>
-                        </div>
-                        <div class="stat-box">
-                            <span>Podia</span>
-                            <strong>${driver.podiums}</strong>
-                        </div>
-                        <div class="stat-box">
-                            <span>Wygrane</span>
-                            <strong>${driver.wins}</strong>
-                        </div>
-                    </div>
-                </div>
-            `;
-            driversGrid.appendChild(card);
+    function getTeamColor(teamName) {
+        const key = normalizeStr(teamName);
+        if (TEAM_COLORS[key]) return TEAM_COLORS[key];
+        for (const [teamKey, color] of Object.entries(TEAM_COLORS)) {
+            if (key.includes(teamKey)) return color;
+        }
+        return "#ff3131";
+    }
+
+    function toNum(val) {
+        const parsed = parseFloat(String(val || "0").replace(",", ".").replace(/[^\d.-]/g, ""));
+        return Number.isNaN(parsed) ? 0 : parsed;
+    }
+
+    function parseCSV(text) {
+        const lines = text.trim().split(/\r?\n/);
+        if (lines.length < 2) return [];
+        const headers = lines[0].split(",").map(h => h.trim().replace(/^"|"$/g, ""));
+        const rows = [];
+
+        for (let i = 1; i < lines.length; i++) {
+            if (!lines[i].trim()) continue;
+            const cols = lines[i]
+                .split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/)
+                .map(c => c.trim().replace(/^"|"$/g, ""));
+            const obj = {};
+            headers.forEach((h, idx) => {
+                obj[h] = cols[idx] || "";
+            });
+            rows.push(obj);
+        }
+        return rows;
+    }
+
+    function mapSheetDrivers(rows) {
+        const mapped = [];
+        rows.forEach(r => {
+            const name = r.Kierowca || r.Driver || r["Imię i nazwisko"] || r.Zawodnik || r.Name || "";
+            if (!name.trim()) return;
+
+            const team = (r.Zespol || r["Zespół"] || r.Team || r.Konstruktor || "CPL").trim();
+            const numberRaw = (r.Numer || r.Nr || r.Number || "-").trim();
+            const points = toNum(r.Punkty || r.Pkt || r.Points);
+            const podiums = toNum(r.Podia || r.Podium || r.Podiums);
+            const wins = toNum(r.Wygrane || r["Zwycięstwa"] || r.Zwyciestwa || r.Wins);
+            const leagueRaw = r.Liga || r.League || r.Split || r.Dywizja || "Diamond";
+
+            mapped.push({
+                league: detectLeague(leagueRaw),
+                name: name.trim(),
+                team: team.toUpperCase(),
+                number: numberRaw || "-",
+                points,
+                podiums,
+                wins
+            });
+        });
+        return mapped;
+    }
+
+    async function loadDrivers() {
+        try {
+            const res = await fetch(`${DRIVERS_CSV_URL}&t=${Date.now()}`, { cache: "no-store" });
+            if (res.ok) {
+                const text = await res.text();
+                const parsed = mapSheetDrivers(parseCSV(text));
+                if (parsed.length > 0) {
+                    driversData = parsed;
+                }
+            }
+        } catch (err) {
+            console.warn("Fallback-Fahrerdaten aktiv:", err);
+        }
+        renderDrivers();
+    }
+
+    function sortDrivers(list) {
+        return [...list].sort((a, b) => {
+            if (b.points !== a.points) return b.points - a.points;
+            if (b.wins !== a.wins) return b.wins - a.wins;
+            if (b.podiums !== a.podiums) return b.podiums - a.podiums;
+            return a.name.localeCompare(b.name, "pl");
         });
     }
 
-    // Live-Filter Suchfunktion
-    driverSearch.addEventListener('input', () => {
-        const query = driverSearch.value.toLowerCase().trim();
+    function createDriverCard(driver, isLeader) {
+        const color = getTeamColor(driver.team);
+        const isDiamond = driver.league === "Diamond";
+        const leagueBadgeClass = isDiamond ? "diamond" : "gold";
+        const leagueBadgeText = isDiamond ? "💎 Liga Diamentowa" : "🏆 Liga Złota";
 
-        const filteredDrivers = driversData.filter(driver => {
-            return driver.name.toLowerCase().includes(query) ||
-                   driver.team.toLowerCase().includes(query) ||
-                   driver.number.toString().includes(query);
+        const card = document.createElement("div");
+        card.className = `driver-card${isLeader ? " is-leader" : ""}`;
+        card.style.setProperty("--team-color", color);
+
+        card.innerHTML = `
+            <div class="driver-card-top">
+                <div class="driver-identity">
+                    <span class="driver-league-tag ${leagueBadgeClass}">${leagueBadgeText}</span>
+                    <div class="driver-name">${driver.name}</div>
+                    <div class="driver-team">${driver.team}</div>
+                </div>
+                <div class="driver-number">${driver.number}</div>
+            </div>
+            <div class="driver-stats">
+                <div class="stat-box">
+                    <span class="stat-label">Punkty</span>
+                    <span class="stat-value">${driver.points}</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Podia</span>
+                    <span class="stat-value">${driver.podiums}</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Wygrane</span>
+                    <span class="stat-value">${driver.wins}</span>
+                </div>
+            </div>
+        `;
+        return card;
+    }
+
+    function renderLeagueBlock(title, leagueKey, filteredList) {
+        const sorted = sortDrivers(filteredList);
+        const section = document.createElement("section");
+        section.className = "league-section";
+
+        const header = document.createElement("div");
+        header.className = "league-section-header";
+        header.innerHTML = `
+            <h2 class="league-section-title">${title}</h2>
+            <span class="league-count-pill">${sorted.length} ${sorted.length === 1 ? "kierowca" : "kierowców"}</span>
+        `;
+
+        const grid = document.createElement("div");
+        grid.className = "drivers-grid";
+
+        sorted.forEach((driver, idx) => {
+            grid.appendChild(createDriverCard(driver, idx === 0));
         });
 
-        renderDrivers(filteredDrivers);
-    });
+        section.appendChild(header);
+        section.appendChild(grid);
+        return section;
+    }
 
-    // Initiales Rendern aller Fahrer
-    renderDrivers(driversData);
+    function renderDrivers() {
+        const query = normalizeStr(document.getElementById("driver-search").value);
+        const container = document.getElementById("drivers-content");
+        container.innerHTML = "";
+
+        const matchesSearch = (d) => {
+            if (!query) return true;
+            const hay = `${normalizeStr(d.name)} ${normalizeStr(d.team)} ${normalizeStr(d.number)}`;
+            return hay.includes(query);
+        };
+
+        const diamondList = driversData.filter(d => d.league === "Diamond" && matchesSearch(d));
+        const goldList = driversData.filter(d => d.league === "Gold" && matchesSearch(d));
+
+        if (activeLeague === "Diamond") {
+            if (diamondList.length === 0) {
+                container.innerHTML = `<div class="empty-state">Brak kierowców w Lidze Diamentowej pasujących do wyszukiwania.</div>`;
+                return;
+            }
+            container.appendChild(renderLeagueBlock("💎 Liga Diamentowa", "Diamond", diamondList));
+            return;
+        }
+
+        if (activeLeague === "Gold") {
+            if (goldList.length === 0) {
+                container.innerHTML = `<div class="empty-state">Brak kierowców w Lidze Złotej pasujących do wyszukiwania.</div>`;
+                return;
+            }
+            container.appendChild(renderLeagueBlock("🏆 Liga Złota", "Gold", goldList));
+            return;
+        }
+
+        // Wszystkie ligi
+        if (diamondList.length === 0 && goldList.length === 0) {
+            container.innerHTML = `<div class="empty-state">Nie znaleziono kierowców pasujących do wyszukiwania.</div>`;
+            return;
+        }
+
+        if (diamondList.length > 0) {
+            container.appendChild(renderLeagueBlock("💎 Liga Diamentowa", "Diamond", diamondList));
+        }
+        if (goldList.length > 0) {
+            container.appendChild(renderLeagueBlock("🏆 Liga Złota", "Gold", goldList));
+        }
+    }
+
+    function switchLeagueFilter(leagueKey, btnElement) {
+        activeLeague = leagueKey;
+        document.querySelectorAll(".league-tab-btn").forEach(btn => btn.classList.remove("active"));
+        btnElement.classList.add("active");
+        renderDrivers();
+    }
+
+    renderDrivers();
+    loadDrivers();
 </script>
 
 </body>
