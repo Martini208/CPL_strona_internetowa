@@ -786,7 +786,7 @@ footer {
 <script>
 const SHEET_ID = '1na_Zlv7uk9AGO3f76sqMvN5C5kT-EXnphJlTD6KKx0M';
 const DIAMOND_LEAGUE_GID = '1651963070';
-const GOLD_LEAGUE_GID = '1651963070';
+const GOLD_LEAGUE_GID = '1869079550';
 
 const TEAM_IMAGES = {
     'mercedes': {
@@ -1206,7 +1206,6 @@ function extractTeamsFromRows(rawData) {
             break;
         }
 
-        // Punkte stehen im Sheet je nach Zeile in Spalte 7 oder 8, danach folgen die Rennen[cite: 9]
         const ptsCandidate7 = parseNumber(row[7]);
         const ptsCandidate8 = parseNumber(row[8]);
         const teamPts = ptsCandidate7 > 0 ? ptsCandidate7 : (ptsCandidate8 > 0 ? ptsCandidate8 : ptsCandidate7);
