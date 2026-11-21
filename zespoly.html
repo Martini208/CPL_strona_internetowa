@@ -1265,7 +1265,7 @@ function fetchLeagueTeamsViaGviz(gid) {
         const script = document.createElement('script');
         const timeout = setTimeout(() => {
             cleanup();
-            resolve(null);
+            resolve({ teams: null, reason: 'gviz-timeout' });
         }, 6000);
 
         function cleanup() {
@@ -1278,63 +1278,92 @@ function fetchLeagueTeamsViaGviz(gid) {
             cleanup();
             try {
                 if (!resp || !resp.table || !Array.isArray(resp.table.rows)) {
-                    resolve(null);
+                    resolve({ teams: null, reason: 'gviz-keine-tabelle' });
                     return;
                 }
                 const rows = resp.table.rows.map(r =>
                     (r.c || []).map(cell => (cell && cell.v !== null && cell.v !== undefined ? String(cell.v) : ''))
                 );
-                resolve(extractTeamsFromRows(rows));
+                const parsed = extractTeamsFromRows(rows);
+                if (!parsed || parsed.length === 0) {
+                    resolve({ teams: null, reason: 'gviz-header-nicht-gefunden' });
+                    return;
+                }
+                resolve({ teams: parsed, reason: 'ok' });
             } catch (e) {
-                resolve(null);
+                resolve({ teams: null, reason: 'gviz-parse-fehler' });
             }
         };
 
         script.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?gid=${gid}&tqx=responseHandler:${callbackName}&t=${Date.now()}`;
         script.onerror = () => {
             cleanup();
-            resolve(null);
+            resolve({ teams: null, reason: 'gviz-script-fehler' });
         };
         document.body.appendChild(script);
     });
 }
 
 async function fetchLeagueTeams(gid) {
-    if (gid === '' || gid === null || gid === undefined) return null;
+    if (gid === '' || gid === null || gid === undefined) {
+        return { teams: null, reason: 'keine-gid' };
+    }
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${gid}&t=${Date.now()}`;
+    let csvReason = 'fetch-fehler';
+
     try {
         const res = await fetch(url, { cache: 'no-store' });
-        if (res.ok) {
+        if (!res.ok) {
+            csvReason = `http-${res.status}`;
+        } else {
             const csvText = await res.text();
-            const parsed = extractTeamsFromCSV(csvText);
-            if (parsed && parsed.length > 0) return parsed;
+            const trimmed = csvText.trim();
+            if (trimmed.startsWith('<!DOCTYPE') || trimmed.startsWith('<html')) {
+                csvReason = 'csv-liefert-html-login';
+            } else {
+                const parsed = extractTeamsFromCSV(csvText);
+                if (parsed && parsed.length > 0) {
+                    return { teams: parsed, reason: 'ok' };
+                }
+                csvReason = 'csv-header-nicht-gefunden';
+            }
         }
     } catch (err) {
-        // Fallback auf GViz JSONP
+        csvReason = 'fetch-cors-oder-netzwerk';
     }
-    return await fetchLeagueTeamsViaGviz(gid);
+
+    const gvizResult = await fetchLeagueTeamsViaGviz(gid);
+    if (gvizResult.teams && gvizResult.teams.length > 0) {
+        return gvizResult;
+    }
+    return { teams: null, reason: `${csvReason} / ${gvizResult.reason}` };
 }
 
 async function loadLeaguesData() {
     let anyLiveLoaded = false;
+    let lastReason = '';
 
     if (DIAMOND_LEAGUE_GID !== '') {
-        const loadedDiamond = await fetchLeagueTeams(DIAMOND_LEAGUE_GID);
-        if (loadedDiamond && loadedDiamond.length > 0) {
-            diamondTeams = loadedDiamond;
+        const resDiamond = await fetchLeagueTeams(DIAMOND_LEAGUE_GID);
+        if (resDiamond.teams && resDiamond.teams.length > 0) {
+            diamondTeams = resDiamond.teams;
             anyLiveLoaded = true;
+        } else {
+            lastReason = resDiamond.reason;
         }
     }
 
     if (GOLD_LEAGUE_GID !== '') {
-        const loadedGold = await fetchLeagueTeams(GOLD_LEAGUE_GID);
-        if (loadedGold && loadedGold.length > 0) {
-            goldTeams = loadedGold;
+        const resGold = await fetchLeagueTeams(GOLD_LEAGUE_GID);
+        if (resGold.teams && resGold.teams.length > 0) {
+            goldTeams = resGold.teams;
             anyLiveLoaded = true;
+        } else {
+            lastReason = resGold.reason;
         }
     }
 
-    dataSourceLabel = anyLiveLoaded ? 'Live Sheet' : 'Fallback';
+    dataSourceLabel = anyLiveLoaded ? 'Live Sheet' : `Fallback (${lastReason || 'unbekannt'})`;
     renderActiveDivision(document.getElementById('team-search').value);
 }
 
