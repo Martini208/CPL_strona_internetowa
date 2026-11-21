@@ -1179,48 +1179,121 @@ function cleanDriverName(rawName) {
         .trim();
 }
 
-function isTeamHeaderColumn(val) {
-    const v = String(val || '').trim().toLowerCase();
-    return v === 'drużyna' || v === 'druzyna';
+function normalizeHeaderCell(val) {
+    return String(val || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/\u0142/g, 'l')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+function isTeamHeaderLabel(cell) {
+    const h = normalizeHeaderCell(cell);
+    return (
+        h === 'druzyna' ||
+        h.startsWith('druzyna ') ||
+        h === 'zespol' ||
+        h.startsWith('zespol ') ||
+        h === 'konstruktor' ||
+        h.startsWith('konstruktor') ||
+        h === 'team' ||
+        h.startsWith('team ')
+    );
+}
+
+function isPosHeaderLabel(cell) {
+    const h = normalizeHeaderCell(cell);
+    return h === 'pozycja' || h === 'poz' || h === 'pos' || h === 'miejsce';
+}
+
+function isPointsHeaderLabel(cell) {
+    const h = normalizeHeaderCell(cell);
+    return h === 'punkty' || h === 'pkt' || h === 'pts' || h === 'points' || h.startsWith('punkty ');
+}
+
+function isDriverHeaderLabel(cell) {
+    const h = normalizeHeaderCell(cell);
+    return h.includes('kierowc') || h.includes('driver') || h.includes('zawodnik');
+}
+
+function detectTeamTableLayout(rawData) {
+    for (let i = 0; i < rawData.length; i++) {
+        const row = rawData[i];
+        if (!Array.isArray(row)) continue;
+
+        let posIdx = -1;
+        let teamIdx = -1;
+        let driverIdx = -1;
+        let pointsIdx = -1;
+
+        row.forEach((cell, idx) => {
+            if (posIdx === -1 && isPosHeaderLabel(cell)) posIdx = idx;
+            if (teamIdx === -1 && isTeamHeaderLabel(cell)) teamIdx = idx;
+            if (driverIdx === -1 && isDriverHeaderLabel(cell)) driverIdx = idx;
+            if (pointsIdx === -1 && isPointsHeaderLabel(cell)) pointsIdx = idx;
+        });
+
+        // Teamtabelle erkennen: hat eine Team-Spalte und (Punkte oder Fahrer oder Position)
+        if (teamIdx !== -1 && (pointsIdx !== -1 || driverIdx !== -1 || posIdx !== -1)) {
+            return {
+                headerIdx: i,
+                posIdx: posIdx !== -1 ? posIdx : Math.max(0, teamIdx - 1),
+                teamIdx,
+                driverIdx: driverIdx !== -1 ? driverIdx : (pointsIdx !== -1 ? pointsIdx - 1 : teamIdx + 3),
+                pointsIdx: pointsIdx !== -1 ? pointsIdx : teamIdx + 4
+            };
+        }
+    }
+    return null;
 }
 
 function extractTeamsFromRows(rawData) {
     if (!Array.isArray(rawData) || rawData.length === 0) return null;
 
-    const teamTableHeaderIdx = rawData.findIndex(r => {
-        if (!Array.isArray(r)) return false;
-        const colC = (r[2] || '').trim().toLowerCase();
-        const hasTeamCol = isTeamHeaderColumn(r[3]) || r.some(cell => isTeamHeaderColumn(cell));
-        const hasDriverCol = r.some(cell => String(cell || '').trim().toLowerCase().includes('kierowc'));
-        return colC === 'pozycja' && hasTeamCol && hasDriverCol;
-    });
+    const layout = detectTeamTableLayout(rawData);
+    if (!layout) return null;
 
-    if (teamTableHeaderIdx === -1) return null;
-
+    const { headerIdx, posIdx, teamIdx, driverIdx, pointsIdx } = layout;
     const teamsMap = new Map();
     let currentTeamKey = '';
 
-    for (let i = teamTableHeaderIdx + 1; i < rawData.length; i++) {
+    for (let i = headerIdx + 1; i < rawData.length; i++) {
         const row = rawData[i];
-        if (!row || row.every(c => !c)) continue;
+        if (!row || row.every(c => !String(c || '').trim())) continue;
 
-        const posCell = (row[2] || '').trim();
-        const teamNameCell = (row[3] || '').trim();
-        const driverNameCell = (row[6] || '').trim();
+        const posCell = String(row[posIdx] || '').trim();
+        const teamNameCell = String(row[teamIdx] || '').trim();
+        const driverNameCell = driverIdx >= 0 ? String(row[driverIdx] || '').trim() : '';
 
-        if (posCell.toLowerCase() === 'pozycja' && isTeamHeaderColumn(teamNameCell)) {
+        // Ende der Teamtabelle bei einer neuen Kopfzeile oder Summenzeile
+        if (
+            (isPosHeaderLabel(posCell) && isTeamHeaderLabel(teamNameCell)) ||
+            normalizeHeaderCell(teamNameCell) === 'razem' ||
+            normalizeHeaderCell(teamNameCell) === 'suma' ||
+            normalizeHeaderCell(teamNameCell) === 'total'
+        ) {
             break;
         }
 
-        const ptsCandidate7 = parseNumber(row[7]);
-        const ptsCandidate8 = parseNumber(row[8]);
-        const hasPtsIn8 = ptsCandidate8 > 0 && ptsCandidate7 === 0;
-        const teamPts = ptsCandidate7 > 0 ? ptsCandidate7 : (ptsCandidate8 > 0 ? ptsCandidate8 : 0);
-        const raceSlice = hasPtsIn8 ? row.slice(9, 29) : row.slice(8, 28);
+        const ptsCandidateMain = pointsIdx >= 0 ? parseNumber(row[pointsIdx]) : 0;
+        const ptsCandidateNext = pointsIdx >= 0 ? parseNumber(row[pointsIdx + 1]) : 0;
+        const teamPts = ptsCandidateMain > 0 ? ptsCandidateMain : (ptsCandidateNext > 0 ? ptsCandidateNext : ptsCandidateMain);
 
+        const raceStartIdx = ptsCandidateNext > 0 && ptsCandidateMain === 0
+            ? pointsIdx + 2
+            : pointsIdx + 1;
+        const raceSlice = raceStartIdx >= 0 ? row.slice(raceStartIdx, raceStartIdx + 24) : [];
         const { wins, podiums } = countPodiumsAndWins(raceSlice);
 
-        if (teamNameCell && teamNameCell !== '#N/A' && !isTeamHeaderColumn(teamNameCell)) {
+        if (
+            teamNameCell &&
+            teamNameCell !== '-' &&
+            teamNameCell !== '#N/A' &&
+            teamNameCell !== '#REF!' &&
+            !isTeamHeaderLabel(teamNameCell)
+        ) {
             currentTeamKey = normalizeTeamKey(teamNameCell);
             if (!teamsMap.has(currentTeamKey)) {
                 teamsMap.set(currentTeamKey, {
@@ -1232,7 +1305,7 @@ function extractTeamsFromRows(rawData) {
                     drivers: []
                 });
             } else if (teamPts > 0) {
-                teamsMap.get(currentTeamKey).points = teamPts;
+                teamsMap.get(currentTeamKey).points = Math.max(teamsMap.get(currentTeamKey).points, teamPts);
             }
         }
 
@@ -1245,7 +1318,7 @@ function extractTeamsFromRows(rawData) {
                 driverNameCell &&
                 driverNameCell !== '-' &&
                 driverNameCell !== '#N/A' &&
-                !driverNameCell.toLowerCase().includes('kierowc')
+                !isDriverHeaderLabel(driverNameCell)
             ) {
                 const displayDriver = cleanDriverName(driverNameCell);
                 if (displayDriver && !teamObj.drivers.includes(displayDriver)) {
