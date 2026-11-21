@@ -269,9 +269,9 @@ nav a:hover {
 }
 
 .today-btn {
-    background: rgba(255, 49, 49, 0.14);
-    color: #ff6b6b;
-    border: 1px solid rgba(255, 49, 49, 0.55);
+    background: rgba(245, 158, 11, 0.14);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.55);
     padding: 8px 14px;
     border-radius: 6px;
     font-size: 13px;
@@ -281,14 +281,14 @@ nav a:hover {
 }
 
 body.light-mode .today-btn {
-    color: #c91c1c;
-    background: rgba(255, 49, 49, 0.08);
+    color: #b45309;
+    background: rgba(245, 158, 11, 0.12);
 }
 
 .today-btn:hover {
-    background: #ff3131;
-    color: #ffffff;
-    border-color: #ff3131;
+    background: #f59e0b;
+    color: #111111;
+    border-color: #fbbf24;
 }
 
 .calendar-weekdays {
@@ -360,34 +360,34 @@ body.light-mode .day-cell.weekend { background: rgba(0, 0, 0, 0.05); }
     background: rgba(52, 152, 219, 0.15);
 }
 
-/* Stylischer heutiger Tag */
+/* Stylischer heutiger Tag in Gold / Amber */
 .day-cell.today-cell {
-    border: 2px solid #ff4d4d;
-    background: linear-gradient(155deg, rgba(255, 49, 49, 0.24) 0%, rgba(255, 49, 49, 0.07) 100%);
-    box-shadow: 0 0 0 1px rgba(255, 77, 77, 0.25), 0 8px 24px rgba(255, 49, 49, 0.24);
+    border: 2px solid #fbbf24;
+    background: linear-gradient(155deg, rgba(245, 158, 11, 0.24) 0%, rgba(245, 158, 11, 0.06) 100%);
+    box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.28), 0 8px 24px rgba(245, 158, 11, 0.22);
 }
 
 .day-cell.today-cell .day-number {
-    color: #ff6b6b;
+    color: #fcd34d;
     font-weight: 900;
 }
 
 body.light-mode .day-cell.today-cell .day-number {
-    color: #c91c1c;
+    color: #b45309;
 }
 
 .today-dot {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #ff3131;
-    box-shadow: 0 0 8px #ff3131;
+    background: #fbbf24;
+    box-shadow: 0 0 8px #fbbf24;
     display: inline-block;
 }
 
 .today-tag {
-    background: #ff3131;
-    color: #ffffff;
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    color: #141414;
     font-size: 9px;
     font-weight: 900;
     letter-spacing: 0.7px;
@@ -395,11 +395,11 @@ body.light-mode .day-cell.today-cell .day-number {
     border-radius: 999px;
     text-transform: uppercase;
     line-height: 1.1;
-    box-shadow: 0 2px 8px rgba(255, 49, 49, 0.45);
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.45);
 }
 
 .day-cell.today-cell.has-race {
-    box-shadow: 0 0 0 2px rgba(255, 110, 110, 0.4), 0 10px 28px rgba(255, 49, 49, 0.34);
+    box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.42), 0 10px 28px rgba(245, 158, 11, 0.32);
 }
 
 .race-badge-list {
@@ -968,7 +968,6 @@ footer {
         renderCalendar();
     });
 
-    // Sofort den aktuellen Monat anzeigen, auch bevor die CSV fertig geladen ist
     renderCalendar();
     fetchCalendarData();
 </script>
