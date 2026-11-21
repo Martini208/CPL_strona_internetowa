@@ -1179,14 +1179,20 @@ function cleanDriverName(rawName) {
         .trim();
 }
 
+function isTeamHeaderColumn(val) {
+    const v = String(val || '').trim().toLowerCase();
+    return v === 'drużyna' || v === 'druzyna';
+}
+
 function extractTeamsFromRows(rawData) {
     if (!Array.isArray(rawData) || rawData.length === 0) return null;
 
     const teamTableHeaderIdx = rawData.findIndex(r => {
+        if (!Array.isArray(r)) return false;
         const colC = (r[2] || '').trim().toLowerCase();
-        const colD = (r[3] || '').trim().toLowerCase();
-        const colG = (r[6] || '').trim().toLowerCase();
-        return colC === 'pozycja' && colD === 'drużyna' && colG.includes('kierowc');
+        const hasTeamCol = isTeamHeaderColumn(r[3]) || r.some(cell => isTeamHeaderColumn(cell));
+        const hasDriverCol = r.some(cell => String(cell || '').trim().toLowerCase().includes('kierowc'));
+        return colC === 'pozycja' && hasTeamCol && hasDriverCol;
     });
 
     if (teamTableHeaderIdx === -1) return null;
@@ -1202,18 +1208,19 @@ function extractTeamsFromRows(rawData) {
         const teamNameCell = (row[3] || '').trim();
         const driverNameCell = (row[6] || '').trim();
 
-        if (posCell.toLowerCase() === 'pozycja' && teamNameCell.toLowerCase() === 'drużyna') {
+        if (posCell.toLowerCase() === 'pozycja' && isTeamHeaderColumn(teamNameCell)) {
             break;
         }
 
         const ptsCandidate7 = parseNumber(row[7]);
         const ptsCandidate8 = parseNumber(row[8]);
-        const teamPts = ptsCandidate7 > 0 ? ptsCandidate7 : (ptsCandidate8 > 0 ? ptsCandidate8 : ptsCandidate7);
-        const raceSlice = ptsCandidate8 > 0 && ptsCandidate7 === 0 ? row.slice(9, 29) : row.slice(8, 28);
+        const hasPtsIn8 = ptsCandidate8 > 0 && ptsCandidate7 === 0;
+        const teamPts = ptsCandidate7 > 0 ? ptsCandidate7 : (ptsCandidate8 > 0 ? ptsCandidate8 : 0);
+        const raceSlice = hasPtsIn8 ? row.slice(9, 29) : row.slice(8, 28);
 
         const { wins, podiums } = countPodiumsAndWins(raceSlice);
 
-        if (teamNameCell && teamNameCell !== '#N/A' && teamNameCell.toLowerCase() !== 'drużyna') {
+        if (teamNameCell && teamNameCell !== '#N/A' && !isTeamHeaderColumn(teamNameCell)) {
             currentTeamKey = normalizeTeamKey(teamNameCell);
             if (!teamsMap.has(currentTeamKey)) {
                 teamsMap.set(currentTeamKey, {
