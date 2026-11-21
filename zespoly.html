@@ -1201,12 +1201,16 @@ function extractTeamsFromRows(rawData) {
         const posCell = (row[2] || '').trim();
         const teamNameCell = (row[3] || '').trim();
         const driverNameCell = (row[6] || '').trim();
-        const teamPtsCell = row[7] !== '' && row[7] !== undefined ? row[7] : row[28];
-        const raceSlice = row.slice(8, 28);
 
         if (posCell.toLowerCase() === 'pozycja' && teamNameCell.toLowerCase() === 'drużyna') {
             break;
         }
+
+        // Punkte stehen im Sheet je nach Zeile in Spalte 7 oder 8, danach folgen die Rennen[cite: 9]
+        const ptsCandidate7 = parseNumber(row[7]);
+        const ptsCandidate8 = parseNumber(row[8]);
+        const teamPts = ptsCandidate7 > 0 ? ptsCandidate7 : (ptsCandidate8 > 0 ? ptsCandidate8 : ptsCandidate7);
+        const raceSlice = ptsCandidate8 > 0 && ptsCandidate7 === 0 ? row.slice(9, 29) : row.slice(8, 28);
 
         const { wins, podiums } = countPodiumsAndWins(raceSlice);
 
@@ -1216,13 +1220,13 @@ function extractTeamsFromRows(rawData) {
                 teamsMap.set(currentTeamKey, {
                     key: currentTeamKey,
                     name: teamNameCell,
-                    points: parseNumber(teamPtsCell),
+                    points: teamPts,
                     podiums: 0,
                     wins: 0,
                     drivers: []
                 });
-            } else if (parseNumber(teamPtsCell) > 0) {
-                teamsMap.get(currentTeamKey).points = parseNumber(teamPtsCell);
+            } else if (teamPts > 0) {
+                teamsMap.get(currentTeamKey).points = teamPts;
             }
         }
 
