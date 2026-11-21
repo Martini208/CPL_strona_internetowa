@@ -32,7 +32,7 @@ body{
     background: var(--bg-color);
     color: var(--text-color);
     transition: background 0.3s ease, color 0.3s ease;
-    padding-top: 80px; /* Perfekter Abstand für die größere Nav-Leiste */
+    padding-top: 80px;
 }
 
 /* Navigation - Größeres "Frosted Glass" Design */
@@ -41,10 +41,9 @@ nav {
     top: 0;
     left: 0;
     width: 100%;
-    height: 80px; /* Größere Box */
-    /* Deutlich transparenter, damit man den Hintergrund gut sieht */
+    height: 80px;
     background: linear-gradient(135deg, rgba(180, 40, 50, 0.60) 0%, rgba(100, 15, 25, 0.70) 100%);
-    backdrop-filter: blur(15px); /* Starker Milchglas-Effekt */
+    backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     display: flex;
     justify-content: space-between;
@@ -98,7 +97,6 @@ nav a:hover {
     color: #ffffff;
 }
 
-/* Spezieller "Zapisy" Button in der Nav */
 .nav-zapisy-btn {
     background: #ff3131 !important;
     color: white !important;
@@ -120,7 +118,6 @@ nav a:hover {
     gap: 15px;
 }
 
-/* Social Media Icons in der Leiste (Vergrößert & Deutlich sichtbar) */
 .nav-socials {
     display: flex;
     align-items: center;
@@ -175,7 +172,6 @@ nav a:hover {
 }
 
 /* Hero */
-
 .hero{
     position:relative;
     height:calc(100vh - 80px);
@@ -247,9 +243,14 @@ nav a:hover {
 }
 
 /* F1 Style Next Race Bar */
-
 .f1-race-bar-section {
     padding: 60px 10% 20px 10%;
+}
+
+.f1-race-bars-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .f1-race-bar {
@@ -261,15 +262,53 @@ nav a:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 18px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     font-size: 14px;
     transition: background 0.3s ease;
 }
 
+.f1-race-bar.gold-bar {
+    border-left-color: #eab308;
+}
+
 .f1-race-info {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 5px;
+}
+
+.f1-race-meta-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.f1-league-badge {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(255, 49, 49, 0.16);
+    color: #ff6b6b;
+    border: 1px solid rgba(255, 49, 49, 0.35);
+}
+
+.f1-race-bar.gold-bar .f1-league-badge {
+    background: rgba(234, 179, 8, 0.16);
+    color: #facc15;
+    border-color: rgba(234, 179, 8, 0.38);
+}
+
+body.light-mode .f1-league-badge {
+    color: #b91c1c;
+}
+
+body.light-mode .f1-race-bar.gold-bar .f1-league-badge {
+    color: #a16207;
 }
 
 .f1-race-meta {
@@ -279,13 +318,28 @@ nav a:hover {
     letter-spacing: 1px;
 }
 
+.f1-race-bar.gold-bar .f1-race-meta {
+    color: #eab308;
+}
+
 .f1-race-title {
     font-size: 20px;
     font-weight: 800;
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 10px;
     letter-spacing: 0.5px;
+}
+
+.f1-race-track {
+    font-size: 13px;
+    font-weight: 600;
+    color: #a0a0a0;
+}
+
+body.light-mode .f1-race-track {
+    color: #555555;
 }
 
 .f1-flag-img {
@@ -299,6 +353,7 @@ nav a:hover {
     display: flex;
     align-items: center;
     gap: 15px;
+    flex-shrink: 0;
 }
 
 .f1-timer-label {
@@ -319,10 +374,14 @@ nav a:hover {
     border-radius: 6px;
     border: 1px solid var(--border-color);
     letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+body.light-mode .f1-timer-digits {
+    background: rgba(0, 0, 0, 0.05);
 }
 
 /* Bereiche */
-
 section{
     padding:60px 10%;
 }
@@ -335,7 +394,6 @@ h2{
 }
 
 /* Tabelle */
-
 table{
     width:100%;
     border-collapse:collapse;
@@ -356,7 +414,6 @@ td{
 }
 
 /* News */
-
 .news-grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
@@ -381,7 +438,6 @@ td{
 }
 
 /* Footer Styles */
-
 footer {
     background: #080808;
     color: #e0e0e0;
@@ -430,8 +486,6 @@ footer {
     color: #ff3131;
 }
 
-/* Social Icons Links mit SVG Logos */
-
 .social-links {
     display: flex;
     gap: 12px;
@@ -465,8 +519,6 @@ footer {
     transform: translateY(-3px);
 }
 
-/* Bottom Bar Zentriert */
-
 .footer-bottom {
     border-top: 1px solid #1f1f1f;
     padding-top: 20px;
@@ -498,9 +550,7 @@ footer {
 }
 
 /* Mobile responsive */
-
 @media(max-width:900px){
-
     nav{
         flex-direction:column;
         height: auto;
@@ -533,8 +583,14 @@ footer {
         text-align: center;
     }
 
+    .f1-race-meta-row,
     .f1-race-title {
         justify-content: center;
+    }
+
+    .f1-race-timer-container {
+        flex-direction: column;
+        gap: 6px;
     }
 }
 </style>
@@ -544,12 +600,10 @@ footer {
 
 <nav>
     <div class="nav-left">
-        <!-- CPL Logo ganz links -->
         <a href="index.html">
             <img class="cpl-logo-img" src="images/cpl_logo_lizard.png" alt="CPL Logo">
         </a>
         
-        <!-- Menüpunkte -->
         <ul>
             <li><a href="kalendarz.html">Kalendarz</a></li>
             <li><a href="sezony.html">Sezony</a></li>
@@ -561,7 +615,6 @@ footer {
         </ul>
     </div>
     
-    <!-- Socials & Rechten Bereich -->
     <div class="nav-right">
         <div class="nav-socials">
             <a href="https://discord.com/invite/szt7rHnFSj" target="_blank" class="nav-social-icon" title="Discord">
@@ -588,7 +641,6 @@ footer {
 
 <section class="hero">
 
-    <!-- YouTube-Video Background im Loop -->
     <iframe 
         src="https://www.youtube.com/embed/WepEUEu1Hv0?autoplay=1&mute=1&controls=0&loop=1&playlist=WepEUEu1Hv0&enablejsapi=1" 
         title="F1 Video Background"
@@ -608,21 +660,47 @@ footer {
 
 </section>
 
-<!-- F1 Style Next Race Bar Section -->
+<!-- F1 Style Next Race Bar Section (Liga Diamentowa = Split 1 | Liga Złota = Split 2) -->
 <div class="f1-race-bar-section" id="kalendarz">
     <h2>Następny wyścig</h2>
-    
-    <div class="f1-race-bar">
-        <div class="f1-race-info">
-            <span class="f1-race-meta">R16 | 12 OCT 2026</span>
-            <div class="f1-race-title">
-                <img src="https://martini208.github.io/CPL-/italien.png" alt="Italien Flagge" class="f1-flag-img">
-                Grand Prix Monzy
+
+    <div class="f1-race-bars-stack">
+        <!-- Split 1 -> Liga Diamentowa -->
+        <div class="f1-race-bar diamond-bar" id="bar-split-1">
+            <div class="f1-race-info">
+                <div class="f1-race-meta-row">
+                    <span class="f1-league-badge">Liga Diamentowa</span>
+                    <span class="f1-race-meta" id="meta-split-1">ŁADOWANIE...</span>
+                </div>
+                <div class="f1-race-title">
+                    <img src="https://flagcdn.com/w40/bh.png" alt="Flaga" class="f1-flag-img" id="flag-split-1" onerror="this.style.display='none'">
+                    <span id="title-split-1">Pobieranie danych...</span>
+                    <span class="f1-race-track" id="track-split-1"></span>
+                </div>
+            </div>
+            <div class="f1-race-timer-container">
+                <span class="f1-timer-label">Czas do wyścigu</span>
+                <div class="f1-timer-digits" id="countdown-split-1">--d --h --m --s</div>
             </div>
         </div>
-        <div class="f1-race-timer-container">
-            <span class="f1-timer-label">Czas do wyścigu</span>
-            <div class="f1-timer-digits" id="countdown">00d 00h 00m 00s</div>
+
+        <!-- Split 2 -> Liga Złota -->
+        <div class="f1-race-bar gold-bar" id="bar-split-2">
+            <div class="f1-race-info">
+                <div class="f1-race-meta-row">
+                    <span class="f1-league-badge">Liga Złota</span>
+                    <span class="f1-race-meta" id="meta-split-2">ŁADOWANIE...</span>
+                </div>
+                <div class="f1-race-title">
+                    <img src="https://flagcdn.com/w40/bh.png" alt="Flaga" class="f1-flag-img" id="flag-split-2" onerror="this.style.display='none'">
+                    <span id="title-split-2">Pobieranie danych...</span>
+                    <span class="f1-race-track" id="track-split-2"></span>
+                </div>
+            </div>
+            <div class="f1-race-timer-container">
+                <span class="f1-timer-label">Czas do wyścigu</span>
+                <div class="f1-timer-digits" id="countdown-split-2">--d --h --m --s</div>
+            </div>
         </div>
     </div>
 </div>
@@ -684,13 +762,11 @@ footer {
 <!-- Erweiterter Footer -->
 <footer>
     <div class="footer-container">
-        <!-- Spalte 1: Info -->
         <div class="footer-col">
             <h3>CPL F1 League</h3>
             <p>Oficjalna liga simracingowa F1. Dołącz do rywalizacji i ścigaj się z najlepszymi kierowcami na torze!</p>
         </div>
 
-        <!-- Spalte 2: Szybkie Linki -->
         <div class="footer-col">
             <h4>Nawigacja</h4>
             <ul>
@@ -701,7 +777,6 @@ footer {
             </ul>
         </div>
 
-        <!-- Spalte 3: Kontakt & Pomoc -->
         <div class="footer-col">
             <h4>Kontakt & Support</h4>
             <ul>
@@ -711,27 +786,19 @@ footer {
             </ul>
         </div>
 
-        <!-- Spalte 4: Social Media mit genauen Links & SVG Logos -->
         <div class="footer-col">
             <h4>Social Media</h4>
             <p style="margin-bottom: 12px;">Zaobserwuj nas w sieci:</p>
             <div class="social-links">
-                <!-- YouTube Logo -->
                 <a href="https://www.youtube.com/@CPLeague" target="_blank" class="social-btn" title="YouTube">
                     <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
                 </a>
-
-                <!-- Instagram Logo -->
                 <a href="https://www.instagram.com/cpl_liga/" target="_blank" class="social-btn" title="Instagram">
                     <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                 </a>
-
-                <!-- Facebook Logo -->
                 <a href="https://www.facebook.com/CPLeSport" target="_blank" class="social-btn" title="Facebook">
                     <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                 </a>
-
-                <!-- TikTok Logo -->
                 <a href="https://www.tiktok.com/@cpl_f1_league" target="_blank" class="social-btn" title="TikTok">
                     <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.82.56-1.33 1.51-1.3 2.51.01.88.48 1.72 1.2 2.22 1.05.74 2.48.74 3.53-.02.82-.58 1.34-1.54 1.34-2.55.02-5.63.01-11.25.01-16.88z"/></svg>
                 </a>
@@ -739,7 +806,6 @@ footer {
         </div>
     </div>
 
-    <!-- Mittig ausgerichteter Footer-Bottom Bereich -->
     <div class="footer-bottom">
         <p>© 2026 CPL Racing League. Wszelkie prawa zastrzeżone.</p>
         <div class="footer-bottom-links">
@@ -756,24 +822,227 @@ footer {
 
     themeToggleBtn.addEventListener('click', () => {
         document.body.classList.toggle('light-mode');
-        
-        if (document.body.classList.contains('light-mode')) {
-            themeToggleBtn.textContent = '🌙';
-        } else {
-            themeToggleBtn.textContent = '☀️';
-        }
+        themeToggleBtn.textContent = document.body.classList.contains('light-mode') ? '🌙' : '☀️';
     });
 
-    // Countdown Timer Script (Ziel-Datum: 12. Oktober 2026, 20:00 Uhr)
-    const raceDate = new Date("Oct 12, 2026 20:00:00").getTime();
+    // Kalendarz z Google Sheets (gid=0): Split 1 = Liga Diamentowa, Split 2 = Liga Złota
+    const CALENDAR_SHEET_ID = "1na_Zlv7uk9AGO3f76sqMvN5C5kT-EXnphJlTD6KKx0M";
+    const CALENDAR_CSV_URL = `https://docs.google.com/spreadsheets/d/${CALENDAR_SHEET_ID}/export?format=csv&gid=0`;
 
-    const countdownFunction = setInterval(() => {
-        const now = new Date().getTime();
-        const distance = raceDate - now;
+    const nextRaceTargets = {
+        "1": null, // Split 1 -> Liga Diamentowa
+        "2": null  // Split 2 -> Liga Złota
+    };
 
-        if (distance < 0) {
-            clearInterval(countdownFunction);
-            document.getElementById("countdown").innerText = "WYŚCIG TRWA!";
+    function parseCSVRows(csvText) {
+        const rows = [];
+        let row = [];
+        let cell = "";
+        let inQuotes = false;
+
+        for (let i = 0; i < csvText.length; i++) {
+            const ch = csvText[i];
+            const next = csvText[i + 1];
+
+            if (ch === '"') {
+                if (inQuotes && next === '"') {
+                    cell += '"';
+                    i++;
+                } else {
+                    inQuotes = !inQuotes;
+                }
+            } else if (ch === "," && !inQuotes) {
+                row.push(cell.trim());
+                cell = "";
+            } else if ((ch === "\n" || ch === "\r") && !inQuotes) {
+                if (ch === "\r" && next === "\n") i++;
+                row.push(cell.trim());
+                if (row.some(c => c !== "")) rows.push(row);
+                row = [];
+                cell = "";
+            } else {
+                cell += ch;
+            }
+        }
+        if (cell.length > 0 || row.length > 0) {
+            row.push(cell.trim());
+            if (row.some(c => c !== "")) rows.push(row);
+        }
+        return rows;
+    }
+
+    function normalizeSplitKey(rawSplit) {
+        const cleaned = String(rawSplit || "")
+            .toLowerCase()
+            .replace(/\s+/g, "");
+        if (cleaned.includes("split1") || cleaned === "1" || cleaned.includes("diament")) {
+            return "1";
+        }
+        if (cleaned.includes("split2") || cleaned === "2" || cleaned.includes("zlot") || cleaned.includes("złot")) {
+            return "2";
+        }
+        return null;
+    }
+
+    function parseRaceDateTime(dateStr, timeStr) {
+        const dRaw = String(dateStr || "").trim();
+        if (!dRaw) return null;
+
+        let year, month, day;
+        if (/^\d{1,2}\.\d{1,2}\.\d{4}$/.test(dRaw)) {
+            const parts = dRaw.split(".");
+            day = parseInt(parts[0], 10);
+            month = parseInt(parts[1], 10);
+            year = parseInt(parts[2], 10);
+        } else if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(dRaw)) {
+            const parts = dRaw.split("-");
+            year = parseInt(parts[0], 10);
+            month = parseInt(parts[1], 10);
+            day = parseInt(parts[2], 10);
+        } else {
+            const fallback = new Date(dRaw);
+            if (!Number.isNaN(fallback.getTime())) return fallback.getTime();
+            return null;
+        }
+
+        let hours = 20;
+        let minutes = 0;
+        const tRaw = String(timeStr || "").trim();
+        const timeMatch = tRaw.match(/(\d{1,2})[:.](\d{2})/);
+        if (timeMatch) {
+            hours = parseInt(timeMatch[1], 10);
+            minutes = parseInt(timeMatch[2], 10);
+        }
+
+        const dt = new Date(year, month - 1, day, hours, minutes, 0);
+        return Number.isNaN(dt.getTime()) ? null : dt.getTime();
+    }
+
+    function getFlagUrl(flagCode) {
+        const code = String(flagCode || "").trim().toLowerCase();
+        if (/^[a-z]{2}$/.test(code)) {
+            return `https://flagcdn.com/w40/${code}.png`;
+        }
+        return "https://martini208.github.io/CPL-/italien.png";
+    }
+
+    function applyRaceToUI(splitKey, race) {
+        const metaEl = document.getElementById(`meta-split-${splitKey}`);
+        const titleEl = document.getElementById(`title-split-${splitKey}`);
+        const trackEl = document.getElementById(`track-split-${splitKey}`);
+        const flagEl = document.getElementById(`flag-split-${splitKey}`);
+
+        if (!race) {
+            metaEl.textContent = "BRAK DANYCH";
+            titleEl.textContent = "Brak zaplanowanych wyścigów";
+            trackEl.textContent = "";
+            return;
+        }
+
+        const roundPart = race.round ? `R${race.round}` : "WYŚCIG";
+        const datePart = race.dateDisplay || "";
+        const timePart = race.timeDisplay ? `${race.timeDisplay}` : "";
+        metaEl.textContent = [roundPart, datePart, timePart].filter(Boolean).join(" | ");
+
+        titleEl.textContent = race.country ? `Grand Prix ${race.country}` : (race.track || "Grand Prix");
+        trackEl.textContent = race.track ? `• ${race.track}` : "";
+
+        if (flagEl) {
+            flagEl.src = getFlagUrl(race.flag);
+            flagEl.alt = race.country || "Flaga";
+            flagEl.style.display = "inline-block";
+        }
+    }
+
+    async function loadNextRacesFromSheet() {
+        try {
+            const response = await fetch(`${CALENDAR_CSV_URL}&t=${Date.now()}`, { cache: "no-store" });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+            const csvText = await response.text();
+            const matrix = parseCSVRows(csvText);
+            if (matrix.length < 2) return;
+
+            const headers = matrix[0].map(h => h.trim().toLowerCase());
+            const idxRound = headers.indexOf("runda");
+            const idxCountry = headers.indexOf("kraj");
+            const idxSplit = headers.indexOf("split");
+            const idxTrack = headers.indexOf("tor");
+            const idxDate = headers.indexOf("data");
+            const idxTime = headers.indexOf("czas");
+            const idxStatus = headers.indexOf("status");
+            const idxFlag = headers.indexOf("flaga");
+
+            const racesBySplit = { "1": [], "2": [] };
+
+            for (let i = 1; i < matrix.length; i++) {
+                const row = matrix[i];
+                const splitKey = normalizeSplitKey(idxSplit >= 0 ? row[idxSplit] : "");
+                if (!splitKey) continue;
+
+                const dateDisplay = idxDate >= 0 ? row[idxDate] : "";
+                const timeDisplay = idxTime >= 0 ? row[idxTime] : "";
+                const timestamp = parseRaceDateTime(dateDisplay, timeDisplay);
+                if (!timestamp) continue;
+
+                racesBySplit[splitKey].push({
+                    round: idxRound >= 0 ? row[idxRound] : "",
+                    country: idxCountry >= 0 ? row[idxCountry] : "",
+                    track: idxTrack >= 0 ? row[idxTrack] : "",
+                    dateDisplay,
+                    timeDisplay,
+                    status: idxStatus >= 0 ? row[idxStatus] : "",
+                    flag: idxFlag >= 0 ? row[idxFlag] : "",
+                    timestamp
+                });
+            }
+
+            const now = Date.now();
+            ["1", "2"].forEach(splitKey => {
+                const list = racesBySplit[splitKey].sort((a, b) => a.timestamp - b.timestamp);
+                if (!list.length) {
+                    applyRaceToUI(splitKey, null);
+                    return;
+                }
+
+                // Erstes Rennen, das noch nicht gestartet ist; falls alle vorbei sind, das letzte Rennen anzeigen
+                const upcoming = list.find(r => r.timestamp >= now) || list[list.length - 1];
+                nextRaceTargets[splitKey] = upcoming.timestamp;
+                applyRaceToUI(splitKey, upcoming);
+            });
+
+            updateCountdowns();
+        } catch (err) {
+            console.warn("Fehler beim Laden des Kalenders aus Google Sheets:", err);
+            ["1", "2"].forEach(splitKey => {
+                const metaEl = document.getElementById(`meta-split-${splitKey}`);
+                const titleEl = document.getElementById(`title-split-${splitKey}`);
+                if (metaEl) metaEl.textContent = "BŁĄD ŁADOWANIA";
+                if (titleEl) titleEl.textContent = "Nie udało się pobrać kalendarza";
+            });
+        }
+    }
+
+    function updateSingleCountdown(splitKey) {
+        const targetTime = nextRaceTargets[splitKey];
+        const el = document.getElementById(`countdown-split-${splitKey}`);
+        if (!el) return;
+
+        if (!targetTime) {
+            el.innerText = "--d --h --m --s";
+            return;
+        }
+
+        const now = Date.now();
+        const distance = targetTime - now;
+
+        if (distance <= 0) {
+            // Wenn der Startzeitpunkt erreicht ist, kurz "WYŚCIG TRWA!" zeigen und ggf. nächsten Eintrag prüfen
+            if (Math.abs(distance) > 3 * 60 * 60 * 1000) {
+                loadNextRacesFromSheet();
+                return;
+            }
+            el.innerText = "WYŚCIG TRWA!";
             return;
         }
 
@@ -782,9 +1051,17 @@ footer {
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        document.getElementById("countdown").innerText = 
+        el.innerText =
             `${days}d ${hours < 10 ? '0' : ''}${hours}h ${minutes < 10 ? '0' : ''}${minutes}m ${seconds < 10 ? '0' : ''}${seconds}s`;
-    }, 1000);
+    }
+
+    function updateCountdowns() {
+        updateSingleCountdown("1");
+        updateSingleCountdown("2");
+    }
+
+    loadNextRacesFromSheet();
+    setInterval(updateCountdowns, 1000);
 </script>
 
 </body>
