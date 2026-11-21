@@ -200,7 +200,7 @@ body.light-mode .page-title p {
     color: #555555;
 }
 
-/* Kleines CPL-Logo in Buttons, Headern & Badges */
+/* Kleines CPL-Logo in Reserve-Buttons, Headern & Badges */
 .mini-cpl-logo {
     width: 16px;
     height: 16px;
@@ -657,12 +657,8 @@ footer {
 
     <div class="league-tabs">
         <button class="league-tab-btn active" onclick="switchLeagueFilter('All', this)">Wszystkie</button>
-        <button class="league-tab-btn" onclick="switchLeagueFilter('Diamond', this)">
-            <img class="mini-cpl-logo" src="images/cpl_logo_lizard.png" alt="CPL"> Liga Diamentowa
-        </button>
-        <button class="league-tab-btn" onclick="switchLeagueFilter('Gold', this)">
-            <img class="mini-cpl-logo" src="images/cpl_logo_lizard.png" alt="CPL"> Liga Złota
-        </button>
+        <button class="league-tab-btn" onclick="switchLeagueFilter('Diamond', this)">💎 Liga Diamentowa</button>
+        <button class="league-tab-btn" onclick="switchLeagueFilter('Gold', this)">🏆 Liga Złota</button>
         <button class="league-tab-btn" onclick="switchLeagueFilter('ReserveDiamond', this)">
             <img class="mini-cpl-logo" src="images/cpl_logo_lizard.png" alt="CPL"> Rezerwa Diamentowa
         </button>
@@ -738,36 +734,36 @@ footer {
     const CATEGORY_CONFIG = {
         Diamond: {
             gid: "1651963070",
-            title: "Liga Diamentowa",
+            sectionHtml: `💎 Liga Diamentowa`,
             badgeClass: "diamond",
-            badgeText: "Liga Diamentowa",
+            badgeHtml: `💎 Liga Diamentowa`,
             defaultTeam: "CPL",
             defaultColor: "#38bdf8",
             isReserve: false
         },
         Gold: {
             gid: "1869079550",
-            title: "Liga Złota",
+            sectionHtml: `🏆 Liga Złota`,
             badgeClass: "gold",
-            badgeText: "Liga Złota",
+            badgeHtml: `🏆 Liga Złota`,
             defaultTeam: "CPL",
             defaultColor: "#fbbf24",
             isReserve: false
         },
         ReserveDiamond: {
             gid: "595943071",
-            title: "Rezerwa Ligi Diamentowej",
+            sectionHtml: `<img class="section-cpl-logo" src="${CPL_LOGO_SRC}" alt="CPL">Rezerwa Ligi Diamentowej`,
             badgeClass: "reserve-diamond",
-            badgeText: "Rezerwa Diamentowa",
+            badgeHtml: `<img class="badge-cpl-logo" src="${CPL_LOGO_SRC}" alt="CPL">Rezerwa Diamentowa`,
             defaultTeam: "REZERWA LD",
             defaultColor: "#818cf8",
             isReserve: true
         },
         ReserveGold: {
             gid: "1869317160",
-            title: "Rezerwa Ligi Złotej",
+            sectionHtml: `<img class="section-cpl-logo" src="${CPL_LOGO_SRC}" alt="CPL">Rezerwa Ligi Złotej`,
             badgeClass: "reserve-gold",
-            badgeText: "Rezerwa Złota",
+            badgeHtml: `<img class="badge-cpl-logo" src="${CPL_LOGO_SRC}" alt="CPL">Rezerwa Złota`,
             defaultTeam: "REZERWA LZ",
             defaultColor: "#f59e0b",
             isReserve: true
@@ -1044,9 +1040,7 @@ footer {
         card.innerHTML = `
             <div class="driver-card-top">
                 <div class="driver-identity">
-                    <span class="driver-league-tag ${cfg.badgeClass}">
-                        <img class="badge-cpl-logo" src="${CPL_LOGO_SRC}" alt="CPL">${cfg.badgeText}
-                    </span>
+                    <span class="driver-league-tag ${cfg.badgeClass}">${cfg.badgeHtml}</span>
                     <div class="driver-name">${driver.name}</div>
                     <div class="driver-team">${driver.team}</div>
                 </div>
@@ -1080,9 +1074,7 @@ footer {
         const header = document.createElement("div");
         header.className = "league-section-header";
         header.innerHTML = `
-            <h2 class="league-section-title">
-                <img class="section-cpl-logo" src="${CPL_LOGO_SRC}" alt="CPL">${cfg.title}
-            </h2>
+            <h2 class="league-section-title">${cfg.sectionHtml}</h2>
             <span class="league-count-pill">${sorted.length} ${sorted.length === 1 ? "kierowca" : "kierowców"}</span>
         `;
 
