@@ -192,10 +192,11 @@ nav a:hover {
     font-size: 15px;
 }
 
-/* Split Selection Tabs */
+/* League Selection Tabs */
 .split-tabs {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     gap: 12px;
     margin-bottom: 25px;
 }
@@ -622,14 +623,14 @@ footer {
 <div class="calendar-page-container">
     <div class="page-title">
         <h1>Kalendarz Wyścigów - Sezon 20</h1>
-        <p>Wybierz miesiąc i split, aby sprawdzić nadchodzące i minione wyścigi</p>
+        <p>Wybierz miesiąc i ligę, aby sprawdzić nadchodzące i minione wyścigi</p>
     </div>
 
-    <!-- Filter Buttons: Wszystkie Split-y, Split 1, Split 2 -->
+    <!-- Filter Buttons: Wszystkie ligi, Liga Diamentowa, Liga Złota -->
     <div class="split-tabs">
-        <button class="split-btn active" onclick="switchSplit('All', this)">Wszystkie Split-y</button>
-        <button class="split-btn" onclick="switchSplit('Split 1', this)">Split 1</button>
-        <button class="split-btn" onclick="switchSplit('Split 2', this)">Split 2</button>
+        <button class="split-btn active" onclick="switchLeague('All', this)">Wszystkie ligi</button>
+        <button class="split-btn" onclick="switchLeague('Diamond', this)">💎 Liga Diamentowa</button>
+        <button class="split-btn" onclick="switchLeague('Gold', this)">🏆 Liga Złota</button>
     </div>
 
     <!-- Interaktiver Kalender -->
@@ -714,7 +715,7 @@ footer {
     const CSV_URL = "https://docs.google.com/spreadsheets/d/1na_Zlv7uk9AGO3f76sqMvN5C5kT-EXnphJlTD6KKx0M/export?format=csv";
 
     let allRacesData = [];
-    let activeSplit = "All"; // "All", "Split 1", "Split 2"
+    let activeLeague = "All"; // "All", "Diamond", "Gold"
 
     function getLocalTodayISO() {
         const now = new Date();
@@ -729,7 +730,6 @@ footer {
         return new Date(now.getFullYear(), now.getMonth(), 1);
     }
 
-    // Startet immer im aktuellen Monat
     let currentDate = getCurrentMonthStart();
 
     const monthNamesPl = [
@@ -742,6 +742,41 @@ footer {
         document.body.classList.toggle('light-mode');
         themeToggleBtn.textContent = document.body.classList.contains('light-mode') ? '🌙' : '☀️';
     });
+
+    function normalizeText(val) {
+        return String(val || '')
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/\u0142/g, 'l')
+            .trim();
+    }
+
+    function getLeagueCode(rawSplit) {
+        const s = normalizeText(rawSplit).replace(/\s+/g, '');
+        if (!s) return 'unknown';
+        if (s.includes('diament') || s.includes('diamond') || s === '1' || s === 'split1') {
+            return 'Diamond';
+        }
+        if (s.includes('zlot') || s.includes('gold') || s === '2' || s === 'split2') {
+            return 'Gold';
+        }
+        return s;
+    }
+
+    function getLeagueBadgePrefix(rawSplit) {
+        const code = getLeagueCode(rawSplit);
+        if (code === 'Diamond') return 'LD';
+        if (code === 'Gold') return 'LZ';
+        return rawSplit ? rawSplit.trim() : 'Liga';
+    }
+
+    function getLeagueTitleSuffix(rawSplit) {
+        const code = getLeagueCode(rawSplit);
+        if (code === 'Diamond') return ' • Liga Diamentowa';
+        if (code === 'Gold') return ' • Liga Złota';
+        return rawSplit ? ` (${rawSplit.trim()})` : '';
+    }
 
     function parseCSV(text) {
         const lines = text.trim().split(/\r?\n/);
@@ -822,9 +857,8 @@ footer {
         const nextRaceObject = upcoming.length > 0 ? upcoming[0] : null;
 
         const filteredRaces = allRacesData.filter(r => {
-            if (activeSplit === "All") return true;
-            if (!r.Split) return false;
-            return r.Split.trim().toLowerCase().replace(/\s+/g, '') === activeSplit.toLowerCase().replace(/\s+/g, '');
+            if (activeLeague === "All") return true;
+            return getLeagueCode(r.Split) === activeLeague;
         });
 
         let monthRaces = [];
@@ -883,7 +917,7 @@ footer {
 
                 racesOnDay.forEach(race => {
                     const raceCopy = { ...race };
-                    if (nextRaceObject && raceCopy.Runda === nextRaceObject.Runda && raceCopy.Split === nextRaceObject.Split && toISODate(raceCopy.Data) === toISODate(nextRaceObject.Data)) {
+                    if (nextRaceObject && raceCopy.Runda === nextRaceObject.Runda && getLeagueCode(raceCopy.Split) === getLeagueCode(nextRaceObject.Split) && toISODate(raceCopy.Data) === toISODate(nextRaceObject.Data)) {
                         dayStatus = "next-race";
                         raceCopy.statusClass = "next-card";
                         raceCopy.colorCode = "#2ecc71";
@@ -900,9 +934,10 @@ footer {
                     const badge = document.createElement("div");
                     badge.classList.add("race-indicator");
 
-                    let splitNum = raceCopy.Split ? raceCopy.Split.replace(/\D/g, '') : '1';
-                    
-                    badge.textContent = activeSplit === "All" ? `${splitNum}: GP ${raceCopy.Kraj || ''}` : `GP ${raceCopy.Kraj || 'Wyścig'}`;
+                    const leaguePrefix = getLeagueBadgePrefix(raceCopy.Split);
+                    badge.textContent = activeLeague === "All"
+                        ? `${leaguePrefix}: GP ${raceCopy.Kraj || ''}`
+                        : `GP ${raceCopy.Kraj || 'Wyścig'}`;
                     badgeList.appendChild(badge);
 
                     monthRaces.push(raceCopy);
@@ -918,14 +953,14 @@ footer {
         }
 
         if (monthRaces.length === 0) {
-            eventsListContainer.innerHTML = "<p style='color:#888;'>Brak wyścigów w tym miesiącu dla wybranego filtru.</p>";
+            eventsListContainer.innerHTML = "<p style='color:#888;'>Brak wyścigów w tym miesiącu dla wybranej ligi.</p>";
         } else {
             monthRaces.forEach(race => {
                 const flagUrl = getFlagUrl(race.Flaga);
                 const trackName = race.Tor || '';
                 const formatInfo = race.Format || '';
                 const subTitleText = (trackName && formatInfo) ? `${trackName} (${formatInfo})` : (trackName || formatInfo);
-                let splitDisplay = race.Split ? ` (${race.Split.replace(/\D/g, '')})` : '';
+                const leagueSuffix = getLeagueTitleSuffix(race.Split);
 
                 const eventCard = document.createElement("div");
                 eventCard.classList.add("event-card");
@@ -935,7 +970,7 @@ footer {
                     <div class="event-info">
                         <img src="${flagUrl}" alt="${race.Kraj || ''}" class="event-flag" onerror="this.src='https://flagcdn.com/w80/un.png'">
                         <div class="event-title">
-                            <h3>Runda ${race.Runda} - GP ${race.Kraj || ''}${splitDisplay}</h3>
+                            <h3>Runda ${race.Runda} - GP ${race.Kraj || ''}${leagueSuffix}</h3>
                             <p>${subTitleText}</p>
                         </div>
                     </div>
@@ -946,8 +981,8 @@ footer {
         }
     }
 
-    function switchSplit(splitName, btnElement) {
-        activeSplit = splitName;
+    function switchLeague(leagueKey, btnElement) {
+        activeLeague = leagueKey;
         document.querySelectorAll('.split-btn').forEach(btn => btn.classList.remove('active'));
         btnElement.classList.add('active');
         renderCalendar();
