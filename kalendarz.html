@@ -312,7 +312,7 @@ body.light-mode .today-btn {
 
 .day-cell {
     position: relative;
-    min-height: 112px;
+    min-height: 118px;
     background: rgba(255, 255, 255, 0.03);
     border-radius: 10px;
     padding: 8px;
@@ -349,6 +349,31 @@ body.light-mode .day-cell.weekend { background: rgba(0, 0, 0, 0.05); }
     display: inline-flex;
     align-items: center;
     gap: 6px;
+}
+
+.day-header-right {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.round-tag {
+    background: rgba(255, 255, 255, 0.14);
+    color: var(--text-color);
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    line-height: 1.1;
+    white-space: nowrap;
+}
+
+body.light-mode .round-tag {
+    background: rgba(17, 17, 17, 0.08);
+    border-color: rgba(17, 17, 17, 0.14);
 }
 
 .day-header-flags {
@@ -639,7 +664,8 @@ footer {
     nav{ flex-direction:column; height: auto; gap:12px; padding:15px; }
     .nav-left { flex-direction: column; align-items: center; }
     nav ul{ flex-wrap:wrap; justify-content:center; }
-    .day-cell { min-height: 78px; font-size: 12px; padding: 5px; }
+    .day-cell { min-height: 82px; font-size: 12px; padding: 5px; }
+    .round-tag { font-size: 9px; padding: 1px 4px; }
     .cell-top-flag { width: 18px; height: 12px; }
     .cell-flag-showcase { padding: 3px 4px; gap: 4px; }
     .cell-flag-hero { width: 24px; height: 16px; }
@@ -837,11 +863,18 @@ footer {
         return s;
     }
 
-    function getLeagueBadgePrefix(rawSplit) {
+    function getLeagueFullName(rawSplit) {
         const code = getLeagueCode(rawSplit);
-        if (code === 'Diamond') return 'LD';
-        if (code === 'Gold') return 'LZ';
+        if (code === 'Diamond') return 'Liga Diamentowa';
+        if (code === 'Gold') return 'Liga Złota';
         return rawSplit ? rawSplit.trim() : 'Liga';
+    }
+
+    function formatRoundLabel(rawRound) {
+        const cleaned = String(rawRound || '').trim();
+        if (!cleaned) return '';
+        if (/^runda\b/i.test(cleaned)) return cleaned;
+        return `Runda ${cleaned}`;
     }
 
     function getLeagueTitleSuffix(rawSplit) {
@@ -971,12 +1004,18 @@ footer {
 
             const racesOnDay = filteredRaces.filter(e => toISODate(e.Data) === isoDateString);
 
-            if (isToday && racesOnDay.length === 0) {
-                const todayTag = document.createElement("span");
-                todayTag.classList.add("today-tag");
-                todayTag.textContent = "Dziś";
-                topRow.appendChild(todayTag);
-            } else if (racesOnDay.length > 0) {
+            const headerRight = document.createElement("div");
+            headerRight.classList.add("day-header-right");
+
+            if (racesOnDay.length > 0) {
+                const uniqueRounds = [...new Set(racesOnDay.map(r => formatRoundLabel(r.Runda)).filter(Boolean))];
+                uniqueRounds.forEach(roundText => {
+                    const roundTag = document.createElement("span");
+                    roundTag.classList.add("round-tag");
+                    roundTag.textContent = roundText;
+                    headerRight.appendChild(roundTag);
+                });
+
                 const headerFlags = document.createElement("div");
                 headerFlags.classList.add("day-header-flags");
 
@@ -989,7 +1028,16 @@ footer {
                     headerFlags.appendChild(topFlag);
                 });
 
-                topRow.appendChild(headerFlags);
+                headerRight.appendChild(headerFlags);
+            } else if (isToday) {
+                const todayTag = document.createElement("span");
+                todayTag.classList.add("today-tag");
+                todayTag.textContent = "Dziś";
+                headerRight.appendChild(todayTag);
+            }
+
+            if (headerRight.childNodes.length > 0) {
+                topRow.appendChild(headerRight);
             }
 
             dayCell.appendChild(topRow);
@@ -1042,10 +1090,8 @@ footer {
                     const badge = document.createElement("div");
                     badge.classList.add("race-indicator");
 
-                    const leaguePrefix = getLeagueBadgePrefix(raceCopy.Split);
-                    badge.textContent = activeLeague === "All"
-                        ? `${leaguePrefix}: GP ${raceCopy.Kraj || ''}`
-                        : `GP ${raceCopy.Kraj || 'Wyścig'}`;
+                    const leagueFullName = getLeagueFullName(raceCopy.Split);
+                    badge.textContent = leagueFullName;
                     badgeList.appendChild(badge);
 
                     monthRaces.push(raceCopy);
