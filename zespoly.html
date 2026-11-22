@@ -1344,7 +1344,9 @@ function extractTeamsFromRows(rawData) {
                 ? canonicalizeTeamName(rawTeamCell)
                 : '';
 
-        const rowPts = pointsIdx >= 0 ? parseNumber(row[pointsIdx]) : 0;
+        const rawPtsCell = pointsIdx >= 0 ? String(row[pointsIdx] || '').trim() : '';
+        const isErrorPts = rawPtsCell === '#REF!' || rawPtsCell === '#N/A' || rawPtsCell === '#WERT!' || rawPtsCell === '#VALUE!';
+        const rowPts = pointsIdx >= 0 && !isErrorPts ? parseNumber(rawPtsCell) : 0;
         const raceStartIdx = pointsIdx >= 0 ? pointsIdx + 1 : -1;
         const raceSlice = raceStartIdx >= 0 ? row.slice(raceStartIdx, raceStartIdx + 24) : [];
         const { wins, podiums } = countPodiumsAndWins(raceSlice);
@@ -1357,6 +1359,8 @@ function extractTeamsFromRows(rawData) {
                     key: currentTeamKey,
                     name: validTeamName,
                     points: 0,
+                    teamRowPoints: 0,
+                    driverSumPoints: 0,
                     podiums: 0,
                     wins: 0,
                     drivers: []
@@ -1367,12 +1371,18 @@ function extractTeamsFromRows(rawData) {
         if (currentTeamKey && teamsMap.has(currentTeamKey)) {
             const teamObj = teamsMap.get(currentTeamKey);
 
-            // Wenn pro Fahrerzeile Fahrerpunkte stehen, aufsummieren; wenn pro Teamzeile Gesamtpunkte stehen, nehmen wir das Maximum
-            if (driverIdx >= 0 && rawDriverCell) {
-                teamObj.points += rowPts;
-            } else if (rowPts > 0) {
-                teamObj.points = Math.max(teamObj.points, rowPts);
+            // In der unteren Tabelle steht der Team-Gesamtpunktestand oft in der ersten Zeile (validTeamName) oder wird aus den Fahrerzeilen summiert
+            if (validTeamName && rowPts > 0) {
+                teamObj.teamRowPoints = Math.max(teamObj.teamRowPoints, rowPts);
             }
+            if (driverIdx >= 0 && rawDriverCell && rawDriverCell !== '-' && rawDriverCell !== '#N/A' && rawDriverCell !== '#REF!') {
+                teamObj.driverSumPoints += rowPts;
+            } else if (rowPts > 0 && !validTeamName) {
+                teamObj.driverSumPoints += rowPts;
+            }
+
+            // Nutze den Team-Gesamtwert falls vorhanden, sonst die Summe der Fahrerzeilen
+            teamObj.points = teamObj.teamRowPoints > 0 ? teamObj.teamRowPoints : teamObj.driverSumPoints;
 
             teamObj.wins += wins;
             teamObj.podiums += podiums;
@@ -1381,6 +1391,7 @@ function extractTeamsFromRows(rawData) {
                 rawDriverCell &&
                 rawDriverCell !== '-' &&
                 rawDriverCell !== '#N/A' &&
+                rawDriverCell !== '#REF!' &&
                 !isDriverHeaderLabel(rawDriverCell)
             ) {
                 const displayDriver = cleanDriverName(rawDriverCell);
@@ -1547,7 +1558,7 @@ function renderTeamCard(team) {
                 <div class="team-stats-row">
                     <div class="stat-item">
                         <span class="stat-label">PUNKTY</span>
-                        <span class="stat-value">${escapeHtml(team.points)}</span>
+                        <span class="stat-value">${escapeHtml(Number.isFinite(Number(team.points)) ? Number(team.points) : 0)}</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">PODIA</span>
