@@ -1403,9 +1403,16 @@ function extractTeamsFromRows(rawData) {
     }
 
     const result = Array.from(teamsMap.values())
-        .filter(t => t.name && !isLikelyDriverName(t.name) && t.drivers.length > 0)
+        .filter(t => t.name && !isLikelyDriverName(t.name))
+        .map(t => ({
+            ...t,
+            points: Number.isFinite(Number(t.points)) ? Number(t.points) : 0,
+            podiums: Number.isFinite(Number(t.podiums)) ? Number(t.podiums) : 0,
+            wins: Number.isFinite(Number(t.wins)) ? Number(t.wins) : 0
+        }))
         .sort((a, b) => b.points - a.points);
 
+    console.log('[CPL Teams] Layout:', layout, 'Parsed teams:', result);
     return result.length > 0 ? result : null;
 }
 
