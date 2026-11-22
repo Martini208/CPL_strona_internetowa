@@ -1275,15 +1275,33 @@ function detectTeamTableLayout(rawData) {
         let teamIdx = -1;
         let driverIdx = -1;
         let pointsIdx = -1;
+        let totalPointsIdx = -1;
         let hasConstructorWord = false;
+        let isPluralDrivers = false;
+
+        let hasTeamsSectionAbove = false;
+        for (let up = Math.max(0, i - 5); up < i; up++) {
+            const prevRow = rawData[up] || [];
+            if (prevRow.some(c => {
+                const nh = normalizeHeaderCell(c);
+                return nh === 'teams' || nh === 'zespoly' || nh === 'konstruktorzy';
+            })) {
+                hasTeamsSectionAbove = true;
+                break;
+            }
+        }
 
         row.forEach((cell, idx) => {
             const h = normalizeHeaderCell(cell);
-            if (h.includes('konstruktor') || h.includes('zespol')) hasConstructorWord = true;
+            if (h.includes('konstruktor') || h.includes('zespol') || h === 'team' || h === 'teams') hasConstructorWord = true;
+            if (h === 'kierowcy' || h === 'drivers') isPluralDrivers = true;
             if (posIdx === -1 && isPosHeaderLabel(cell)) posIdx = idx;
             if (teamIdx === -1 && isTeamHeaderLabel(cell)) teamIdx = idx;
             if (driverIdx === -1 && isDriverHeaderLabel(cell)) driverIdx = idx;
-            if (pointsIdx === -1 && isPointsHeaderLabel(cell)) pointsIdx = idx;
+            if (isPointsHeaderLabel(cell)) {
+                if (pointsIdx === -1) pointsIdx = idx;
+                totalPointsIdx = idx;
+            }
         });
 
         if (teamIdx !== -1 && (pointsIdx !== -1 || driverIdx !== -1)) {
@@ -1293,11 +1311,16 @@ function detectTeamTableLayout(rawData) {
                 teamIdx,
                 driverIdx,
                 pointsIdx: pointsIdx !== -1 ? pointsIdx : teamIdx + 1,
-                score: (hasConstructorWord ? 10 : 0) + (driverIdx !== -1 ? 5 : 0) + (pointsIdx !== -1 ? 3 : 0)
+                totalPointsIdx: totalPointsIdx !== -1 ? totalPointsIdx : -1,
+                score:
+                    (hasTeamsSectionAbove ? 25 : 0) +
+                    (isPluralDrivers ? 12 : 0) +
+                    (hasConstructorWord ? 10 : 0) +
+                    (driverIdx !== -1 ? 5 : 0) +
+                    (pointsIdx !== -1 ? 3 : 0)
             };
 
-            // Bevorzuge eine explizite Konstruktor-/Team-Tabelle gegenüber einer reinen Fahrertabelle
-            if (!bestCandidate || candidate.score > bestCandidate.score) {
+            if (!bestCandidate || candidate.score >= bestCandidate.score) {
                 bestCandidate = candidate;
             }
         }
@@ -1312,7 +1335,7 @@ function extractTeamsFromRows(rawData) {
     const layout = detectTeamTableLayout(rawData);
     if (!layout) return null;
 
-    const { headerIdx, posIdx, teamIdx, driverIdx, pointsIdx } = layout;
+    const { headerIdx, posIdx, teamIdx, driverIdx, pointsIdx, totalPointsIdx } = layout;
     const teamsMap = new Map();
     let currentTeamKey = '';
 
@@ -1333,12 +1356,11 @@ function extractTeamsFromRows(rawData) {
             break;
         }
 
-        // Falls in der Teamspalte aus Versehen ein Fahrername steht, nicht als Team verwenden
+        const isErrorTeam = rawTeamCell === '#REF!' || rawTeamCell === '#N/A' || rawTeamCell === '#WERT!' || rawTeamCell === '#VALUE!';
         const validTeamName =
             rawTeamCell &&
             rawTeamCell !== '-' &&
-            rawTeamCell !== '#N/A' &&
-            rawTeamCell !== '#REF!' &&
+            !isErrorTeam &&
             !isTeamHeaderLabel(rawTeamCell) &&
             !isLikelyDriverName(rawTeamCell)
                 ? canonicalizeTeamName(rawTeamCell)
@@ -1347,8 +1369,14 @@ function extractTeamsFromRows(rawData) {
         const rawPtsCell = pointsIdx >= 0 ? String(row[pointsIdx] || '').trim() : '';
         const isErrorPts = rawPtsCell === '#REF!' || rawPtsCell === '#N/A' || rawPtsCell === '#WERT!' || rawPtsCell === '#VALUE!';
         const rowPts = pointsIdx >= 0 && !isErrorPts ? parseNumber(rawPtsCell) : 0;
+
+        const rawTotalPtsCell = totalPointsIdx >= 0 ? String(row[totalPointsIdx] || '').trim() : '';
+        const isErrorTotalPts = rawTotalPtsCell === '#REF!' || rawTotalPtsCell === '#N/A' || rawTotalPtsCell === '#WERT!' || rawTotalPtsCell === '#VALUE!';
+        const rowTotalPts = totalPointsIdx >= 0 && !isErrorTotalPts ? parseNumber(rawTotalPtsCell) : 0;
+
         const raceStartIdx = pointsIdx >= 0 ? pointsIdx + 1 : -1;
-        const raceSlice = raceStartIdx >= 0 ? row.slice(raceStartIdx, raceStartIdx + 24) : [];
+        const raceEndIdx = totalPointsIdx > raceStartIdx ? totalPointsIdx : raceStartIdx + 24;
+        const raceSlice = raceStartIdx >= 0 ? row.slice(raceStartIdx, raceEndIdx) : [];
         const { wins, podiums } = countPodiumsAndWins(raceSlice);
 
         if (validTeamName) {
@@ -1371,27 +1399,27 @@ function extractTeamsFromRows(rawData) {
         if (currentTeamKey && teamsMap.has(currentTeamKey)) {
             const teamObj = teamsMap.get(currentTeamKey);
 
-            // In der unteren Tabelle steht der Team-Gesamtpunktestand oft in der ersten Zeile (validTeamName) oder wird aus den Fahrerzeilen summiert
-            if (validTeamName && rowPts > 0) {
+            if (validTeamName && totalPointsIdx !== pointsIdx && rowTotalPts > 0) {
+                teamObj.teamRowPoints = Math.max(teamObj.teamRowPoints, rowTotalPts);
+            } else if (validTeamName && rowPts > 0) {
                 teamObj.teamRowPoints = Math.max(teamObj.teamRowPoints, rowPts);
             }
-            if (driverIdx >= 0 && rawDriverCell && rawDriverCell !== '-' && rawDriverCell !== '#N/A' && rawDriverCell !== '#REF!') {
+
+            const isErrorDriver = rawDriverCell === '#REF!' || rawDriverCell === '#N/A' || rawDriverCell === '#WERT!' || rawDriverCell === '#VALUE!';
+            if (driverIdx >= 0 && rawDriverCell && rawDriverCell !== '-' && !isErrorDriver) {
                 teamObj.driverSumPoints += rowPts;
             } else if (rowPts > 0 && !validTeamName) {
                 teamObj.driverSumPoints += rowPts;
             }
 
-            // Nutze den Team-Gesamtwert falls vorhanden, sonst die Summe der Fahrerzeilen
             teamObj.points = teamObj.teamRowPoints > 0 ? teamObj.teamRowPoints : teamObj.driverSumPoints;
-
             teamObj.wins += wins;
             teamObj.podiums += podiums;
 
             if (
                 rawDriverCell &&
                 rawDriverCell !== '-' &&
-                rawDriverCell !== '#N/A' &&
-                rawDriverCell !== '#REF!' &&
+                !isErrorDriver &&
                 !isDriverHeaderLabel(rawDriverCell)
             ) {
                 const displayDriver = cleanDriverName(rawDriverCell);
@@ -1569,11 +1597,11 @@ function renderTeamCard(team) {
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">PODIA</span>
-                        <span class="stat-value">${escapeHtml(team.podiums)}</span>
+                        <span class="stat-value">${escapeHtml(Number.isFinite(Number(team.podiums)) ? Number(team.podiums) : 0)}</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">WYGRANE</span>
-                        <span class="stat-value">${escapeHtml(team.wins)}</span>
+                        <span class="stat-value">${escapeHtml(Number.isFinite(Number(team.wins)) ? Number(team.wins) : 0)}</span>
                     </div>
                 </div>
 
