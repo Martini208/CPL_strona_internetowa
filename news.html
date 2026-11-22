@@ -292,7 +292,7 @@ nav a:hover {
 footer {
     background: #080808;
     color: #e0e0e0;
-    padding: 60px 10% 20px 10%;
+    padding: 60px 10% 35px 10%;
     margin-top: auto;
     border-top: 1px solid var(--border-color);
 }
@@ -317,15 +317,57 @@ footer {
 .footer-col ul li a { color: #a0a0a0; text-decoration: none; font-size: 14px; }
 .footer-col ul li a:hover { color: #ff3131; }
 
+.social-links,
 .footer-social-links {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 12px !important;
+    flex-wrap: wrap !important;
+    margin-top: 10px !important;
+}
+
+footer .social-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    min-height: 42px !important;
+    max-width: 42px !important;
+    max-height: 42px !important;
+    padding: 0 !important;
+    background: #1a1a1a !important;
+    color: #ffffff !important;
+    border-radius: 50% !important;
+    text-decoration: none !important;
+    border: 1px solid var(--border-color) !important;
+    transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease !important;
+}
+
+footer .social-btn svg {
+    width: 20px !important;
+    height: 20px !important;
+    min-width: 20px !important;
+    min-height: 20px !important;
+    max-width: 20px !important;
+    max-height: 20px !important;
+    display: block !important;
+    fill: currentColor !important;
+}
+
+footer .social-btn:hover {
+    background: #ff3131 !important;
+    border-color: #ff3131 !important;
+    color: #ffffff !important;
+    transform: translateY(-3px) !important;
 }
 
 .footer-bottom {
     border-top: 1px solid #1f1f1f;
-    padding-top: 20px;
+    padding-top: 24px;
+    padding-bottom: 16px;
     text-align: center;
     font-size: 13px;
     color: #777777;
@@ -473,7 +515,7 @@ footer {
             </div>
         </div>
     </div>
-    <div class="footer-bottom" style="padding-bottom: 16px;">
+    <div class="footer-bottom">
         <p>© 2026 CPL Racing League. Wszelkie prawa zastrzeżone.</p>
     </div>
 </footer>
