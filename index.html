@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CPL F1 League</title>
+<title>Kalendarz - CPL F1 League</title>
     
 <style>
 :root {
@@ -13,14 +13,13 @@
     --border-color: #333333;
 }
 
-/* Light Mode Styles */
 body.light-mode {
     --bg-color: #f4f4f9;
     --text-color: #111111;
     --card-bg: #ffffff;
     --border-color: #e0e0e0;
 }
-
+    
 *{
     margin:0;
     padding:0;
@@ -35,7 +34,7 @@ body{
     padding-top: 80px;
 }
 
-/* Navigation - Größeres "Frosted Glass" Design */
+/* Navigation - Exakte 1:1 Kopie der Hauptseite */
 nav {
     position: fixed;
     top: 0;
@@ -171,529 +170,470 @@ nav a:hover {
     transform: scale(1.2);
 }
 
-/* Hero */
-.hero{
-    position:relative;
-    height:calc(100vh - 80px);
-    overflow:hidden;
+/* Container Layout */
+.calendar-page-container {
+    padding: 30px 5% 50px 5%;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.hero iframe{
-    position:absolute;
-    top:50%;
-    left:50%;
-    width:100vw;
-    height:56.25vw;
-    min-height:100vh;
-    min-width:177.77vh;
-    transform:translate(-50%, -50%);
-    pointer-events:none;
+.page-title {
+    text-align: center;
+    margin-bottom: 25px;
 }
 
-.overlay{
-    position:absolute;
-    inset:0;
-    background:rgba(0,0,0,0.55);
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
+.page-title h1 {
+    font-size: 34px;
+    color: #ff3131;
+    text-transform: uppercase;
 }
 
-.overlay h1{
-    font-size:80px;
-    color:white;
-    text-shadow:0 0 15px rgba(255,49,49,.5);
+.page-title p {
+    font-size: 15px;
 }
 
-.overlay p{
-    font-size:24px;
-    color:#ff3131;
-    margin-top:10px;
-}
-
-.buttons{
-    margin-top:30px;
-}
-
-.btn{
-    display:inline-block;
-    padding:15px 30px;
-    margin:10px;
-    border-radius:8px;
-    font-weight:bold;
-    text-decoration:none;
-    transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-.btn:hover{
-    transform: scale(1.05);
-    opacity: 0.9;
-}
-
-.btn-red{
-    background:#ff3131;
-    color:white;
-}
-
-.btn-discord{
-    background:#5865F2;
-    color:white;
-}
-
-/* F1 Style Next Race Bar */
-.f1-race-bar-section {
-    padding: 60px 10% 20px 10%;
-}
-
-.f1-race-bars-stack {
+/* League Selection Tabs */
+.split-tabs {
     display: flex;
-    flex-direction: column;
-    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 25px;
 }
 
-.f1-race-bar {
+.split-btn {
     background: var(--card-bg);
+    border: 1px solid var(--border-color);
     color: var(--text-color);
-    border-left: 6px solid #38bdf8;
+    padding: 10px 24px;
+    border-radius: 30px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.split-btn.active, .split-btn:hover {
+    background: #ff3131;
+    border-color: #ff3131;
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(255, 49, 49, 0.4);
+}
+
+/* Interaktiver Kalender Box */
+.interactive-calendar {
+    background: var(--card-bg);
     border-radius: 12px;
-    padding: 16px 25px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    margin-bottom: 35px;
+    border: 1px solid var(--border-color);
+}
+
+.calendar-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 18px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    font-size: 14px;
-    transition: background 0.3s ease;
-}
-
-.f1-race-bar.diamond-bar {
-    border-left-color: #38bdf8;
-}
-
-.f1-race-bar.gold-bar {
-    border-left-color: #eab308;
-}
-
-.f1-race-info {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.f1-race-meta-row {
-    display: flex;
-    align-items: center;
+    margin-bottom: 20px;
+    gap: 12px;
     flex-wrap: wrap;
-    gap: 8px;
 }
 
-.f1-league-badge {
-    font-size: 11px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    padding: 2px 8px;
-    border-radius: 999px;
-}
-
-.f1-race-bar.diamond-bar .f1-league-badge {
-    background: rgba(56, 189, 248, 0.16);
-    color: #7dd3fc;
-    border: 1px solid rgba(56, 189, 248, 0.38);
-}
-
-.f1-race-bar.gold-bar .f1-league-badge {
-    background: rgba(234, 179, 8, 0.16);
-    color: #facc15;
-    border: 1px solid rgba(234, 179, 8, 0.38);
-}
-
-body.light-mode .f1-race-bar.diamond-bar .f1-league-badge {
-    color: #0369a1;
-    background: rgba(2, 132, 199, 0.12);
-}
-
-body.light-mode .f1-race-bar.gold-bar .f1-league-badge {
-    color: #a16207;
-}
-
-.f1-race-meta {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1px;
-}
-
-.f1-race-bar.diamond-bar .f1-race-meta {
-    color: #38bdf8;
-}
-
-.f1-race-bar.gold-bar .f1-race-meta {
-    color: #eab308;
-}
-
-body.light-mode .f1-race-bar.diamond-bar .f1-race-meta {
-    color: #0284c7;
-}
-
-.f1-race-title {
-    font-size: 20px;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    letter-spacing: 0.5px;
-}
-
-.f1-race-track {
-    font-size: 13px;
-    font-weight: 600;
-    color: #a0a0a0;
-}
-
-body.light-mode .f1-race-track {
-    color: #555555;
-}
-
-.f1-flag-img {
-    height: 20px;
-    width: auto;
-    border-radius: 2px;
-    object-fit: contain;
-}
-
-.f1-race-timer-container {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    flex-shrink: 0;
-}
-
-.f1-timer-label {
-    font-size: 11px;
-    font-weight: 700;
-    color: #94949e;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.f1-timer-digits {
-    font-family: monospace, monospace;
-    font-size: 18px;
-    font-weight: bold;
+.calendar-header h2 {
+    font-size: 22px;
     color: var(--text-color);
-    background: rgba(255, 255, 255, 0.08);
+    text-transform: capitalize;
+}
+
+.calendar-nav-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.cal-btn {
+    background: #ff3131;
+    color: white;
+    border: none;
+    padding: 9px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.cal-btn:hover {
+    background: #e02828;
+    transform: scale(1.03);
+}
+
+.today-btn {
+    background: rgba(245, 158, 11, 0.14);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.55);
     padding: 8px 14px;
     border-radius: 6px;
-    border: 1px solid var(--border-color);
-    letter-spacing: 1px;
-    white-space: nowrap;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-body.light-mode .f1-timer-digits {
-    background: rgba(0, 0, 0, 0.05);
+body.light-mode .today-btn {
+    color: #b45309;
+    background: rgba(245, 158, 11, 0.12);
 }
 
-/* Bereiche */
-section{
-    padding:60px 10%;
+.today-btn:hover {
+    background: #f59e0b;
+    color: #111111;
+    border-color: #fbbf24;
 }
 
-h2{
-    text-align:center;
-    color:#ff3131;
-    margin-bottom:40px;
-    font-size:40px;
-}
-
-/* Top 3 Standings Showcase (Liga Diamentowa & Liga Złota) */
-.standings-showcase {
+.calendar-weekdays {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 28px;
-}
-
-.league-podium-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.league-podium-card:hover {
-    transform: translateY(-4px);
-}
-
-.league-podium-card.diamond-card {
-    border-top: 4px solid #38bdf8;
-    background: linear-gradient(180deg, rgba(56, 189, 248, 0.08) 0%, var(--card-bg) 42%);
-}
-
-.league-podium-card.diamond-card:hover {
-    box-shadow: 0 14px 34px rgba(56, 189, 248, 0.18);
-}
-
-.league-podium-card.gold-card {
-    border-top: 4px solid #eab308;
-    background: linear-gradient(180deg, rgba(234, 179, 8, 0.08) 0%, var(--card-bg) 42%);
-}
-
-.league-podium-card.gold-card:hover {
-    box-shadow: 0 14px 34px rgba(234, 179, 8, 0.18);
-}
-
-.league-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-    padding-bottom: 14px;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-weight: bold;
+    font-size: 15px;
+    color: #ff3131;
+    padding-bottom: 10px;
     border-bottom: 1px solid var(--border-color);
 }
 
-.league-card-title {
-    font-size: 21px;
-    font-weight: 900;
-    letter-spacing: 0.4px;
-    display: flex;
-    align-items: center;
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
     gap: 10px;
+    margin-top: 12px;
 }
 
-.diamond-card .league-card-title {
-    color: #7dd3fc;
-}
-
-.gold-card .league-card-title {
-    color: #facc15;
-}
-
-body.light-mode .diamond-card .league-card-title {
-    color: #0369a1;
-}
-
-body.light-mode .gold-card .league-card-title {
-    color: #a16207;
-}
-
-.league-top3-tag {
-    font-size: 11px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    padding: 4px 10px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.07);
-    color: #b5b5b5;
-}
-
-body.light-mode .league-top3-tag {
-    background: rgba(0, 0, 0, 0.06);
-    color: #444444;
-}
-
-.podium-list {
+.day-cell {
+    position: relative;
+    min-height: 118px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    padding: 8px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    justify-content: space-between;
+    font-size: 15px;
+    border: 2px solid transparent;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
 }
 
-.podium-row {
+body.light-mode .day-cell {
+    background: rgba(0, 0, 0, 0.025);
+}
+
+.day-cell.empty { background: transparent; border-color: transparent; }
+.day-cell.weekend { background: rgba(255, 255, 255, 0.06); }
+body.light-mode .day-cell.weekend { background: rgba(0, 0, 0, 0.05); }
+
+.day-cell.has-race:hover {
+    transform: translateY(-2px);
+}
+
+.day-top-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 14px;
-    padding: 14px 16px;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    transition: transform 0.2s ease, background 0.2s ease;
+    gap: 6px;
+    min-height: 22px;
 }
 
-body.light-mode .podium-row {
-    background: rgba(0, 0, 0, 0.025);
-    border-color: rgba(0, 0, 0, 0.07);
-}
-
-.podium-row:hover {
-    transform: translateX(3px);
-    background: rgba(255, 255, 255, 0.06);
-}
-
-body.light-mode .podium-row:hover {
-    background: rgba(0, 0, 0, 0.045);
-}
-
-.podium-row.rank-1 {
-    border-width: 1px;
-}
-
-.diamond-card .podium-row.rank-1 {
-    background: linear-gradient(90deg, rgba(56, 189, 248, 0.16) 0%, rgba(255, 255, 255, 0.03) 100%);
-    border-color: rgba(56, 189, 248, 0.42);
-}
-
-.gold-card .podium-row.rank-1 {
-    background: linear-gradient(90deg, rgba(234, 179, 8, 0.16) 0%, rgba(255, 255, 255, 0.03) 100%);
-    border-color: rgba(234, 179, 8, 0.42);
-}
-
-.podium-left {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    min-width: 0;
-}
-
-.rank-badge {
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
+.day-number {
+    font-weight: bold;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    font-weight: 900;
-    font-size: 13px;
-    flex-shrink: 0;
-    letter-spacing: 0.3px;
+    gap: 6px;
 }
 
-/* P1 = Gold, P2 = Silber, P3 = Bronze */
-.rank-badge.pos-1 {
-    background: linear-gradient(135deg, #facc15, #ca8a04);
-    color: #111111;
-    box-shadow: 0 4px 12px rgba(234, 179, 8, 0.32);
-}
-
-.rank-badge.pos-2 {
-    background: linear-gradient(135deg, #e2e8f0, #64748b);
-    color: #0f172a;
-    box-shadow: 0 4px 12px rgba(148, 163, 184, 0.25);
-}
-
-.rank-badge.pos-3 {
-    background: linear-gradient(135deg, #d97706, #78350f);
-    color: #ffffff;
-    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.28);
-}
-
-.driver-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    min-width: 0;
-}
-
-.driver-name-line {
-    display: flex;
+.day-header-right {
+    display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
     flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
-.driver-name {
-    font-size: 16px;
-    font-weight: 800;
+.round-tag {
+    background: rgba(255, 255, 255, 0.14);
     color: var(--text-color);
-    line-height: 1.25;
-}
-
-.driver-number {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 800;
     padding: 2px 7px;
     border-radius: 6px;
-    background: rgba(255, 255, 255, 0.08);
-    color: #cbd5e1;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    line-height: 1.1;
+    white-space: nowrap;
 }
 
-body.light-mode .driver-number {
-    background: rgba(0, 0, 0, 0.07);
-    color: #334155;
+body.light-mode .round-tag {
+    background: rgba(17, 17, 17, 0.08);
+    border-color: rgba(17, 17, 17, 0.14);
 }
 
-.driver-team {
-    font-size: 12px;
-    color: #9ca3af;
+/* Status-Farben */
+.day-cell.past-race {
+    border: 2px solid #ff3131;
+    background: linear-gradient(165deg, rgba(255, 49, 49, 0.18) 0%, rgba(255, 49, 49, 0.06) 100%);
+}
+.day-cell.next-race {
+    border: 2px solid #2ecc71;
+    background: linear-gradient(165deg, rgba(46, 204, 113, 0.20) 0%, rgba(46, 204, 113, 0.06) 100%);
+    box-shadow: 0 6px 20px rgba(46, 204, 113, 0.16);
+}
+.day-cell.future-race {
+    border: 2px solid #3498db;
+    background: linear-gradient(165deg, rgba(52, 152, 219, 0.18) 0%, rgba(52, 152, 219, 0.06) 100%);
+}
+
+/* Stylischer heutiger Tag in Gold / Amber */
+.day-cell.today-cell {
+    border: 2px solid #fbbf24;
+    background: linear-gradient(155deg, rgba(245, 158, 11, 0.24) 0%, rgba(245, 158, 11, 0.06) 100%);
+    box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.28), 0 8px 24px rgba(245, 158, 11, 0.22);
+}
+
+.day-cell.today-cell .day-number {
+    color: #fcd34d;
+    font-weight: 900;
+}
+
+body.light-mode .day-cell.today-cell .day-number {
+    color: #b45309;
+}
+
+.today-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #fbbf24;
+    box-shadow: 0 0 8px #fbbf24;
+    display: inline-block;
+}
+
+.today-tag {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    color: #141414;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.7px;
+    padding: 2px 6px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    line-height: 1.1;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.45);
+}
+
+.day-cell.today-cell.has-race {
+    box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.42), 0 10px 28px rgba(245, 158, 11, 0.32);
+}
+
+/* LIVE Styling (20:00 - 22:00) */
+@keyframes livePulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.75);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 14px 3px rgba(46, 204, 113, 0.45);
+        transform: scale(1.03);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
+        transform: scale(1);
+    }
+}
+
+@keyframes liveCellGlow {
+    0% {
+        box-shadow: 0 0 0 2px rgba(46, 204, 113, 0.65), 0 0 18px rgba(46, 204, 113, 0.32);
+    }
+    50% {
+        box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.95), 0 0 28px rgba(46, 204, 113, 0.55);
+    }
+    100% {
+        box-shadow: 0 0 0 2px rgba(46, 204, 113, 0.65), 0 0 18px rgba(46, 204, 113, 0.32);
+    }
+}
+
+.live-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: linear-gradient(135deg, #2ecc71 0%, #16a34a 100%);
+    color: #09180e;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.7px;
+    padding: 2px 7px;
+    border-radius: 999px;
+    text-transform: uppercase;
+    line-height: 1.1;
+    animation: livePulse 1.6s infinite ease-in-out;
+}
+
+.live-pill::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 0 6px #ffffff;
+}
+
+.day-cell.live-race-cell {
+    border: 2px solid #2ecc71 !important;
+    background: linear-gradient(160deg, rgba(46, 204, 113, 0.28) 0%, rgba(22, 163, 74, 0.10) 100%) !important;
+    animation: liveCellGlow 2s infinite ease-in-out;
+}
+
+.race-indicator.is-live {
+    background: linear-gradient(135deg, #2ecc71 0%, #15803d 100%) !important;
+    color: #ffffff !important;
+    font-weight: 900;
+    box-shadow: 0 3px 12px rgba(46, 204, 113, 0.45);
+}
+
+/* Mittlere Flaggen-Showcase im Kästchen */
+.cell-flag-showcase {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin: 6px 0 4px 0;
+    padding: 5px 6px;
+    border-radius: 7px;
+    background: rgba(0, 0, 0, 0.34);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+body.light-mode .cell-flag-showcase {
+    background: rgba(17, 17, 17, 0.06);
+    border-color: rgba(17, 17, 17, 0.12);
+}
+
+.cell-flag-hero {
+    width: 34px;
+    height: 22px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.32);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.45);
+    flex-shrink: 0;
+}
+
+.cell-flag-showcase.multi .cell-flag-hero {
+    width: 28px;
+    height: 18px;
+}
+
+.cell-gp-label {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--text-color);
+}
+
+.race-badge-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: auto;
+}
+
+.race-indicator {
+    background: rgba(255, 49, 49, 0.88);
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 4px 6px;
+    border-radius: 5px;
+    text-align: center;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-body.light-mode .driver-team {
-    color: #555555;
+.day-cell.next-race .race-indicator {
+    background: rgba(46, 204, 113, 0.90);
 }
 
-.points-pill {
-    font-family: monospace, monospace;
-    font-size: 16px;
-    font-weight: 900;
-    padding: 7px 13px;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.07);
-    border: 1px solid var(--border-color);
-    color: var(--text-color);
-    white-space: nowrap;
-    flex-shrink: 0;
+.day-cell.future-race .race-indicator {
+    background: rgba(52, 152, 219, 0.90);
 }
 
-.diamond-card .podium-row.rank-1 .points-pill {
-    color: #7dd3fc;
-    border-color: rgba(56, 189, 248, 0.45);
+/* Event Liste */
+.events-section-title {
+    color: #ff3131;
+    margin-bottom: 16px;
+    font-size: 22px;
 }
 
-.gold-card .podium-row.rank-1 .points-pill {
-    color: #facc15;
-    border-color: rgba(234, 179, 8, 0.45);
+.events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
-body.light-mode .diamond-card .podium-row.rank-1 .points-pill {
-    color: #0369a1;
-}
-
-body.light-mode .gold-card .podium-row.rank-1 .points-pill {
-    color: #a16207;
-}
-
-.standings-status {
-    text-align: center;
-    padding: 20px 10px;
-    font-size: 14px;
-    color: #9ca3af;
-}
-
-/* News */
-.news-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:25px;
-}
-
-.news-card{
+.event-card {
     background: var(--card-bg);
-    padding:25px;
-    border-radius:15px;
-    transition: transform .3s, background 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border-left: 5px solid #ff3131;
+    border-radius: 8px;
+    padding: 14px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.news-card:hover{
-    transform:translateY(-5px);
+.event-card.next-card { border-left-color: #2ecc71; }
+.event-card.future-card { border-left-color: #3498db; }
+
+.event-card.live-card {
+    border: 1px solid rgba(46, 204, 113, 0.65);
+    border-left: 6px solid #2ecc71;
+    background: linear-gradient(90deg, rgba(46, 204, 113, 0.16) 0%, var(--card-bg) 55%);
+    animation: liveCellGlow 2s infinite ease-in-out;
 }
 
-.news-card h3{
-    color:#ff3131;
-    margin-bottom:10px;
+.event-card:hover { transform: translateX(4px); }
+
+.event-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
 }
 
-/* Footer Styles */
+.event-flag {
+    width: 36px;
+    height: 24px;
+    border-radius: 3px;
+    object-fit: cover;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.event-title h3 {
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.event-title p { font-size: 13px; color: #aaaaaa; margin-top: 3px; }
+.event-date { font-weight: bold; font-size: 15px; }
+
+/* Footer */
 footer {
     background: #080808;
     color: #e0e0e0;
@@ -717,30 +657,11 @@ footer {
     letter-spacing: 0.5px;
 }
 
-.footer-col p {
-    font-size: 14px;
-    line-height: 1.6;
-    color: #a0a0a0;
-}
-
-.footer-col ul {
-    list-style: none;
-}
-
-.footer-col ul li {
-    margin-bottom: 10px;
-}
-
-.footer-col ul li a {
-    color: #a0a0a0;
-    text-decoration: none;
-    font-size: 14px;
-    transition: color 0.2s ease;
-}
-
-.footer-col ul li a:hover {
-    color: #ff3131;
-}
+.footer-col p { font-size: 14px; line-height: 1.6; color: #a0a0a0; }
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 10px; }
+.footer-col ul li a { color: #a0a0a0; text-decoration: none; font-size: 14px; transition: color 0.2s ease; }
+.footer-col ul li a:hover { color: #ff3131; }
 
 .social-links {
     display: flex;
@@ -805,58 +726,20 @@ footer {
     color: #ffffff;
 }
 
-/* Mobile responsive */
-@media(max-width:1024px){
-    .standings-showcase {
-        grid-template-columns: 1fr;
-    }
-}
-
 @media(max-width:900px){
-    nav{
-        flex-direction:column;
-        height: auto;
-        gap:12px;
-        padding:15px;
-    }
-
-    .nav-left {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    nav ul{
-        flex-wrap:wrap;
-        justify-content:center;
-    }
-
-    .overlay h1{
-        font-size:45px;
-    }
-
-    .buttons{
-        display:flex;
-        flex-direction:column;
-    }
-
-    .f1-race-bar {
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
-    }
-
-    .f1-race-meta-row,
-    .f1-race-title {
-        justify-content: center;
-    }
-
-    .f1-race-timer-container {
-        flex-direction: column;
-        gap: 6px;
-    }
+    nav{ flex-direction:column; height: auto; gap:12px; padding:15px; }
+    .nav-left { flex-direction: column; align-items: center; }
+    nav ul{ flex-wrap:wrap; justify-content:center; }
+    .day-cell { min-height: 82px; font-size: 12px; padding: 5px; }
+    .round-tag { font-size: 9px; padding: 1px 5px; }
+    .live-pill { font-size: 8px; padding: 2px 5px; }
+    .cell-flag-showcase { padding: 3px 4px; gap: 4px; }
+    .cell-flag-hero { width: 24px; height: 16px; }
+    .cell-gp-label { font-size: 9px; }
+    .race-indicator { font-size: 10px; padding: 2px 4px; }
+    .today-tag { font-size: 8px; padding: 2px 5px; }
 }
 </style>
-
 </head>
 <body>
 
@@ -865,7 +748,6 @@ footer {
         <a href="index.html">
             <img class="cpl-logo-img" src="images/cpl_logo_lizard.png" alt="CPL Logo">
         </a>
-        
         <ul>
             <li><a href="kalendarz.html">Kalendarz</a></li>
             <li><a href="sezony.html">Sezony</a></li>
@@ -886,142 +768,64 @@ footer {
                 <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
             </a>
             <a href="https://www.instagram.com/cpl_liga/" target="_blank" class="nav-social-icon" title="Instagram">
-                <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-            </a>
+                <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
             <a href="https://www.facebook.com/CPLeSport" target="_blank" class="nav-social-icon" title="Facebook">
-                <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-            </a>
+                <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
             <a href="https://www.tiktok.com/@cpl_f1_league" target="_blank" class="nav-social-icon" title="TikTok">
-                <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.82.56-1.33 1.51-1.3 2.51.01.88.48 1.72 1.2 2.22 1.05.74 2.48.74 3.53-.02.82-.58 1.34-1.54 1.34-2.55.02-5.63.01-11.25.01-16.88z"/></svg>
-            </a>
+                <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.82.56-1.33 1.51-1.3 2.51.01.88.48 1.72 1.2 2.22 1.05.74 2.48.74 3.53-.02.82-.58 1.34-1.54 1.34-2.55.02-5.63.01-11.25.01-16.88z"/></svg></a>
         </div>
-        <a href="#zaloguj">Zaloguj</a>
-        <a href="#rejestracja">Rejestracja</a>
+        <a href="index.html#zaloguj">Zaloguj</a>
+        <a href="index.html#rejestracja">Rejestracja</a>
         <button id="theme-toggle" class="theme-toggle-btn" title="Przełącz tryb">☀️</button>
     </div>
 </nav>
 
-<section class="hero">
+<div class="calendar-page-container">
+    <div class="page-title">
+        <h1>Kalendarz Wyścigów - Sezon 20</h1>
+        <p>Wybierz miesiąc i ligę, aby sprawdzić nadchodzące i minione wyścigi</p>
+    </div>
 
-    <iframe 
-        src="https://www.youtube.com/embed/WepEUEu1Hv0?autoplay=1&mute=1&controls=0&loop=1&playlist=WepEUEu1Hv0&enablejsapi=1" 
-        title="F1 Video Background"
-        frameborder="0" 
-        allow="autoplay; encrypted-media">
-    </iframe>
+    <!-- Filter Buttons: Wszystkie ligi, Liga Diamentowa, Liga Złota -->
+    <div class="split-tabs">
+        <button class="split-btn active" onclick="switchLeague('All', this)">Wszystkie ligi</button>
+        <button class="split-btn" onclick="switchLeague('Diamond', this)">💎 Liga Diamentowa</button>
+        <button class="split-btn" onclick="switchLeague('Gold', this)">🏆 Liga Złota</button>
+    </div>
 
-    <div class="overlay">
-        <h1>CPL F1 LEAGUE</h1>
-        <p>EST. 2016 | F1 26</p>
+    <!-- Interaktiver Kalender -->
+    <div class="interactive-calendar">
+        <div class="calendar-header">
+            <div class="calendar-nav-group">
+                <button class="cal-btn" id="prev-month">&lt; Poprzedni</button>
+                <button class="today-btn" id="jump-today" title="Wróć do bieżącego miesiąca">Dzisiaj</button>
+            </div>
+            <h2 id="month-year-display">Ładowanie...</h2>
+            <button class="cal-btn" id="next-month">Następny &gt;</button>
+        </div>
 
-        <div class="buttons">
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfLSj3z30_t1cdEPyULm26suCN8jpB8NOT9JsXNYE8ikeVUZg/viewform" target="_blank" class="btn btn-red">Zapisz się!</a>
-            <a href="https://discord.com/invite/szt7rHnFSj" target="_blank" class="btn btn-discord">Discord</a>
+        <div class="calendar-weekdays">
+            <div>Pon</div>
+            <div>Wt</div>
+            <div>Śr</div>
+            <div>Czw</div>
+            <div>Pt</div>
+            <div>Sob</div>
+            <div>Niedz</div>
+        </div>
+
+        <div class="calendar-days" id="calendar-days-container">
+            <!-- Dynamisch -->
         </div>
     </div>
 
-</section>
-
-<!-- F1 Style Next Race Bar Section (Liga Diamentowa = Split 1 | Liga Złota = Split 2) -->
-<div class="f1-race-bar-section" id="kalendarz">
-    <h2>Następny wyścig</h2>
-
-    <div class="f1-race-bars-stack">
-        <div class="f1-race-bar diamond-bar" id="bar-split-1">
-            <div class="f1-race-info">
-                <div class="f1-race-meta-row">
-                    <span class="f1-league-badge">Liga Diamentowa</span>
-                    <span class="f1-race-meta" id="meta-split-1">ŁADOWANIE...</span>
-                </div>
-                <div class="f1-race-title">
-                    <img src="https://flagcdn.com/w40/bh.png" alt="Flaga" class="f1-flag-img" id="flag-split-1" onerror="this.style.display='none'">
-                    <span id="title-split-1">Pobieranie danych...</span>
-                    <span class="f1-race-track" id="track-split-1"></span>
-                </div>
-            </div>
-            <div class="f1-race-timer-container">
-                <span class="f1-timer-label">Czas do wyścigu</span>
-                <div class="f1-timer-digits" id="countdown-split-1">--d --h --m --s</div>
-            </div>
-        </div>
-
-        <div class="f1-race-bar gold-bar" id="bar-split-2">
-            <div class="f1-race-info">
-                <div class="f1-race-meta-row">
-                    <span class="f1-league-badge">Liga Złota</span>
-                    <span class="f1-race-meta" id="meta-split-2">ŁADOWANIE...</span>
-                </div>
-                <div class="f1-race-title">
-                    <img src="https://flagcdn.com/w40/bh.png" alt="Flaga" class="f1-flag-img" id="flag-split-2" onerror="this.style.display='none'">
-                    <span id="title-split-2">Pobieranie danych...</span>
-                    <span class="f1-race-track" id="track-split-2"></span>
-                </div>
-            </div>
-            <div class="f1-race-timer-container">
-                <span class="f1-timer-label">Czas do wyścigu</span>
-                <div class="f1-timer-digits" id="countdown-split-2">--d --h --m --s</div>
-            </div>
-        </div>
+    <!-- Liste der Events -->
+    <h2 class="events-section-title">Wyścigi w tym miesiącu</h2>
+    <div class="events-list" id="month-events-list">
+        <p style="color:#888;">Ładowanie danych z Google Sheets...</p>
     </div>
 </div>
 
-<!-- Top 3 Klasyfikacja kierowców: Liga Diamentowa + Liga Złota -->
-<section id="kierowcy">
-    <h2>Klasyfikacja kierowców</h2>
-
-    <div class="standings-showcase">
-        <!-- Liga Diamentowa (gid=1651963070) -->
-        <div class="league-podium-card diamond-card">
-            <div class="league-card-header">
-                <div class="league-card-title">
-                    <span>💎 Liga Diamentowa</span>
-                </div>
-                <span class="league-top3-tag">TOP 3</span>
-            </div>
-            <div id="top3-diamond" class="podium-list">
-                <div class="standings-status">Ładowanie klasyfikacji...</div>
-            </div>
-        </div>
-
-        <!-- Liga Złota (gid=1869079550) -->
-        <div class="league-podium-card gold-card">
-            <div class="league-card-header">
-                <div class="league-card-title">
-                    <span>🏆 Liga Złota</span>
-                </div>
-                <span class="league-top3-tag">TOP 3</span>
-            </div>
-            <div id="top3-gold" class="podium-list">
-                <div class="standings-status">Ładowanie klasyfikacji...</div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section id="news">
-    <h2>Aktualności</h2>
-
-    <div class="news-grid">
-
-        <div class="news-card">
-            <h3>Sezon rozpoczęty!</h3>
-            <p>Nowy sezon CPL oficjalnie wystartował. Czekają nas wielkie emocje na torze.</p>
-        </div>
-
-        <div class="news-card">
-            <h3>Zapowiedź GP Monzy</h3>
-            <p>Wszystkie najważniejsze informacje i harmonogram przed nadchodzącym wyścigiem.</p>
-        </div>
-
-        <div class="news-card">
-            <h3>Rynek transferowy</h3>
-            <p>Kierowcy zmieniają barwy zespołowe przed kolejnymi rundami.</p>
-        </div>
-
-    </div>
-</section>
-
-<!-- Erweiterter Footer -->
 <footer>
     <div class="footer-container">
         <div class="footer-col">
@@ -1059,11 +863,9 @@ footer {
                     <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                 </a>
                 <a href="https://www.facebook.com/CPLeSport" target="_blank" class="social-btn" title="Facebook">
-                    <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                </a>
+                    <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
                 <a href="https://www.tiktok.com/@cpl_f1_league" target="_blank" class="social-btn" title="TikTok">
-                    <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.82.56-1.33 1.51-1.3 2.51.01.88.48 1.72 1.2 2.22 1.05.74 2.48.74 3.53-.02.82-.58 1.34-1.54 1.34-2.55.02-5.63.01-11.25.01-16.88z"/></svg>
-                </a>
+                    <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.82.56-1.33 1.51-1.3 2.51.01.88.48 1.72 1.2 2.22 1.05.74 2.48.74 3.53-.02.82-.58 1.34-1.54 1.34-2.55.02-5.63.01-11.25.01-16.88z"/></svg></a>
             </div>
         </div>
     </div>
@@ -1073,370 +875,383 @@ footer {
 </footer>
 
 <script>
-    // Theme Toggle Script
-    const themeToggleBtn = document.getElementById('theme-toggle');
+    const CSV_URL = "https://docs.google.com/spreadsheets/d/1na_Zlv7uk9AGO3f76sqMvN5C5kT-EXnphJlTD6KKx0M/export?format=csv";
 
+    let allRacesData = [];
+    let activeLeague = "All"; // "All", "Diamond", "Gold"
+
+    function getLocalTodayISO() {
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = String(now.getMonth() + 1).padStart(2, '0');
+        const d = String(now.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+    }
+
+    function isRaceLiveNow(raceDateStr) {
+        const isoDate = toISODate(raceDateStr);
+        if (!isoDate) return false;
+
+        const now = new Date();
+        const todayStr = getLocalTodayISO();
+        if (isoDate !== todayStr) return false;
+
+        // Live-Fenster: 20:00:00 bis einschließlich 22:00:00
+        const currentMinutes = now.getHours() * 60 + now.getMinutes();
+        const startMinutes = 20 * 60; // 20:00
+        const endMinutes = 22 * 60;   // 22:00
+
+        return currentMinutes >= startMinutes && currentMinutes <= endMinutes;
+    }
+
+    function getCurrentMonthStart() {
+        const now = new Date();
+        return new Date(now.getFullYear(), now.getMonth(), 1);
+    }
+
+    let currentDate = getCurrentMonthStart();
+
+    const monthNamesPl = [
+        "Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", 
+        "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"
+    ];
+
+    const themeToggleBtn = document.getElementById('theme-toggle');
     themeToggleBtn.addEventListener('click', () => {
         document.body.classList.toggle('light-mode');
         themeToggleBtn.textContent = document.body.classList.contains('light-mode') ? '🌙' : '☀️';
     });
 
-    const SHEET_ID = "1na_Zlv7uk9AGO3f76sqMvN5C5kT-EXnphJlTD6KKx0M";
-    const CALENDAR_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
-    const DIAMOND_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=1651963070`;
-    const GOLD_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=1869079550`;
-
-    const nextRaceTargets = {
-        "1": null,
-        "2": null
-    };
-
-    function escapeHtml(str) {
-        return String(str || "")
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#39;");
+    function normalizeText(val) {
+        return String(val || '')
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/\u0142/g, 'l')
+            .trim();
     }
 
-    function parseCSVRows(csvText) {
-        const rows = [];
-        let row = [];
-        let cell = "";
-        let inQuotes = false;
-
-        for (let i = 0; i < csvText.length; i++) {
-            const ch = csvText[i];
-            const next = csvText[i + 1];
-
-            if (ch === '"') {
-                if (inQuotes && next === '"') {
-                    cell += '"';
-                    i++;
-                } else {
-                    inQuotes = !inQuotes;
-                }
-            } else if (ch === "," && !inQuotes) {
-                row.push(cell.trim());
-                cell = "";
-            } else if ((ch === "\n" || ch === "\r") && !inQuotes) {
-                if (ch === "\r" && next === "\n") i++;
-                row.push(cell.trim());
-                if (row.some(c => c !== "")) rows.push(row);
-                row = [];
-                cell = "";
-            } else {
-                cell += ch;
-            }
+    function getLeagueCode(rawSplit) {
+        const s = normalizeText(rawSplit).replace(/\s+/g, '');
+        if (!s) return 'unknown';
+        if (s.includes('diament') || s.includes('diamond') || s === '1' || s === 'split1') {
+            return 'Diamond';
         }
-        if (cell.length > 0 || row.length > 0) {
-            row.push(cell.trim());
-            if (row.some(c => c !== "")) rows.push(row);
+        if (s.includes('zlot') || s.includes('gold') || s === '2' || s === 'split2') {
+            return 'Gold';
         }
-        return rows;
+        return s;
     }
 
-    // --- KALENDARZ (Następny wyścig) ---
-    function normalizeSplitKey(rawSplit) {
-        const cleaned = String(rawSplit || "").toLowerCase().replace(/\s+/g, "");
-        if (cleaned.includes("split1") || cleaned === "1" || cleaned.includes("diament")) return "1";
-        if (cleaned.includes("split2") || cleaned === "2" || cleaned.includes("zlot") || cleaned.includes("złot")) return "2";
-        return null;
+    function getLeagueFullName(rawSplit) {
+        const code = getLeagueCode(rawSplit);
+        if (code === 'Diamond') return 'Liga Diamentowa';
+        if (code === 'Gold') return 'Liga Złota';
+        return rawSplit ? rawSplit.trim() : 'Liga';
     }
 
-    function parseRaceDateTime(dateStr, timeStr) {
-        const dRaw = String(dateStr || "").trim();
-        if (!dRaw) return null;
-
-        let year, month, day;
-        if (/^\d{1,2}\.\d{1,2}\.\d{4}$/.test(dRaw)) {
-            const parts = dRaw.split(".");
-            day = parseInt(parts[0], 10);
-            month = parseInt(parts[1], 10);
-            year = parseInt(parts[2], 10);
-        } else if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(dRaw)) {
-            const parts = dRaw.split("-");
-            year = parseInt(parts[0], 10);
-            month = parseInt(parts[1], 10);
-            day = parseInt(parts[2], 10);
-        } else {
-            const fallback = new Date(dRaw);
-            if (!Number.isNaN(fallback.getTime())) return fallback.getTime();
-            return null;
-        }
-
-        let hours = 20;
-        let minutes = 0;
-        const tRaw = String(timeStr || "").trim();
-        const timeMatch = tRaw.match(/(\d{1,2})[:.](\d{2})/);
-        if (timeMatch) {
-            hours = parseInt(timeMatch[1], 10);
-            minutes = parseInt(timeMatch[2], 10);
-        }
-
-        const dt = new Date(year, month - 1, day, hours, minutes, 0);
-        return Number.isNaN(dt.getTime()) ? null : dt.getTime();
+    function formatRoundLabel(rawRound) {
+        const cleaned = String(rawRound || '').trim();
+        if (!cleaned) return '';
+        if (/^runda\b/i.test(cleaned)) return cleaned;
+        return `Runda ${cleaned}`;
     }
 
-    function getFlagUrl(flagCode) {
-        const code = String(flagCode || "").trim().toLowerCase();
-        if (/^[a-z]{2}$/.test(code)) {
-            return `https://flagcdn.com/w40/${code}.png`;
-        }
-        return "https://martini208.github.io/CPL-/italien.png";
+    function getLeagueTitleSuffix(rawSplit) {
+        const code = getLeagueCode(rawSplit);
+        if (code === 'Diamond') return ' • Liga Diamentowa';
+        if (code === 'Gold') return ' • Liga Złota';
+        return rawSplit ? ` (${rawSplit.trim()})` : '';
     }
 
-    function applyRaceToUI(splitKey, race) {
-        const metaEl = document.getElementById(`meta-split-${splitKey}`);
-        const titleEl = document.getElementById(`title-split-${splitKey}`);
-        const trackEl = document.getElementById(`track-split-${splitKey}`);
-        const flagEl = document.getElementById(`flag-split-${splitKey}`);
+    function parseCSV(text) {
+        const lines = text.trim().split(/\r?\n/);
+        if (lines.length < 2) return [];
+        
+        const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+        const result = [];
 
-        if (!race) {
-            metaEl.textContent = "BRAK DANYCH";
-            titleEl.textContent = "Brak zaplanowanych wyścigów";
-            trackEl.textContent = "";
-            return;
+        for (let i = 1; i < lines.length; i++) {
+            if (!lines[i].trim()) continue;
+            
+            const currentline = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(item => item.trim().replace(/^"|"$/g, ''));
+            const obj = {};
+            headers.forEach((header, index) => {
+                obj[header] = currentline[index] || '';
+            });
+            result.push(obj);
         }
-
-        const roundPart = race.round ? `R${race.round}` : "WYŚCIG";
-        const datePart = race.dateDisplay || "";
-        const timePart = race.timeDisplay ? `${race.timeDisplay}` : "";
-        metaEl.textContent = [roundPart, datePart, timePart].filter(Boolean).join(" | ");
-
-        titleEl.textContent = race.country ? `Grand Prix ${race.country}` : (race.track || "Grand Prix");
-        trackEl.textContent = race.track ? `• ${race.track}` : "";
-
-        if (flagEl) {
-            flagEl.src = getFlagUrl(race.flag);
-            flagEl.alt = race.country || "Flaga";
-            flagEl.style.display = "inline-block";
-        }
+        return result;
     }
 
-    async function loadNextRacesFromSheet() {
+    function toISODate(dStr) {
+        if (!dStr) return '';
+        const p = dStr.trim().split('.');
+        if (p.length === 3) {
+            const day = p[0].padStart(2, '0');
+            const month = p[1].padStart(2, '0');
+            const year = p[2];
+            return `${year}-${month}-${day}`;
+        }
+        return '';
+    }
+
+    function getFlagUrl(flagaCode) {
+        if (!flagaCode) return 'https://flagcdn.com/w80/un.png';
+        const code = flagaCode.trim().toLowerCase();
+        return `https://flagcdn.com/w80/${code}.png`;
+    }
+
+    async function fetchCalendarData() {
         try {
-            const response = await fetch(`${CALENDAR_CSV_URL}&t=${Date.now()}`, { cache: "no-store" });
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
+            const response = await fetch(`${CSV_URL}&t=${Date.now()}`, { cache: 'no-store' });
             const csvText = await response.text();
-            const matrix = parseCSVRows(csvText);
-            if (matrix.length < 2) return;
+            allRacesData = parseCSV(csvText);
+            renderCalendar();
+        } catch (error) {
+            console.error("Fehler beim Laden der CSV:", error);
+            document.getElementById('month-events-list').innerHTML = 
+                '<p style="color:#ff3131;">Nie udało się załadować kalendarza z Google Sheets.</p>';
+        }
+    }
 
-            const headers = matrix[0].map(h => h.trim().toLowerCase());
-            const idxRound = headers.indexOf("runda");
-            const idxCountry = headers.indexOf("kraj");
-            const idxSplit = headers.indexOf("split");
-            const idxTrack = headers.indexOf("tor");
-            const idxDate = headers.indexOf("data");
-            const idxTime = headers.indexOf("czas");
-            const idxStatus = headers.indexOf("status");
-            const idxFlag = headers.indexOf("flaga");
+    function renderCalendar() {
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
 
-            const racesBySplit = { "1": [], "2": [] };
+        document.getElementById("month-year-display").textContent = `${monthNamesPl[month]} ${year}`;
+        const daysContainer = document.getElementById("calendar-days-container");
+        const eventsListContainer = document.getElementById("month-events-list");
+        
+        daysContainer.innerHTML = "";
+        eventsListContainer.innerHTML = "";
 
-            for (let i = 1; i < matrix.length; i++) {
-                const row = matrix[i];
-                const splitKey = normalizeSplitKey(idxSplit >= 0 ? row[idxSplit] : "");
-                if (!splitKey) continue;
+        const firstDayIndex = new Date(year, month, 1).getDay();
+        const adjustedFirstDay = (firstDayIndex === 0) ? 6 : firstDayIndex - 1;
+        const totalDays = new Date(year, month + 1, 0).getDate();
 
-                const dateDisplay = idxDate >= 0 ? row[idxDate] : "";
-                const timeDisplay = idxTime >= 0 ? row[idxTime] : "";
-                const timestamp = parseRaceDateTime(dateDisplay, timeDisplay);
-                if (!timestamp) continue;
+        for (let i = 0; i < adjustedFirstDay; i++) {
+            const emptyCell = document.createElement("div");
+            emptyCell.classList.add("day-cell", "empty");
+            daysContainer.appendChild(emptyCell);
+        }
 
-                racesBySplit[splitKey].push({
-                    round: idxRound >= 0 ? row[idxRound] : "",
-                    country: idxCountry >= 0 ? row[idxCountry] : "",
-                    track: idxTrack >= 0 ? row[idxTrack] : "",
-                    dateDisplay,
-                    timeDisplay,
-                    status: idxStatus >= 0 ? row[idxStatus] : "",
-                    flag: idxFlag >= 0 ? row[idxFlag] : "",
-                    timestamp
+        const todayStr = getLocalTodayISO();
+
+        const sortedAll = [...allRacesData].sort((a,b) => toISODate(a.Data).localeCompare(toISODate(b.Data)));
+        const upcoming = sortedAll.filter(r => toISODate(r.Data) >= todayStr);
+        const nextRaceObject = upcoming.length > 0 ? upcoming[0] : null;
+
+        const filteredRaces = allRacesData.filter(r => {
+            if (activeLeague === "All") return true;
+            return getLeagueCode(r.Split) === activeLeague;
+        });
+
+        let monthRaces = [];
+
+        for (let day = 1; day <= totalDays; day++) {
+            const dayCell = document.createElement("div");
+            dayCell.classList.add("day-cell");
+
+            const dayOfWeek = (adjustedFirstDay + day - 1) % 7;
+            if (dayOfWeek === 5 || dayOfWeek === 6) {
+                dayCell.classList.add("weekend");
+            }
+
+            const formattedMonth = String(month + 1).padStart(2, '0');
+            const formattedDay = String(day).padStart(2, '0');
+            const isoDateString = `${year}-${formattedMonth}-${formattedDay}`;
+            const isToday = isoDateString === todayStr;
+
+            if (isToday) {
+                dayCell.classList.add("today-cell");
+            }
+
+            const topRow = document.createElement("div");
+            topRow.classList.add("day-top-row");
+
+            const dayNumDiv = document.createElement("div");
+            dayNumDiv.classList.add("day-number");
+            dayNumDiv.textContent = day;
+
+            if (isToday) {
+                const dot = document.createElement("span");
+                dot.classList.add("today-dot");
+                dayNumDiv.appendChild(dot);
+            }
+
+            topRow.appendChild(dayNumDiv);
+
+            const racesOnDay = filteredRaces.filter(e => toISODate(e.Data) === isoDateString);
+            const anyLiveOnDay = racesOnDay.some(r => isRaceLiveNow(r.Data));
+
+            const headerRight = document.createElement("div");
+            headerRight.classList.add("day-header-right");
+
+            if (racesOnDay.length > 0) {
+                const uniqueRounds = [...new Set(racesOnDay.map(r => formatRoundLabel(r.Runda)).filter(Boolean))];
+                uniqueRounds.forEach(roundText => {
+                    const roundTag = document.createElement("span");
+                    roundTag.classList.add("round-tag");
+                    roundTag.textContent = roundText;
+                    headerRight.appendChild(roundTag);
                 });
             }
 
-            const now = Date.now();
-            ["1", "2"].forEach(splitKey => {
-                const list = racesBySplit[splitKey].sort((a, b) => a.timestamp - b.timestamp);
-                if (!list.length) {
-                    applyRaceToUI(splitKey, null);
-                    return;
+            if (anyLiveOnDay) {
+                const livePill = document.createElement("span");
+                livePill.classList.add("live-pill");
+                livePill.textContent = "LIVE";
+                headerRight.appendChild(livePill);
+            } else if (isToday) {
+                const todayTag = document.createElement("span");
+                todayTag.classList.add("today-tag");
+                todayTag.textContent = "Dziś";
+                headerRight.appendChild(todayTag);
+            }
+
+            if (headerRight.childNodes.length > 0) {
+                topRow.appendChild(headerRight);
+            }
+
+            dayCell.appendChild(topRow);
+
+            if (racesOnDay.length > 0) {
+                dayCell.classList.add("has-race");
+                if (anyLiveOnDay) {
+                    dayCell.classList.add("live-race-cell");
                 }
 
-                const upcoming = list.find(r => r.timestamp >= now) || list[list.length - 1];
-                nextRaceTargets[splitKey] = upcoming.timestamp;
-                applyRaceToUI(splitKey, upcoming);
-            });
+                const showcase = document.createElement("div");
+                showcase.className = racesOnDay.length > 1 ? "cell-flag-showcase multi" : "cell-flag-showcase";
 
-            updateCountdowns();
-        } catch (err) {
-            console.warn("Fehler beim Laden des Kalenders aus Google Sheets:", err);
-            ["1", "2"].forEach(splitKey => {
-                const metaEl = document.getElementById(`meta-split-${splitKey}`);
-                const titleEl = document.getElementById(`title-split-${splitKey}`);
-                if (metaEl) metaEl.textContent = "BŁĄD ŁADOWANIA";
-                if (titleEl) titleEl.textContent = "Nie udało się pobrać kalendarza";
-            });
-        }
-    }
+                racesOnDay.forEach(race => {
+                    const heroFlag = document.createElement("img");
+                    heroFlag.src = getFlagUrl(race.Flaga);
+                    heroFlag.alt = race.Kraj || 'GP';
+                    heroFlag.classList.add("cell-flag-hero");
+                    heroFlag.onerror = function() { this.src = 'https://flagcdn.com/w80/un.png'; };
+                    showcase.appendChild(heroFlag);
+                });
 
-    function updateSingleCountdown(splitKey) {
-        const targetTime = nextRaceTargets[splitKey];
-        const el = document.getElementById(`countdown-split-${splitKey}`);
-        if (!el) return;
+                if (racesOnDay.length === 1) {
+                    const gpLabel = document.createElement("span");
+                    gpLabel.className = "cell-gp-label";
+                    gpLabel.textContent = racesOnDay[0].Kraj ? `GP ${racesOnDay[0].Kraj}` : 'Wyścig';
+                    showcase.appendChild(gpLabel);
+                }
 
-        if (!targetTime) {
-            el.innerText = "--d --h --m --s";
-            return;
-        }
+                dayCell.appendChild(showcase);
 
-        const now = Date.now();
-        const distance = targetTime - now;
+                const badgeList = document.createElement("div");
+                badgeList.classList.add("race-badge-list");
 
-        if (distance <= 0) {
-            if (Math.abs(distance) > 3 * 60 * 60 * 1000) {
-                loadNextRacesFromSheet();
-                return;
+                let dayStatus = null;
+
+                racesOnDay.forEach(race => {
+                    const raceCopy = { ...race, isLive: isRaceLiveNow(race.Data) };
+
+                    if (raceCopy.isLive) {
+                        dayStatus = "next-race";
+                        raceCopy.statusClass = "live-card";
+                        raceCopy.colorCode = "#2ecc71";
+                    } else if (nextRaceObject && raceCopy.Runda === nextRaceObject.Runda && getLeagueCode(raceCopy.Split) === getLeagueCode(nextRaceObject.Split) && toISODate(raceCopy.Data) === toISODate(nextRaceObject.Data)) {
+                        dayStatus = "next-race";
+                        raceCopy.statusClass = "next-card";
+                        raceCopy.colorCode = "#2ecc71";
+                    } else if (isoDateString < todayStr) {
+                        if (dayStatus !== "next-race") dayStatus = "past-race";
+                        raceCopy.statusClass = "";
+                        raceCopy.colorCode = "#ff3131";
+                    } else {
+                        if (dayStatus !== "next-race") dayStatus = "future-race";
+                        raceCopy.statusClass = "future-card";
+                        raceCopy.colorCode = "#3498db";
+                    }
+
+                    const badge = document.createElement("div");
+                    badge.classList.add("race-indicator");
+                    if (raceCopy.isLive) {
+                        badge.classList.add("is-live");
+                    }
+
+                    const leagueFullName = getLeagueFullName(raceCopy.Split);
+                    badge.textContent = raceCopy.isLive ? `● LIVE • ${leagueFullName}` : leagueFullName;
+                    badgeList.appendChild(badge);
+
+                    monthRaces.push(raceCopy);
+                });
+
+                if (dayStatus) {
+                    dayCell.classList.add(dayStatus);
+                }
+                dayCell.appendChild(badgeList);
             }
-            el.innerText = "WYŚCIG TRWA!";
-            return;
+
+            daysContainer.appendChild(dayCell);
         }
 
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        if (monthRaces.length === 0) {
+            eventsListContainer.innerHTML = "<p style='color:#888;'>Brak wyścigów w tym miesiącu dla wybranej ligi.</p>";
+        } else {
+            monthRaces.forEach(race => {
+                const flagUrl = getFlagUrl(race.Flaga);
+                const trackName = race.Tor || '';
+                const formatInfo = race.Format || '';
+                const subTitleText = (trackName && formatInfo) ? `${trackName} (${formatInfo})` : (trackName || formatInfo);
+                const leagueSuffix = getLeagueTitleSuffix(race.Split);
+                const liveBadgeHtml = race.isLive ? `<span class="live-pill">LIVE</span>` : '';
 
-        el.innerText =
-            `${days}d ${hours < 10 ? '0' : ''}${hours}h ${minutes < 10 ? '0' : ''}${minutes}m ${seconds < 10 ? '0' : ''}${seconds}s`;
-    }
+                const eventCard = document.createElement("div");
+                eventCard.classList.add("event-card");
+                if (race.statusClass) eventCard.classList.add(race.statusClass);
 
-    function updateCountdowns() {
-        updateSingleCountdown("1");
-        updateSingleCountdown("2");
-    }
-
-    // --- TOP 3 KLASYFIKACJA KIEROWCÓW (Liga Diamentowa & Liga Złota) ---
-    function parseTop3FromStandingsMatrix(matrix) {
-        if (!matrix || matrix.length < 2) return [];
-
-        let headerRowIdx = -1;
-        let idxPos = -1, idxNum = -1, idxDriver = -1, idxTeam = -1, idxPts = -1;
-
-        for (let r = 0; r < matrix.length; r++) {
-            const lowerRow = matrix[r].map(c => String(c || "").trim().toLowerCase());
-            const dIdx = lowerRow.indexOf("kierowca");
-            const pIdx = lowerRow.indexOf("punkty");
-            if (dIdx !== -1 && pIdx !== -1) {
-                headerRowIdx = r;
-                idxPos = lowerRow.indexOf("pozycja");
-                idxNum = lowerRow.indexOf("numer");
-                idxDriver = dIdx;
-                idxTeam = lowerRow.indexOf("drużyna") !== -1 ? lowerRow.indexOf("drużyna") : lowerRow.indexOf("druzyna");
-                idxPts = pIdx;
-                break;
-            }
-        }
-
-        if (headerRowIdx === -1) return [];
-
-        const entries = [];
-        for (let i = headerRowIdx + 1; i < matrix.length; i++) {
-            const row = matrix[i];
-            const driver = idxDriver >= 0 ? String(row[idxDriver] || "").trim() : "";
-            const ptsRaw = idxPts >= 0 ? String(row[idxPts] || "").trim() : "";
-
-            if (!driver || driver === "#N/A" || ptsRaw === "#N/A") continue;
-
-            const points = parseFloat(ptsRaw.replace(",", "."));
-            if (Number.isNaN(points)) continue;
-
-            const posRaw = idxPos >= 0 ? parseInt(String(row[idxPos] || "").trim(), 10) : NaN;
-            const numRaw = idxNum >= 0 ? String(row[idxNum] || "").trim() : "";
-            const teamRaw = idxTeam >= 0 ? String(row[idxTeam] || "").trim() : "";
-
-            entries.push({
-                position: !Number.isNaN(posRaw) ? posRaw : entries.length + 1,
-                number: numRaw,
-                driver,
-                team: teamRaw,
-                points
-            });
-        }
-
-        entries.sort((a, b) => {
-            if (b.points !== a.points) return b.points - a.points;
-            return a.position - b.position;
-        });
-
-        return entries.slice(0, 3).map((item, idx) => ({
-            ...item,
-            rank: idx + 1
-        }));
-    }
-
-    function renderTop3Card(containerId, top3List) {
-        const container = document.getElementById(containerId);
-        if (!container) return;
-
-        if (!top3List || !top3List.length) {
-            container.innerHTML = `<div class="standings-status">Brak danych w klasyfikacji</div>`;
-            return;
-        }
-
-        container.innerHTML = top3List.map(item => {
-            const rankClass = `rank-${item.rank}`;
-            const badgeClass = `pos-${item.rank}`;
-            const ptsFormatted = Number.isInteger(item.points) ? `${item.points} pkt` : `${item.points.toFixed(1)} pkt`;
-            const numberBadge = item.number ? `<span class="driver-number">#${escapeHtml(item.number)}</span>` : "";
-            const teamLine = item.team ? `<div class="driver-team">${escapeHtml(item.team)}</div>` : "";
-
-            return `
-                <div class="podium-row ${rankClass}">
-                    <div class="podium-left">
-                        <div class="rank-badge ${badgeClass}">P${item.rank}</div>
-                        <div class="driver-meta">
-                            <div class="driver-name-line">
-                                <span class="driver-name">${escapeHtml(item.driver)}</span>
-                                ${numberBadge}
-                            </div>
-                            ${teamLine}
+                eventCard.innerHTML = `
+                    <div class="event-info">
+                        <img src="${flagUrl}" alt="${race.Kraj || ''}" class="event-flag" onerror="this.src='https://flagcdn.com/w80/un.png'">
+                        <div class="event-title">
+                            <h3>Runda ${race.Runda} - GP ${race.Kraj || ''}${leagueSuffix} ${liveBadgeHtml}</h3>
+                            <p>${subTitleText}</p>
                         </div>
                     </div>
-                    <div class="points-pill">${escapeHtml(ptsFormatted)}</div>
-                </div>
-            `;
-        }).join("");
-    }
-
-    async function loadSingleLeagueTop3(csvUrl, containerId, label) {
-        try {
-            const response = await fetch(`${csvUrl}&t=${Date.now()}`, { cache: "no-store" });
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            const csvText = await response.text();
-            const matrix = parseCSVRows(csvText);
-            const top3 = parseTop3FromStandingsMatrix(matrix);
-            renderTop3Card(containerId, top3);
-        } catch (err) {
-            console.warn(`Fehler beim Laden der Top 3 (${label}):`, err);
-            const container = document.getElementById(containerId);
-            if (container) {
-                container.innerHTML = `<div class="standings-status">Nie udało się pobrać danych (${escapeHtml(label)})</div>`;
-            }
+                    <div class="event-date" style="color: ${race.colorCode || '#ff3131'}">${race.Data} (${race.Czas || '20:00'})</div>
+                `;
+                eventsListContainer.appendChild(eventCard);
+            });
         }
     }
 
-    function loadAllLeagueStandings() {
-        loadSingleLeagueTop3(DIAMOND_CSV_URL, "top3-diamond", "Liga Diamentowa");
-        loadSingleLeagueTop3(GOLD_CSV_URL, "top3-gold", "Liga Złota");
+    function switchLeague(leagueKey, btnElement) {
+        activeLeague = leagueKey;
+        document.querySelectorAll('.split-btn').forEach(btn => btn.classList.remove('active'));
+        btnElement.classList.add('active');
+        renderCalendar();
     }
 
-    loadNextRacesFromSheet();
-    loadAllLeagueStandings();
-    setInterval(updateCountdowns, 1000);
+    document.getElementById("prev-month").addEventListener("click", () => {
+        currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+        renderCalendar();
+    });
+
+    document.getElementById("next-month").addEventListener("click", () => {
+        currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+        renderCalendar();
+    });
+
+    document.getElementById("jump-today").addEventListener("click", () => {
+        currentDate = getCurrentMonthStart();
+        renderCalendar();
+    });
+
+    renderCalendar();
+    fetchCalendarData();
+
+    // Alle 30 Sekunden Live-Status prüfen, damit 20:00 und 22:00 sauber greifen
+    setInterval(() => {
+        if (allRacesData.length > 0) {
+            renderCalendar();
+        }
+    }, 30000);
 </script>
 
 </body>
