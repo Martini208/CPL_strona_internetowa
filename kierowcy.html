@@ -808,12 +808,6 @@ footer {
     let driversData = [];
     let activeCategory = "All";
 
-    const themeToggleBtn = document.getElementById("theme-toggle");
-    themeToggleBtn.addEventListener("click", () => {
-        document.body.classList.toggle("light-mode");
-        themeToggleBtn.textContent = document.body.classList.contains("light-mode") ? "🌙" : "☀️";
-    });
-
     function normalizeStr(val) {
         return String(val || "")
             .toLowerCase()
