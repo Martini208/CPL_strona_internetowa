@@ -808,6 +808,42 @@ footer {
     let driversData = [];
     let activeCategory = "All";
 
+    document.addEventListener('DOMContentLoaded', () => {
+        const THEME_STORAGE_KEY = 'cpl_theme_mode';
+        const themeToggleBtns = document.querySelectorAll('#theme-toggle, .theme-toggle-btn, [data-theme-toggle]');
+
+        function applyThemeMode(isLight, syncStorage = false) {
+            document.body.classList.toggle('light-mode', isLight);
+            themeToggleBtns.forEach(btn => {
+                btn.textContent = isLight ? '🌙' : '☀️';
+            });
+            if (syncStorage) {
+                try {
+                    localStorage.setItem(THEME_STORAGE_KEY, isLight ? 'light' : 'dark');
+                } catch (e) {}
+            }
+        }
+
+        let initialLight = false;
+        try {
+            initialLight = localStorage.getItem(THEME_STORAGE_KEY) === 'light';
+        } catch (e) {}
+        applyThemeMode(initialLight, false);
+
+        themeToggleBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const nextLight = !document.body.classList.contains('light-mode');
+                applyThemeMode(nextLight, true);
+            });
+        });
+
+        window.addEventListener('storage', (event) => {
+            if (event.key === THEME_STORAGE_KEY) {
+                applyThemeMode(event.newValue === 'light', false);
+            }
+        });
+    });
+
     function normalizeStr(val) {
         return String(val || "")
             .toLowerCase()
