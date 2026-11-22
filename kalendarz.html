@@ -312,16 +312,16 @@ body.light-mode .today-btn {
 
 .day-cell {
     position: relative;
-    min-height: 95px;
+    min-height: 112px;
     background: rgba(255, 255, 255, 0.03);
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 8px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     font-size: 15px;
     border: 2px solid transparent;
-    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
 }
 
 body.light-mode .day-cell {
@@ -332,12 +332,16 @@ body.light-mode .day-cell {
 .day-cell.weekend { background: rgba(255, 255, 255, 0.06); }
 body.light-mode .day-cell.weekend { background: rgba(0, 0, 0, 0.05); }
 
+.day-cell.has-race:hover {
+    transform: translateY(-2px);
+}
+
 .day-top-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 6px;
-    min-height: 20px;
+    min-height: 22px;
 }
 
 .day-number {
@@ -347,18 +351,35 @@ body.light-mode .day-cell.weekend { background: rgba(0, 0, 0, 0.05); }
     gap: 6px;
 }
 
+.day-header-flags {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.cell-top-flag {
+    width: 24px;
+    height: 16px;
+    object-fit: cover;
+    border-radius: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+    display: block;
+}
+
 /* Status-Farben */
 .day-cell.past-race {
     border: 2px solid #ff3131;
-    background: rgba(255, 49, 49, 0.15);
+    background: linear-gradient(165deg, rgba(255, 49, 49, 0.18) 0%, rgba(255, 49, 49, 0.06) 100%);
 }
 .day-cell.next-race {
     border: 2px solid #2ecc71;
-    background: rgba(46, 204, 113, 0.15);
+    background: linear-gradient(165deg, rgba(46, 204, 113, 0.20) 0%, rgba(46, 204, 113, 0.06) 100%);
+    box-shadow: 0 6px 20px rgba(46, 204, 113, 0.16);
 }
 .day-cell.future-race {
     border: 2px solid #3498db;
-    background: rgba(52, 152, 219, 0.15);
+    background: linear-gradient(165deg, rgba(52, 152, 219, 0.18) 0%, rgba(52, 152, 219, 0.06) 100%);
 }
 
 /* Stylischer heutiger Tag in Gold / Amber */
@@ -403,20 +424,63 @@ body.light-mode .day-cell.today-cell .day-number {
     box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.42), 0 10px 28px rgba(245, 158, 11, 0.32);
 }
 
+/* Mittlere Flaggen-Showcase im Kästchen */
+.cell-flag-showcase {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin: 6px 0 4px 0;
+    padding: 5px 6px;
+    border-radius: 7px;
+    background: rgba(0, 0, 0, 0.34);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+body.light-mode .cell-flag-showcase {
+    background: rgba(17, 17, 17, 0.06);
+    border-color: rgba(17, 17, 17, 0.12);
+}
+
+.cell-flag-hero {
+    width: 34px;
+    height: 22px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.32);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.45);
+    flex-shrink: 0;
+}
+
+.cell-flag-showcase.multi .cell-flag-hero {
+    width: 28px;
+    height: 18px;
+}
+
+.cell-gp-label {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--text-color);
+}
+
 .race-badge-list {
     display: flex;
     flex-direction: column;
     gap: 4px;
-    margin-top: 6px;
+    margin-top: auto;
 }
 
 .race-indicator {
-    background: rgba(255, 49, 49, 0.85);
+    background: rgba(255, 49, 49, 0.88);
     color: white;
     font-size: 11px;
     font-weight: bold;
     padding: 4px 6px;
-    border-radius: 4px;
+    border-radius: 5px;
     text-align: center;
     white-space: nowrap;
     overflow: hidden;
@@ -424,11 +488,11 @@ body.light-mode .day-cell.today-cell .day-number {
 }
 
 .day-cell.next-race .race-indicator {
-    background: rgba(46, 204, 113, 0.88);
+    background: rgba(46, 204, 113, 0.90);
 }
 
 .day-cell.future-race .race-indicator {
-    background: rgba(52, 152, 219, 0.88);
+    background: rgba(52, 152, 219, 0.90);
 }
 
 /* Event Liste */
@@ -575,8 +639,12 @@ footer {
     nav{ flex-direction:column; height: auto; gap:12px; padding:15px; }
     .nav-left { flex-direction: column; align-items: center; }
     nav ul{ flex-wrap:wrap; justify-content:center; }
-    .day-cell { min-height: 64px; font-size: 12px; padding: 5px; }
-    .race-indicator { font-size: 10px; padding: 2px; }
+    .day-cell { min-height: 78px; font-size: 12px; padding: 5px; }
+    .cell-top-flag { width: 18px; height: 12px; }
+    .cell-flag-showcase { padding: 3px 4px; gap: 4px; }
+    .cell-flag-hero { width: 24px; height: 16px; }
+    .cell-gp-label { font-size: 9px; }
+    .race-indicator { font-size: 10px; padding: 2px 4px; }
     .today-tag { font-size: 8px; padding: 2px 5px; }
 }
 </style>
@@ -901,19 +969,54 @@ footer {
 
             topRow.appendChild(dayNumDiv);
 
-            if (isToday) {
+            const racesOnDay = filteredRaces.filter(e => toISODate(e.Data) === isoDateString);
+
+            if (isToday && racesOnDay.length === 0) {
                 const todayTag = document.createElement("span");
                 todayTag.classList.add("today-tag");
                 todayTag.textContent = "Dziś";
                 topRow.appendChild(todayTag);
+            } else if (racesOnDay.length > 0) {
+                const headerFlags = document.createElement("div");
+                headerFlags.classList.add("day-header-flags");
+
+                racesOnDay.forEach(race => {
+                    const topFlag = document.createElement("img");
+                    topFlag.src = getFlagUrl(race.Flaga);
+                    topFlag.alt = race.Kraj || 'GP';
+                    topFlag.classList.add("cell-top-flag");
+                    topFlag.onerror = function() { this.src = 'https://flagcdn.com/w80/un.png'; };
+                    headerFlags.appendChild(topFlag);
+                });
+
+                topRow.appendChild(headerFlags);
             }
 
             dayCell.appendChild(topRow);
 
-            const racesOnDay = filteredRaces.filter(e => toISODate(e.Data) === isoDateString);
-
             if (racesOnDay.length > 0) {
                 dayCell.classList.add("has-race");
+
+                const showcase = document.createElement("div");
+                showcase.className = racesOnDay.length > 1 ? "cell-flag-showcase multi" : "cell-flag-showcase";
+
+                racesOnDay.forEach(race => {
+                    const heroFlag = document.createElement("img");
+                    heroFlag.src = getFlagUrl(race.Flaga);
+                    heroFlag.alt = race.Kraj || 'GP';
+                    heroFlag.classList.add("cell-flag-hero");
+                    heroFlag.onerror = function() { this.src = 'https://flagcdn.com/w80/un.png'; };
+                    showcase.appendChild(heroFlag);
+                });
+
+                if (racesOnDay.length === 1) {
+                    const gpLabel = document.createElement("span");
+                    gpLabel.className = "cell-gp-label";
+                    gpLabel.textContent = racesOnDay[0].Kraj ? `GP ${racesOnDay[0].Kraj}` : 'Wyścig';
+                    showcase.appendChild(gpLabel);
+                }
+
+                dayCell.appendChild(showcase);
 
                 const badgeList = document.createElement("div");
                 badgeList.className = "race-badge-list";
