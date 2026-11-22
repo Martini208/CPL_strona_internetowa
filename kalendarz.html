@@ -354,7 +354,7 @@ body.light-mode .day-cell.weekend { background: rgba(0, 0, 0, 0.05); }
 .day-header-right {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
     flex-wrap: wrap;
     justify-content: flex-end;
 }
@@ -364,7 +364,7 @@ body.light-mode .day-cell.weekend { background: rgba(0, 0, 0, 0.05); }
     color: var(--text-color);
     font-size: 10px;
     font-weight: 800;
-    padding: 2px 6px;
+    padding: 2px 7px;
     border-radius: 6px;
     border: 1px solid rgba(255, 255, 255, 0.18);
     line-height: 1.1;
@@ -374,22 +374,6 @@ body.light-mode .day-cell.weekend { background: rgba(0, 0, 0, 0.05); }
 body.light-mode .round-tag {
     background: rgba(17, 17, 17, 0.08);
     border-color: rgba(17, 17, 17, 0.14);
-}
-
-.day-header-flags {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.cell-top-flag {
-    width: 24px;
-    height: 16px;
-    object-fit: cover;
-    border-radius: 3px;
-    border: 1px solid rgba(255, 255, 255, 0.28);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
-    display: block;
 }
 
 /* Status-Farben */
@@ -665,8 +649,7 @@ footer {
     .nav-left { flex-direction: column; align-items: center; }
     nav ul{ flex-wrap:wrap; justify-content:center; }
     .day-cell { min-height: 82px; font-size: 12px; padding: 5px; }
-    .round-tag { font-size: 9px; padding: 1px 4px; }
-    .cell-top-flag { width: 18px; height: 12px; }
+    .round-tag { font-size: 9px; padding: 1px 5px; }
     .cell-flag-showcase { padding: 3px 4px; gap: 4px; }
     .cell-flag-hero { width: 24px; height: 16px; }
     .cell-gp-label { font-size: 9px; }
@@ -1015,21 +998,9 @@ footer {
                     roundTag.textContent = roundText;
                     headerRight.appendChild(roundTag);
                 });
+            }
 
-                const headerFlags = document.createElement("div");
-                headerFlags.classList.add("day-header-flags");
-
-                racesOnDay.forEach(race => {
-                    const topFlag = document.createElement("img");
-                    topFlag.src = getFlagUrl(race.Flaga);
-                    topFlag.alt = race.Kraj || 'GP';
-                    topFlag.classList.add("cell-top-flag");
-                    topFlag.onerror = function() { this.src = 'https://flagcdn.com/w80/un.png'; };
-                    headerFlags.appendChild(topFlag);
-                });
-
-                headerRight.appendChild(headerFlags);
-            } else if (isToday) {
+            if (isToday) {
                 const todayTag = document.createElement("span");
                 todayTag.classList.add("today-tag");
                 todayTag.textContent = "Dziś";
