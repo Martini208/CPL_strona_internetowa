@@ -1562,9 +1562,10 @@ async function loadLeaguesData() {
 function renderTeamCard(team) {
     const safeName = escapeHtml(team.name);
     const assets = getTeamAssets(team.name);
-    const pillsHtml = team.drivers.length > 0
-        ? team.drivers.map(d => `<span class="driver-pill">${escapeHtml(d)}</span>`).join('')
-        : `<span class="driver-pill">Brak kierowców</span>`;
+    const validDrivers = (team.drivers || []).map(d => String(d || '').trim()).filter(Boolean);
+    const pillsHtml = validDrivers.length > 0
+        ? validDrivers.map(d => `<span class="driver-pill">${escapeHtml(d)}</span>`).join('')
+        : `<span class="driver-pill">=</span>`;
 
     const carHtml = assets.car
         ? `<img src="${escapeHtml(assets.car)}" alt="${safeName} F1 car" class="f1-car-img" onerror="this.style.display='none';">`
