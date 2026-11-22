@@ -686,7 +686,7 @@ footer {
                 <li><a href="kalendarz.html">Kalendarz Wyścigów</a></li>
                 <li><a href="sezony.html">Sezony</a></li>
                 <li><a href="kierowcy.html">Klasyfikacja Kierowców</a></li>
-                <li><a href="index.html#zespoly">Klasyfikacja Zespołów</a></li>
+                <li><a href="zespoly.html">Klasyfikacja Zespołów</a></li>
                 <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSfLSj3z30_t1cdEPyULm26suCN8jpB8NOT9JsXNYE8ikeVUZg/viewform" target="_blank">Dołącz do ligi</a></li>
             </ul>
         </div>
@@ -937,6 +937,118 @@ function onSeasonChange() {
     loadSeasonData();
 }
 
+function cleanDriverName(raw) {
+    return String(raw || '')
+        .replace(/\s*[–-]\s*[–-]\s*/g, ' – ')
+        .replace(/\s+[–-]\s*$/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+// Spezieller Parser für den unteren Teamblock in Sezon 20 (1651963070) & Sezon 20 S2 (1869079550)
+function parseSeason20TeamBlock(rawData, startSearchIdx) {
+    let headerIdx = -1;
+    let colPos = -1;
+    let colTeam = -1;
+    let colDrivers = -1;
+    let colPts = -1;
+
+    for (let i = startSearchIdx; i < rawData.length; i++) {
+        const r = rawData[i] || [];
+        const norm = r.map(c =>
+            String(c || '')
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/\u0142/g, 'l')
+                .trim()
+        );
+
+        const tIdx = norm.findIndex(c => c === 'druzyna' || c === 'zespol' || c === 'konstruktor');
+        const dIdx = norm.findIndex(c => c.startsWith('kierowc'));
+        const pIdx = norm.findIndex(c => c === 'punkty' || c === 'pkt');
+        const posIdx = norm.findIndex(c => c === 'pozycja' || c === 'poz');
+
+        if (tIdx !== -1 && dIdx !== -1 && pIdx !== -1) {
+            headerIdx = i;
+            colPos = posIdx !== -1 ? posIdx : Math.max(0, tIdx - 1);
+            colTeam = tIdx;
+            colDrivers = dIdx;
+            colPts = pIdx;
+            break;
+        }
+    }
+
+    if (headerIdx === -1) return [];
+
+    const teams = [];
+    let currentTeam = null;
+
+    for (let i = headerIdx + 1; i < rawData.length; i++) {
+        const r = rawData[i] || [];
+        if (r.every(cell => !String(cell || '').trim())) continue;
+
+        const rawPos = String(r[colPos] || '').trim();
+        const rawTeam = String(r[colTeam] || '').trim();
+        const rawDriver = String(r[colDrivers] || '').trim();
+        const rawPts = String(r[colPts] || '').trim();
+
+        const lowerTeam = rawTeam.toLowerCase();
+        if (lowerTeam === 'pozycja' || lowerTeam === 'drużyna' || lowerTeam === 'druzyna' || lowerTeam === 'razem') {
+            break;
+        }
+
+        const cleanedDriver = cleanDriverName(rawDriver);
+        const isValidDriver =
+            cleanedDriver &&
+            cleanedDriver !== '-' &&
+            !/^#ref!/i.test(cleanedDriver) &&
+            !/^#n\/a$/i.test(cleanedDriver);
+
+        const parsedPts = parseFloat(rawPts.replace(',', '.').replace(/[^\d.-]/g, ''));
+        const hasValidPts = rawPts !== '' && !Number.isNaN(parsedPts);
+
+        if (
+            rawTeam &&
+            rawTeam !== '-' &&
+            !/^#ref!/i.test(rawTeam) &&
+            !/^#n\/a$/i.test(rawTeam) &&
+            !/^\d+([.,]\d+)?$/.test(rawTeam)
+        ) {
+            currentTeam = {
+                pos: rawPos || String(teams.length + 1),
+                name: rawTeam.replace(/\s+/g, ' ').trim(),
+                driversList: [],
+                points: hasValidPts ? parsedPts : 0
+            };
+            if (isValidDriver) {
+                currentTeam.driversList.push(cleanedDriver);
+            }
+            teams.push(currentTeam);
+        } else if (currentTeam) {
+            if (isValidDriver && !currentTeam.driversList.includes(cleanedDriver)) {
+                currentTeam.driversList.push(cleanedDriver);
+            }
+            if (currentTeam.points === 0 && hasValidPts) {
+                currentTeam.points = parsedPts;
+            }
+        }
+    }
+
+    return teams
+        .map(t => ({
+            pos: t.pos,
+            name: t.name,
+            drivers: t.driversList.join(' & '),
+            points: t.points
+        }))
+        .sort((a, b) => b.points - a.points)
+        .map((t, idx) => ({
+            ...t,
+            pos: String(idx + 1)
+        }));
+}
+
 function parseBottomTeamBlock(rawData, startSearchIdx) {
     let teams = [];
     let summaryHeaderIdx = -1;
@@ -1145,9 +1257,10 @@ async function loadSeasonData() {
                 raceStartCol = colPts + 1;
             }
         } else if (isSeason20or20S2) {
-            colTeam = colTeam + 1;
+            // WICHTIG: colTeam NICHT verschieben, da headers.indexOf('Drużyna') bereits die exakte Spalte liefert
             raceStartCol = colPts + 1;
             raceHeaders = ['AUS', 'SIN', 'CHI', 'JAP', 'AZE', 'BAH', 'KSA', 'AUT', 'EMR', 'WLO', 'BEL', 'NID', 'CAT', 'WBR', 'BRA', 'MIA', 'STA', 'MEK', 'LVE', 'ABU'];
+            globalTeams = parseSeason20TeamBlock(rawData, headerIndex + 1);
         } else if (isSeason8Format) {
             for (let c = colTeam + 1; c < colPts; c++) {
                 let val = headers[c];
@@ -1315,7 +1428,7 @@ async function loadSeasonData() {
         else if (currentGid === '1216314763') maxDrivers = 20;
         else if (currentGid === '874501409') maxDrivers = 20;
         else if (currentGid === '1651963070') maxDrivers = 22;
-        else if (currentGid === '1869079550') maxDrivers = 14;
+        else if (currentGid === '1869079550') maxDrivers = 15;
         else if (currentGid === '1127275876') maxDrivers = 14;
         else if (currentGid === '476402002') maxDrivers = 19;
         else if (currentGid === '830059160') maxDrivers = 19;
@@ -1335,7 +1448,7 @@ async function loadSeasonData() {
                 break;
             }
 
-            if (pos && !isNaN(parseInt(pos)) && driverName && driverName !== '' && driverName !== '0' && parseInt(pos) <= maxDrivers) {
+            if (pos && !isNaN(parseInt(pos)) && driverName && driverName !== '' && driverName !== '0' && driverName !== '#N/A' && parseInt(pos) <= maxDrivers) {
                 let driverRaces = [];
                 for (let r = 0; r < raceHeaders.length; r++) {
                     let cellVal = row[raceStartCol + r] || '';
