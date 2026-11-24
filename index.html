@@ -1124,8 +1124,8 @@ footer {
         <a href="news.html" class="news-card">
             <div class="news-card-body">
                 <div class="news-meta">Aktualności CPL</div>
-                <h3>Ładowanie aktualności...</h3>
-                <p>Pobieranie najnowszych wpisów ze strony news.html.</p>
+                <h3>Zobacz wszystkie aktualności</h3>
+                <p>Kliknij, aby przejść do pełnego wpisu na stronie news.html.</p>
             </div>
         </a>
     </div>
@@ -1632,13 +1632,28 @@ footer {
     setInterval(updateCountdowns, 1000);
 
     // --- OSTATNIE 3 WPISY Z NEWS.HTML (klickbare Kurzeinträge mit Bild, Datum/Autor, Titel & Kurztext) ---
+    function renderNewsFallbackCard(grid) {
+        grid.innerHTML = `
+            <a href="news.html" class="news-card">
+                <div class="news-card-body">
+                    <div class="news-meta">Aktualności CPL</div>
+                    <h3>Przejdź do aktualności</h3>
+                    <p>Kliknij, aby zobaczyć wszystkie wpisy i pełne artykuły na stronie news.html.</p>
+                </div>
+            </a>
+        `;
+    }
+
     async function loadLatestThreeNews() {
         const grid = document.getElementById('home-news-grid');
         if (!grid) return;
 
         try {
             const response = await fetch('news.html', { cache: 'no-store' });
-            if (!response.ok) return;
+            if (!response.ok) {
+                renderNewsFallbackCard(grid);
+                return;
+            }
 
             const html = await response.text();
             const doc = new DOMParser().parseFromString(html, 'text/html');
@@ -1646,15 +1661,19 @@ footer {
             let articles = Array.from(doc.querySelectorAll('article, .news-card, .news-item, .post-card'));
 
             if (articles.length === 0) {
-                articles = Array.from(doc.querySelectorAll('main div, section div, .container div')).filter(el => {
+                articles = Array.from(doc.querySelectorAll('div')).filter(el => {
                     const heading = el.querySelector(':scope > h2, :scope > h3, :scope > div > h2, :scope > div > h3');
                     const paragraph = el.querySelector(':scope > p, :scope > div > p');
-                    return heading && paragraph && el.querySelectorAll('h2, h3').length === 1;
+                    const hasImg = Boolean(el.querySelector('img'));
+                    return heading && paragraph && hasImg && el.querySelectorAll('h2, h3').length === 1;
                 });
             }
 
             const latestThree = articles.slice(0, 3);
-            if (latestThree.length === 0) return;
+            if (latestThree.length === 0) {
+                renderNewsFallbackCard(grid);
+                return;
+            }
 
             grid.innerHTML = '';
 
@@ -1694,6 +1713,7 @@ footer {
             });
         } catch (e) {
             console.warn('News konnten nicht geladen werden:', e);
+            renderNewsFallbackCard(grid);
         }
     }
 
