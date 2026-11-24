@@ -743,11 +743,12 @@ body.light-mode .gold-card .podium-row.rank-1 .points-pill {
     color: #9ca3af;
 }
 
-/* News - Klickbare Karten wie auf dem Bild (ohne Button) */
+/* News - Klickbare Karten wie auf dem Bild (ohne Button), bis zu 3 nebeneinander */
 .news-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 25px;
+    align-items: stretch;
 }
 
 .news-card {
@@ -931,6 +932,10 @@ footer {
 }
 
 @media(max-width:900px){
+    .news-grid {
+        grid-template-columns: 1fr;
+    }
+
     nav{
         flex-direction:column;
         height: auto;
@@ -1692,7 +1697,6 @@ footer {
 
         if (!firstUrl) return "";
 
-        // Google Drive Links: .../d/<ID>/... oder open?id=<ID> oder uc?id=<ID>
         const driveIdMatch =
             firstUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/) ||
             firstUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) ||
@@ -1791,7 +1795,6 @@ footer {
 
             if (!parsedNews.length) return;
 
-            // Sortiere absteigend (neueste Einträge zuerst) und nimm maximal die letzten 3
             parsedNews.sort((a, b) => {
                 if (b.tsMs !== a.tsMs) return b.tsMs - a.tsMs;
                 return b.rowIndex - a.rowIndex;
