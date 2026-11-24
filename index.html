@@ -743,7 +743,7 @@ body.light-mode .gold-card .podium-row.rank-1 .points-pill {
     color: #9ca3af;
 }
 
-/* News - Klickbare Kurzeinträge mit Bild, Datum/Autor, Titel & Kurztext (ohne Button) */
+/* News - Klickbare Karten wie auf dem Bild (ohne Button) */
 .news-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -788,8 +788,7 @@ body.light-mode .gold-card .podium-row.rank-1 .points-pill {
     font-size: 12px;
     font-weight: 700;
     color: #ff3131;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
+    letter-spacing: 0.4px;
     margin-bottom: 8px;
 }
 
@@ -1122,7 +1121,7 @@ footer {
 
     <div class="news-grid" id="home-news-grid">
         <a href="news.html" class="news-card">
-            <img src="images/news-cpl-launch.jpg" alt="Otwarcie nowej strony ligi CPL" class="news-card-img" onerror="this.style.display='none'">
+            <img src="https://drive.google.com/thumbnail?id=1L373XM3RA4mCo3YiMZDt4v5UbZJQsVG1&sz=w1000" alt="Otwarcie nowej strony ligi CPL" class="news-card-img" onerror="this.style.display='none'">
             <div class="news-card-body">
                 <div class="news-meta">22 LISTOPADA 2026 • Daniel Słoma</div>
                 <h3>Otwarcie nowej strony ligi CPL</h3>
@@ -1225,6 +1224,11 @@ footer {
     const CALENDAR_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
     const DIAMOND_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=1651963070`;
     const GOLD_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=1869079550`;
+
+    // CPL News - Nowy wpis (Odpowiedzi)
+    const NEWS_SHEET_ID = "18wongGQNJWeON0S0IVyfjm12xDu9-Pr8coiyFQxlP3Y";
+    const NEWS_GID = "1568110716";
+    const NEWS_CSV_URL = `https://docs.google.com/spreadsheets/d/${NEWS_SHEET_ID}/export?format=csv&gid=${NEWS_GID}`;
 
     const nextRaceTargets = {
         "1": null,
@@ -1632,91 +1636,175 @@ footer {
     loadAllLeagueStandings();
     setInterval(updateCountdowns, 1000);
 
-    // --- OSTATNIE 3 WPISY Z NEWS.HTML (klickbare Kurzeinträge mit Bild, Datum/Autor, Titel & Kurztext, ohne Button) ---
-    function extractMetaText(item, titleEl) {
-        const metaEl = item.querySelector('.news-meta, .meta, .date, .author, time');
-        if (metaEl && metaEl.textContent.trim()) {
-            return metaEl.textContent.trim();
+    // --- OSTATNIE 3 AKTUALNOŚCI Z ARKUSZA GOOGLE SHEETS (bez przycisku "Czytaj więcej") ---
+    function formatPolishDateFromTimestamp(tsStr) {
+        const raw = String(tsStr || "").trim();
+        if (!raw) return "";
+
+        const match = raw.match(/(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})/) || raw.match(/(\d{1,2})[-/.](\d{1,2})[-/.](\d{4})/);
+        let year, monthIndex, day;
+
+        if (match) {
+            if (match[1].length === 4) {
+                year = parseInt(match[1], 10);
+                monthIndex = parseInt(match[2], 10) - 1;
+                day = parseInt(match[3], 10);
+            } else {
+                day = parseInt(match[1], 10);
+                monthIndex = parseInt(match[2], 10) - 1;
+                year = parseInt(match[3], 10);
+            }
+        } else {
+            const d = new Date(raw);
+            if (Number.isNaN(d.getTime())) return raw;
+            day = d.getDate();
+            monthIndex = d.getMonth();
+            year = d.getFullYear();
         }
 
-        // Fallback: Suche nach einer Zeile mit "•" oder einem Jahr (z. B. "22 LISTOPADA 2026 • Daniel Słoma")
-        const candidates = Array.from(item.querySelectorAll('p, span, div')).filter(el => {
-            if (el === titleEl || el.contains(titleEl) || el.querySelector('h1, h2, h3, p, img')) return false;
-            const txt = el.textContent.trim();
-            return txt.length > 0 && txt.length < 90 && (txt.includes('•') || /\b202\d\b/.test(txt));
-        });
+        const monthsPl = [
+            "STYCZNIA", "LUTEGO", "MARCA", "KWIETNIA", "MAJA", "CZERWCA",
+            "LIPCA", "SIERPNIA", "WRZEŚNIA", "PAŹDZIERNIKA", "LISTOPADA", "GRUDNIA"
+        ];
 
-        return candidates.length > 0 ? candidates[0].textContent.trim() : 'Aktualności CPL';
+        if (monthIndex < 0 || monthIndex > 11 || Number.isNaN(day) || Number.isNaN(year)) {
+            return raw;
+        }
+
+        return `${day} ${monthsPl[monthIndex]} ${year}`;
     }
 
-    async function loadLatestThreeNews() {
-        const grid = document.getElementById('home-news-grid');
+    function parseTimestampToMs(tsStr) {
+        const raw = String(tsStr || "").trim();
+        if (!raw) return 0;
+        const normalized = raw.replace(/\//g, "-").replace(" ", "T");
+        const ms = Date.parse(normalized);
+        if (!Number.isNaN(ms)) return ms;
+        const fallback = Date.parse(raw);
+        return Number.isNaN(fallback) ? 0 : fallback;
+    }
+
+    function resolveDriveImageUrl(rawPhotoField) {
+        const firstUrl = String(rawPhotoField || "")
+            .split(",")
+            .map(s => s.trim())
+            .find(Boolean);
+
+        if (!firstUrl) return "";
+
+        // Google Drive Links: .../d/<ID>/... oder open?id=<ID> oder uc?id=<ID>
+        const driveIdMatch =
+            firstUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/) ||
+            firstUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) ||
+            firstUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+
+        if (driveIdMatch && driveIdMatch[1]) {
+            return `https://drive.google.com/thumbnail?id=${driveIdMatch[1]}&sz=w1000`;
+        }
+
+        return sanitizeUrl(firstUrl, "");
+    }
+
+    function renderNewsCards(items) {
+        const grid = document.getElementById("home-news-grid");
+        if (!grid) return;
+
+        if (!items || !items.length) {
+            grid.innerHTML = `
+                <a href="news.html" class="news-card">
+                    <div class="news-card-body">
+                        <div class="news-meta">Aktualności CPL</div>
+                        <h3>Brak wpisów</h3>
+                        <p>Brak opublikowanych aktualności.</p>
+                    </div>
+                </a>
+            `;
+            return;
+        }
+
+        grid.innerHTML = items.map(item => {
+            const dateFormatted = formatPolishDateFromTimestamp(item.timestamp);
+            const metaParts = [dateFormatted, item.author].filter(Boolean);
+            const metaText = metaParts.length ? metaParts.join(" • ") : "Aktualności CPL";
+            const imgHtml = item.imageUrl
+                ? `<img src="${escapeHTML(item.imageUrl)}" alt="${escapeHTML(item.title)}" class="news-card-img" onerror="this.style.display='none'">`
+                : "";
+
+            return `
+                <a href="news.html" class="news-card">
+                    ${imgHtml}
+                    <div class="news-card-body">
+                        <div class="news-meta">${escapeHTML(metaText)}</div>
+                        <h3>${escapeHTML(item.title)}</h3>
+                        <p>${escapeHTML(item.lead)}</p>
+                    </div>
+                </a>
+            `;
+        }).join("");
+    }
+
+    async function loadLatestThreeNewsFromSheet() {
+        const grid = document.getElementById("home-news-grid");
         if (!grid) return;
 
         try {
-            const response = await fetch('news.html', { cache: 'no-store' });
-            if (!response.ok) return;
+            const response = await fetch(`${NEWS_CSV_URL}&t=${Date.now()}`, { cache: "no-store" });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
-            const html = await response.text();
-            const doc = new DOMParser().parseFromString(html, 'text/html');
+            const csvText = await response.text();
+            const matrix = parseCSVRows(csvText);
+            if (matrix.length < 2) return;
 
-            let articles = Array.from(doc.querySelectorAll('article, .news-card, .news-item, .post-card'));
+            const headers = matrix[0].map(h => String(h || "").trim().toLowerCase());
+            const idxTs = headers.indexOf("sygnatura czasowa");
+            const idxTitle = headers.indexOf("tytuł") !== -1 ? headers.indexOf("tytuł") : headers.indexOf("tytul");
+            const idxAuthor = headers.indexOf("autor");
+            const idxLead = headers.indexOf("lit");
+            const idxText = headers.indexOf("tekst");
+            const idxPhoto = headers.indexOf("zdjęcie") !== -1 ? headers.indexOf("zdjęcie") : headers.indexOf("zdjecie");
 
-            if (articles.length === 0) {
-                articles = Array.from(doc.querySelectorAll('div')).filter(el => {
-                    const heading = el.querySelector(':scope > h2, :scope > h3, :scope > div > h2, :scope > div > h3');
-                    const paragraph = el.querySelector(':scope > p, :scope > div > p');
-                    return heading && paragraph && el.querySelectorAll('h2, h3').length === 1;
+            const parsedNews = [];
+
+            for (let i = 1; i < matrix.length; i++) {
+                const row = matrix[i];
+                const title = idxTitle >= 0 ? String(row[idxTitle] || "").trim() : "";
+                const leadRaw = idxLead >= 0 ? String(row[idxLead] || "").trim() : "";
+                const textRaw = idxText >= 0 ? String(row[idxText] || "").trim() : "";
+                const lead = leadRaw || textRaw;
+
+                if (!title && !lead) continue;
+
+                const timestamp = idxTs >= 0 ? String(row[idxTs] || "").trim() : "";
+                const author = idxAuthor >= 0 ? String(row[idxAuthor] || "").trim() : "";
+                const photoField = idxPhoto >= 0 ? String(row[idxPhoto] || "").trim() : "";
+
+                parsedNews.push({
+                    rowIndex: i,
+                    timestamp,
+                    tsMs: parseTimestampToMs(timestamp),
+                    title: title || "Aktualność CPL",
+                    author,
+                    lead,
+                    imageUrl: resolveDriveImageUrl(photoField)
                 });
             }
 
-            const latestThree = articles.slice(0, 3);
-            if (latestThree.length === 0) return;
+            if (!parsedNews.length) return;
 
-            grid.innerHTML = '';
-
-            latestThree.forEach(item => {
-                const imgEl = item.querySelector('img');
-                const imgSrc = imgEl ? sanitizeUrl(imgEl.getAttribute('src'), '') : '';
-                const imgAlt = imgEl && imgEl.getAttribute('alt') ? imgEl.getAttribute('alt').trim() : 'Aktualność CPL';
-
-                const titleEl = item.querySelector('h2, h3');
-                const metaText = extractMetaText(item, titleEl);
-
-                const paragraphs = Array.from(item.querySelectorAll('p'));
-                const descEl = paragraphs.find(p => {
-                    const txt = p.textContent.trim();
-                    return txt &&
-                        txt !== metaText &&
-                        !p.className.toLowerCase().includes('meta') &&
-                        !p.className.toLowerCase().includes('date');
-                }) || paragraphs[0];
-
-                const linkEl = item.querySelector('a[href*="news"], a');
-                const href = linkEl ? sanitizeUrl(linkEl.getAttribute('href'), 'news.html') : 'news.html';
-
-                const titleText = titleEl ? titleEl.textContent.trim() : 'Aktualność CPL';
-                const descText = descEl ? descEl.textContent.trim() : '';
-
-                const card = document.createElement('a');
-                card.href = href;
-                card.className = 'news-card';
-                card.innerHTML = `
-                    ${imgSrc ? `<img src="${escapeHTML(imgSrc)}" alt="${escapeHTML(imgAlt)}" class="news-card-img" onerror="this.style.display='none'">` : ''}
-                    <div class="news-card-body">
-                        <div class="news-meta">${escapeHTML(metaText)}</div>
-                        <h3>${escapeHTML(titleText)}</h3>
-                        <p>${escapeHTML(descText)}</p>
-                    </div>
-                `;
-                grid.appendChild(card);
+            // Sortiere absteigend (neueste Einträge zuerst) und nimm maximal die letzten 3
+            parsedNews.sort((a, b) => {
+                if (b.tsMs !== a.tsMs) return b.tsMs - a.tsMs;
+                return b.rowIndex - a.rowIndex;
             });
-        } catch (e) {
-            console.warn('News konnten nicht geladen werden:', e);
+
+            const latestThree = parsedNews.slice(0, 3);
+            renderNewsCards(latestThree);
+        } catch (err) {
+            console.warn("Fehler beim Laden der News aus Google Sheets:", err);
         }
     }
 
-    loadLatestThreeNews();
+    loadLatestThreeNewsFromSheet();
 </script>
 
 </body>
