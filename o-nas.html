@@ -330,7 +330,54 @@ body.light-mode .feature-box {
     margin-bottom: 0;
 }
 
-/* Historia Ligi - Timeline / Etapy */
+/* Historia Ligi - Header & Button + Timeline */
+.section-header-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+}
+
+.section-header-row h2 {
+    margin-bottom: 0;
+}
+
+.history-more-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 20px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    color: #ffffff;
+    background: linear-gradient(135deg, #ff3131 0%, #b81414 100%);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 6px 20px rgba(255, 49, 49, 0.35);
+    transition: transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease;
+}
+
+.history-more-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px rgba(255, 49, 49, 0.55);
+    filter: brightness(1.08);
+}
+
+.history-more-btn .btn-arrow {
+    display: inline-block;
+    transition: transform 0.22s ease;
+}
+
+.history-more-btn:hover .btn-arrow {
+    transform: translateX(4px);
+}
+
 .history-grid {
     position: relative;
     display: grid;
@@ -714,8 +761,16 @@ footer {
     <!-- 3. Historia Ligi -->
     <div class="about-content-card">
         <div class="team-card-bg-pattern"></div>
-        <div class="placeholder-tag">Platzhalter Text</div>
-        <h2>Historia Ligi</h2>
+        <div class="section-header-row">
+            <div>
+                <div class="placeholder-tag">Platzhalter Text</div>
+                <h2>Historia Ligi</h2>
+            </div>
+            <a href="historia.html" class="history-more-btn">
+                <span>Czytaj pełną historię</span>
+                <span class="btn-arrow">→</span>
+            </a>
+        </div>
         <p>[PLATZHALTER TEKST – Wstęp do historii CPL: jak powstała liga, kto stał u jej początków i jak rozwijała się na przestrzeni sezonów.]</p>
         <div class="history-grid">
             <div class="history-step">
