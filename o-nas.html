@@ -299,37 +299,6 @@ body.light-mode .placeholder-tag {
     align-items: center;
 }
 
-/* KPI / Statystyki */
-.stats-grid {
-    position: relative;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
-    margin-bottom: 28px;
-}
-
-.stat-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-top: 3px solid #ff3131;
-    border-radius: 14px;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
-}
-
-.stat-value {
-    font-size: 28px;
-    font-weight: 900;
-    color: #ff3131;
-    margin-bottom: 4px;
-}
-
-.stat-label {
-    font-size: 13px;
-    opacity: 0.85;
-}
-
 /* Co nas wyróżnia */
 .features-grid {
     position: relative;
@@ -397,47 +366,6 @@ body.light-mode .history-step {
 
 .history-step p {
     font-size: 14px;
-    margin-bottom: 0;
-}
-
-/* Weekend wyścigowy */
-.schedule-grid {
-    position: relative;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-    gap: 16px;
-    margin-top: 12px;
-}
-
-.schedule-item {
-    background: rgba(0, 0, 0, 0.25);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 18px;
-}
-
-body.light-mode .schedule-item {
-    background: rgba(0, 0, 0, 0.03);
-}
-
-.schedule-badge {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 800;
-    padding: 3px 8px;
-    border-radius: 6px;
-    background: rgba(255, 49, 49, 0.18);
-    color: #ff6b6b;
-    margin-bottom: 8px;
-}
-
-.schedule-item h3 {
-    font-size: 16px;
-    margin-bottom: 6px;
-}
-
-.schedule-item p {
-    font-size: 13px;
     margin-bottom: 0;
 }
 
@@ -762,30 +690,6 @@ footer {
         </div>
     </div>
 
-    <!-- Statystyki / Liczby ligi -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="placeholder-tag">Platzhalter</div>
-            <div class="stat-value">[XX]</div>
-            <div class="stat-label">[PLATZHALTER – np. Aktualny sezon]</div>
-        </div>
-        <div class="stat-card">
-            <div class="placeholder-tag">Platzhalter</div>
-            <div class="stat-value">[XX]</div>
-            <div class="stat-label">[PLATZHALTER – np. Liczba lig / splitów]</div>
-        </div>
-        <div class="stat-card">
-            <div class="placeholder-tag">Platzhalter</div>
-            <div class="stat-value">[XX+]</div>
-            <div class="stat-label">[PLATZHALTER – np. Aktywnych kierowców]</div>
-        </div>
-        <div class="stat-card">
-            <div class="placeholder-tag">Platzhalter</div>
-            <div class="stat-value">[XX]</div>
-            <div class="stat-label">[PLATZHALTER – np. Rozegranych rund]</div>
-        </div>
-    </div>
-
     <!-- 2. Co nas wyróżnia -->
     <div class="about-content-card">
         <div class="team-card-bg-pattern"></div>
@@ -832,36 +736,7 @@ footer {
         </div>
     </div>
 
-    <!-- 4. Jak wygląda weekend wyścigowy -->
-    <div class="about-content-card">
-        <div class="team-card-bg-pattern"></div>
-        <div class="placeholder-tag">Platzhalter Text</div>
-        <h2>Jak wygląda weekend wyścigowy?</h2>
-        <div class="schedule-grid">
-            <div class="schedule-item">
-                <div class="schedule-badge">[PLATZHALTER – Krok 1]</div>
-                <h3>[PLATZHALTER – Treningi]</h3>
-                <p>[PLATZHALTER TEKST – Przygotowania do GP, sesje testowe i ustawienia.]</p>
-            </div>
-            <div class="schedule-item">
-                <div class="schedule-badge">[PLATZHALTER – Krok 2]</div>
-                <h3>[PLATZHALTER – Kwalifikacje]</h3>
-                <p>[PLATZHALTER TEKST – Walka o pole position i kolejność na starcie.]</p>
-            </div>
-            <div class="schedule-item">
-                <div class="schedule-badge">[PLATZHALTER – Krok 3]</div>
-                <h3>[PLATZHALTER – Wyścig]</h3>
-                <p>[PLATZHALTER TEKST – Główna rywalizacja na torze i transmisja na żywo.]</p>
-            </div>
-            <div class="schedule-item">
-                <div class="schedule-badge">[PLATZHALTER – Krok 4]</div>
-                <h3>[PLATZHALTER – Wyniki i komisja]</h3>
-                <p>[PLATZHALTER TEKST – Analiza incydentów, kary oraz oficjalne klasyfikacje.]</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- 5. Zespół / Kadra: Właściciel, Admini, Sędziowie, Komentatorzy -->
+    <!-- 4. Zespół / Kadra: Właściciel, Admini, Sędziowie, Komentatorzy -->
     <div class="about-content-card">
         <div class="team-card-bg-pattern"></div>
         <div class="placeholder-tag">Platzhalter Text &amp; Zdjęcia</div>
@@ -963,7 +838,7 @@ footer {
         </div>
     </div>
 
-    <!-- Galeria / Klimat Ligi -->
+    <!-- 5. Galeria / Klimat Ligi -->
     <div class="about-content-card">
         <div class="team-card-bg-pattern"></div>
         <div class="placeholder-tag">Platzhalter Bilder</div>
@@ -988,7 +863,7 @@ footer {
         </div>
     </div>
 
-    <!-- CTA Box -->
+    <!-- 6. CTA Box -->
     <div class="about-content-card">
         <div class="team-card-bg-pattern"></div>
         <div class="cta-box">
