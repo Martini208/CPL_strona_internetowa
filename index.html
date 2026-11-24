@@ -743,7 +743,7 @@ body.light-mode .gold-card .podium-row.rank-1 .points-pill {
     color: #9ca3af;
 }
 
-/* News - Klickbare Kurzeinträge mit Bild wie auf news.html (ohne Button) */
+/* News - Klickbare Kurzeinträge mit Bild, Datum/Autor, Titel & Kurztext (ohne Button) */
 .news-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -771,7 +771,7 @@ body.light-mode .gold-card .podium-row.rank-1 .points-pill {
 
 .news-card-img {
     width: 100%;
-    height: 210px;
+    height: 220px;
     object-fit: cover;
     display: block;
     background: #121212;
@@ -1122,10 +1122,11 @@ footer {
 
     <div class="news-grid" id="home-news-grid">
         <a href="news.html" class="news-card">
+            <img src="images/news-cpl-launch.jpg" alt="Otwarcie nowej strony ligi CPL" class="news-card-img" onerror="this.style.display='none'">
             <div class="news-card-body">
-                <div class="news-meta">Aktualności CPL</div>
-                <h3>Zobacz wszystkie aktualności</h3>
-                <p>Kliknij, aby przejść do pełnego wpisu na stronie news.html.</p>
+                <div class="news-meta">22 LISTOPADA 2026 • Daniel Słoma</div>
+                <h3>Otwarcie nowej strony ligi CPL</h3>
+                <p>Liga CPL nie chciała już zostać w tyle - nadążamy z czasami i oferujemy nowe oblicze doświadczeń ligowych w świecie F1.</p>
             </div>
         </a>
     </div>
@@ -1631,17 +1632,21 @@ footer {
     loadAllLeagueStandings();
     setInterval(updateCountdowns, 1000);
 
-    // --- OSTATNIE 3 WPISY Z NEWS.HTML (klickbare Kurzeinträge mit Bild, Datum/Autor, Titel & Kurztext) ---
-    function renderNewsFallbackCard(grid) {
-        grid.innerHTML = `
-            <a href="news.html" class="news-card">
-                <div class="news-card-body">
-                    <div class="news-meta">Aktualności CPL</div>
-                    <h3>Przejdź do aktualności</h3>
-                    <p>Kliknij, aby zobaczyć wszystkie wpisy i pełne artykuły na stronie news.html.</p>
-                </div>
-            </a>
-        `;
+    // --- OSTATNIE 3 WPISY Z NEWS.HTML (klickbare Kurzeinträge mit Bild, Datum/Autor, Titel & Kurztext, ohne Button) ---
+    function extractMetaText(item, titleEl) {
+        const metaEl = item.querySelector('.news-meta, .meta, .date, .author, time');
+        if (metaEl && metaEl.textContent.trim()) {
+            return metaEl.textContent.trim();
+        }
+
+        // Fallback: Suche nach einer Zeile mit "•" oder einem Jahr (z. B. "22 LISTOPADA 2026 • Daniel Słoma")
+        const candidates = Array.from(item.querySelectorAll('p, span, div')).filter(el => {
+            if (el === titleEl || el.contains(titleEl) || el.querySelector('h1, h2, h3, p, img')) return false;
+            const txt = el.textContent.trim();
+            return txt.length > 0 && txt.length < 90 && (txt.includes('•') || /\b202\d\b/.test(txt));
+        });
+
+        return candidates.length > 0 ? candidates[0].textContent.trim() : 'Aktualności CPL';
     }
 
     async function loadLatestThreeNews() {
@@ -1650,10 +1655,7 @@ footer {
 
         try {
             const response = await fetch('news.html', { cache: 'no-store' });
-            if (!response.ok) {
-                renderNewsFallbackCard(grid);
-                return;
-            }
+            if (!response.ok) return;
 
             const html = await response.text();
             const doc = new DOMParser().parseFromString(html, 'text/html');
@@ -1664,16 +1666,12 @@ footer {
                 articles = Array.from(doc.querySelectorAll('div')).filter(el => {
                     const heading = el.querySelector(':scope > h2, :scope > h3, :scope > div > h2, :scope > div > h3');
                     const paragraph = el.querySelector(':scope > p, :scope > div > p');
-                    const hasImg = Boolean(el.querySelector('img'));
-                    return heading && paragraph && hasImg && el.querySelectorAll('h2, h3').length === 1;
+                    return heading && paragraph && el.querySelectorAll('h2, h3').length === 1;
                 });
             }
 
             const latestThree = articles.slice(0, 3);
-            if (latestThree.length === 0) {
-                renderNewsFallbackCard(grid);
-                return;
-            }
+            if (latestThree.length === 0) return;
 
             grid.innerHTML = '';
 
@@ -1682,19 +1680,21 @@ footer {
                 const imgSrc = imgEl ? sanitizeUrl(imgEl.getAttribute('src'), '') : '';
                 const imgAlt = imgEl && imgEl.getAttribute('alt') ? imgEl.getAttribute('alt').trim() : 'Aktualność CPL';
 
-                const metaEl = item.querySelector('.news-meta, .meta, .date, time');
                 const titleEl = item.querySelector('h2, h3');
+                const metaText = extractMetaText(item, titleEl);
+
                 const paragraphs = Array.from(item.querySelectorAll('p'));
-                const descEl = paragraphs.find(p =>
-                    !p.className.toLowerCase().includes('meta') &&
-                    !p.className.toLowerCase().includes('date') &&
-                    p !== metaEl
-                ) || paragraphs[0];
+                const descEl = paragraphs.find(p => {
+                    const txt = p.textContent.trim();
+                    return txt &&
+                        txt !== metaText &&
+                        !p.className.toLowerCase().includes('meta') &&
+                        !p.className.toLowerCase().includes('date');
+                }) || paragraphs[0];
 
                 const linkEl = item.querySelector('a[href*="news"], a');
                 const href = linkEl ? sanitizeUrl(linkEl.getAttribute('href'), 'news.html') : 'news.html';
 
-                const metaText = metaEl ? metaEl.textContent.trim() : 'Aktualności CPL';
                 const titleText = titleEl ? titleEl.textContent.trim() : 'Aktualność CPL';
                 const descText = descEl ? descEl.textContent.trim() : '';
 
@@ -1702,7 +1702,7 @@ footer {
                 card.href = href;
                 card.className = 'news-card';
                 card.innerHTML = `
-                    ${imgSrc ? `<img src="${escapeHTML(imgSrc)}" alt="${escapeHTML(imgAlt)}" class="news-card-img">` : ''}
+                    ${imgSrc ? `<img src="${escapeHTML(imgSrc)}" alt="${escapeHTML(imgAlt)}" class="news-card-img" onerror="this.style.display='none'">` : ''}
                     <div class="news-card-body">
                         <div class="news-meta">${escapeHTML(metaText)}</div>
                         <h3>${escapeHTML(titleText)}</h3>
@@ -1713,7 +1713,6 @@ footer {
             });
         } catch (e) {
             console.warn('News konnten nicht geladen werden:', e);
-            renderNewsFallbackCard(grid);
         }
     }
 
