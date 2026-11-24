@@ -505,6 +505,15 @@ footer .social-btn:hover {
     border: 1px solid var(--border-color);
 }
 
+/* Bilder innerhalb des Modals ("Czytaj więcej") nicht klickbar machen */
+.news-modal img,
+.news-modal-gallery a {
+    pointer-events: none !important;
+    user-select: none !important;
+    -webkit-user-drag: none !important;
+    cursor: default !important;
+}
+
 .news-modal-video {
     margin-top: 24px;
     position: relative;
@@ -859,6 +868,28 @@ footer .social-btn:hover {
         return `https://${str}`;
     }
 
+    function disableImageClicksInModal(modalContainer) {
+        if (!modalContainer) return;
+
+        modalContainer.querySelectorAll("img").forEach((img) => {
+            img.removeAttribute("onclick");
+            img.setAttribute("draggable", "false");
+            img.style.pointerEvents = "none";
+            img.style.cursor = "default";
+        });
+
+        modalContainer.querySelectorAll(".news-modal-gallery a").forEach((link) => {
+            link.removeAttribute("href");
+            link.removeAttribute("target");
+            link.style.pointerEvents = "none";
+            link.style.cursor = "default";
+            link.addEventListener("click", (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            });
+        });
+    }
+
     function openArticleModal(articleIndex) {
         const article = allNewsArticles[articleIndex];
         if (!article) return;
@@ -874,9 +905,9 @@ footer .social-btn:hover {
         const extraImagesHtml = article.images.length > 1
             ? `<div class="news-modal-gallery">
                 ${article.images.slice(1).map(img => `
-                    <a href="${escapeHtml(img.originalUrl)}" target="_blank" rel="noopener">
+                    <div>
                         <img src="${escapeHtml(img.url)}" alt="${escapeHtml(article.title)}" onerror="this.onerror=null;this.src='${escapeHtml(img.fallbackUrl)}';">
-                    </a>
+                    </div>
                 `).join("")}
                </div>`
             : "";
@@ -931,6 +962,8 @@ footer .social-btn:hover {
                 ${attachmentsHtml}
             </div>
         `;
+
+        disableImageClicksInModal(inner);
 
         backdrop.classList.add("open");
         document.body.style.overflow = "hidden";
