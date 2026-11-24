@@ -743,31 +743,73 @@ body.light-mode .gold-card .podium-row.rank-1 .points-pill {
     color: #9ca3af;
 }
 
-/* News */
-.news-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:25px;
+/* News - Klickbare Kurzeinträge mit Bild wie auf news.html (ohne Button) */
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
 }
 
-.news-card{
+.news-card {
     background: var(--card-bg);
-    padding:25px;
-    border-radius:15px;
-    transition: transform .3s, background 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
     text-decoration: none;
     color: inherit;
+    transition: transform .3s, box-shadow .3s, background 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.news-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(255,49,49,0.18);
+    border-color: rgba(255,49,49,0.5);
+}
+
+.news-card-img {
+    width: 100%;
+    height: 210px;
+    object-fit: cover;
     display: block;
+    background: #121212;
 }
 
-.news-card:hover{
-    transform:translateY(-5px);
+.news-card-body {
+    padding: 22px 24px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
-.news-card h3{
-    color:#ff3131;
-    margin-bottom:10px;
+.news-meta {
+    font-size: 12px;
+    font-weight: 700;
+    color: #ff3131;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 8px;
+}
+
+.news-card h3 {
+    color: var(--text-color);
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    line-height: 1.3;
+}
+
+.news-card p {
+    color: #b5b5b5;
+    font-size: 14px;
+    line-height: 1.55;
+    margin: 0;
+}
+
+body.light-mode .news-card p {
+    color: #4b5563;
 }
 
 /* Footer Styles */
@@ -1078,18 +1120,13 @@ footer {
 <section id="news">
     <h2>Aktualności</h2>
 
-   <div class="news-grid" id="home-news-grid">
+    <div class="news-grid" id="home-news-grid">
         <a href="news.html" class="news-card">
-            <h3>Sezon rozpoczęty!</h3>
-            <p>Nowy sezon CPL oficjalnie wystartował. Czekają nas wielkie emocje na torze.</p>
-        </a>
-        <a href="news.html" class="news-card">
-            <h3>Zapowiedź GP Monzy</h3>
-            <p>Wszystkie najważniejsze informacje i harmonogram przed nadchodzącym wyścigiem.</p>
-        </a>
-        <a href="news.html" class="news-card">
-            <h3>Rynek transferowy</h3>
-            <p>Kierowcy zmieniają barwy zespołowe przed kolejnymi rundami.</p>
+            <div class="news-card-body">
+                <div class="news-meta">Aktualności CPL</div>
+                <h3>Ładowanie aktualności...</h3>
+                <p>Pobieranie najnowszych wpisów ze strony news.html.</p>
+            </div>
         </a>
     </div>
 </section>
@@ -1204,6 +1241,15 @@ footer {
 
     function escapeHTML(str) {
         return escapeHtml(str);
+    }
+
+    function sanitizeUrl(rawUrl, fallback = "news.html") {
+        const val = String(rawUrl || "").trim();
+        if (!val) return fallback;
+        if (/^(https?:\/\/|\/|\.\/|\.\.\/|[a-zA-Z0-9_-]+\/|[a-zA-Z0-9_-]+\.html)/i.test(val) && !/^javascript:/i.test(val)) {
+            return val;
+        }
+        return fallback;
     }
 
     function parseCSVRows(csvText) {
@@ -1585,6 +1631,7 @@ footer {
     loadAllLeagueStandings();
     setInterval(updateCountdowns, 1000);
 
+    // --- OSTATNIE 3 WPISY Z NEWS.HTML (klickbare Kurzeinträge mit Bild, Datum/Autor, Titel & Kurztext) ---
     async function loadLatestThreeNews() {
         const grid = document.getElementById('home-news-grid');
         if (!grid) return;
@@ -1612,19 +1659,36 @@ footer {
             grid.innerHTML = '';
 
             latestThree.forEach(item => {
+                const imgEl = item.querySelector('img');
+                const imgSrc = imgEl ? sanitizeUrl(imgEl.getAttribute('src'), '') : '';
+                const imgAlt = imgEl && imgEl.getAttribute('alt') ? imgEl.getAttribute('alt').trim() : 'Aktualność CPL';
+
+                const metaEl = item.querySelector('.news-meta, .meta, .date, time');
                 const titleEl = item.querySelector('h2, h3');
                 const paragraphs = Array.from(item.querySelectorAll('p'));
-                const descEl = paragraphs.find(p => !p.className.toLowerCase().includes('meta') && !p.className.toLowerCase().includes('date')) || paragraphs[0];
+                const descEl = paragraphs.find(p =>
+                    !p.className.toLowerCase().includes('meta') &&
+                    !p.className.toLowerCase().includes('date') &&
+                    p !== metaEl
+                ) || paragraphs[0];
 
-                const title = titleEl ? titleEl.textContent.trim() : 'Aktualność CPL';
-                const desc = descEl ? descEl.textContent.trim() : '';
+                const linkEl = item.querySelector('a[href*="news"], a');
+                const href = linkEl ? sanitizeUrl(linkEl.getAttribute('href'), 'news.html') : 'news.html';
+
+                const metaText = metaEl ? metaEl.textContent.trim() : 'Aktualności CPL';
+                const titleText = titleEl ? titleEl.textContent.trim() : 'Aktualność CPL';
+                const descText = descEl ? descEl.textContent.trim() : '';
 
                 const card = document.createElement('a');
-                card.href = 'news.html';
+                card.href = href;
                 card.className = 'news-card';
                 card.innerHTML = `
-                    <h3>${escapeHTML(title)}</h3>
-                    <p>${escapeHTML(desc)}</p>
+                    ${imgSrc ? `<img src="${escapeHTML(imgSrc)}" alt="${escapeHTML(imgAlt)}" class="news-card-img">` : ''}
+                    <div class="news-card-body">
+                        <div class="news-meta">${escapeHTML(metaText)}</div>
+                        <h3>${escapeHTML(titleText)}</h3>
+                        <p>${escapeHTML(descText)}</p>
+                    </div>
                 `;
                 grid.appendChild(card);
             });
