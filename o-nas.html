@@ -32,7 +32,7 @@ body {
     background: var(--bg-color);
     color: var(--text-color);
     transition: background 0.3s ease, color 0.3s ease;
-    padding-top: 80px; /* Perfekter Abstand für die größere Nav-Leiste */
+    padding-top: 80px;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -44,9 +44,9 @@ nav {
     top: 0;
     left: 0;
     width: 100%;
-    height: 80px; /* Größere Box */
+    height: 80px;
     background: linear-gradient(135deg, rgba(180, 40, 50, 0.60) 0%, rgba(100, 15, 25, 0.70) 100%);
-    backdrop-filter: blur(15px); /* Starker Milchglas-Effekt */
+    backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     display: flex;
     justify-content: space-between;
@@ -100,7 +100,6 @@ nav a:hover {
     color: #ffffff;
 }
 
-/* Spezieller "Zapisy" Button in der Nav */
 .nav-zapisy-btn {
     background: #ff3131 !important;
     color: white !important;
@@ -122,7 +121,6 @@ nav a:hover {
     gap: 15px;
 }
 
-/* Social Media Icons in der Leiste (Vergrößert & Deutlich sichtbar) */
 .nav-socials {
     display: flex;
     align-items: center;
@@ -198,7 +196,8 @@ nav a:hover {
 
 .page-title p {
     font-size: 15px;
-    margin-top: 5px;
+    margin-top: 6px;
+    opacity: 0.85;
 }
 
 /* Content Box / Card Design */
@@ -207,37 +206,137 @@ nav a:hover {
     border-radius: 16px;
     overflow: hidden;
     position: relative;
-    padding: 35px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    padding: 32px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
     border: 1px solid var(--border-color);
-    margin-bottom: 30px;
+    margin-bottom: 28px;
 }
 
 .about-content-card h2 {
+    position: relative;
     font-size: 24px;
     font-weight: 800;
     color: var(--text-color);
-    margin-bottom: 15px;
+    margin-bottom: 16px;
     border-left: 4px solid #ff3131;
     padding-left: 12px;
 }
 
 .about-content-card p {
+    position: relative;
     font-size: 15px;
-    color: rgba(255, 255, 255, 0.8);
-    line-height: 1.6;
-    margin-bottom: 15px;
+    color: rgba(255, 255, 255, 0.82);
+    line-height: 1.65;
+    margin-bottom: 14px;
 }
 
 body.light-mode .about-content-card p {
     color: #444444;
 }
 
-.features-grid {
+.team-card-bg-pattern {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 12px 12px;
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+/* Platzhalter-Hinweise & Bildflächen */
+.placeholder-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: rgba(255, 49, 49, 0.16);
+    color: #ff6b6b;
+    border: 1px solid rgba(255, 49, 49, 0.35);
+    margin-bottom: 10px;
+}
+
+body.light-mode .placeholder-tag {
+    color: #c62828;
+    background: rgba(255, 49, 49, 0.1);
+}
+
+.photo-placeholder {
+    position: relative;
+    width: 100%;
+    min-height: 190px;
+    border-radius: 12px;
+    border: 2px dashed rgba(255, 49, 49, 0.5);
+    background: rgba(255, 49, 49, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    gap: 6px;
+    color: var(--text-color);
+}
+
+.photo-placeholder strong {
+    font-size: 14px;
+    color: #ff3131;
+}
+
+.photo-placeholder span {
+    font-size: 12px;
+    opacity: 0.75;
+}
+
+/* Split Layout für "Co to CPL" + Bildplatzhalter */
+.split-feature-row {
+    position: relative;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-    margin-top: 25px;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 24px;
+    align-items: center;
+}
+
+/* KPI / Statystyki */
+.stats-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.stat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-top: 3px solid #ff3131;
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.stat-value {
+    font-size: 28px;
+    font-weight: 900;
+    color: #ff3131;
+    margin-bottom: 4px;
+}
+
+.stat-label {
+    font-size: 13px;
+    opacity: 0.85;
+}
+
+/* Co nas wyróżnia */
+.features-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+    margin-top: 12px;
 }
 
 .feature-box {
@@ -262,13 +361,233 @@ body.light-mode .feature-box {
     margin-bottom: 0;
 }
 
-.team-card-bg-pattern {
-    position: absolute;
-    inset: 0;
-    background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-    background-size: 12px 12px;
-    opacity: 0.3;
-    pointer-events: none;
+/* Historia Ligi - Timeline / Etapy */
+.history-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 18px;
+    margin-top: 14px;
+}
+
+.history-step {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--border-color);
+    border-left: 4px solid #ff3131;
+    border-radius: 12px;
+    padding: 18px;
+}
+
+body.light-mode .history-step {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.history-era {
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #ff3131;
+    margin-bottom: 6px;
+}
+
+.history-step h3 {
+    font-size: 17px;
+    margin-bottom: 8px;
+}
+
+.history-step p {
+    font-size: 14px;
+    margin-bottom: 0;
+}
+
+/* Weekend wyścigowy */
+.schedule-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 16px;
+    margin-top: 12px;
+}
+
+.schedule-item {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 18px;
+}
+
+body.light-mode .schedule-item {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.schedule-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: rgba(255, 49, 49, 0.18);
+    color: #ff6b6b;
+    margin-bottom: 8px;
+}
+
+.schedule-item h3 {
+    font-size: 16px;
+    margin-bottom: 6px;
+}
+
+.schedule-item p {
+    font-size: 13px;
+    margin-bottom: 0;
+}
+
+/* Zespół / Kadra: Właściciel, Admini, Sędziowie, Komentatorzy */
+.staff-group {
+    position: relative;
+    margin-top: 24px;
+}
+
+.staff-group:first-of-type {
+    margin-top: 12px;
+}
+
+.staff-group-title {
+    font-size: 17px;
+    font-weight: 800;
+    color: #ff3131;
+    margin-bottom: 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.staff-group-title span.role-hint {
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0.75;
+    color: var(--text-color);
+}
+
+.staff-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
+    gap: 16px;
+}
+
+.member-card {
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+body.light-mode .member-card {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.member-card:hover {
+    transform: translateY(-3px);
+    border-color: #ff3131;
+}
+
+.member-avatar-placeholder {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: 2px dashed rgba(255, 49, 49, 0.65);
+    background: rgba(255, 49, 49, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    text-align: center;
+    padding: 6px;
+    line-height: 1.2;
+}
+
+.member-name {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text-color);
+}
+
+.member-role {
+    font-size: 12px;
+    font-weight: 700;
+    color: #ff5252;
+}
+
+.member-bio {
+    font-size: 13px !important;
+    margin-bottom: 0 !important;
+}
+
+/* Galeria / Klimat Ligi */
+.gallery-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 12px;
+}
+
+/* CTA Box */
+.cta-box {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.cta-btn-primary {
+    display: inline-block;
+    padding: 11px 22px;
+    border-radius: 25px;
+    background: #ff3131;
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 14px;
+    text-decoration: none;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.cta-btn-primary:hover {
+    background: #e02424;
+    transform: translateY(-2px);
+}
+
+.cta-btn-secondary {
+    display: inline-block;
+    padding: 11px 22px;
+    border-radius: 25px;
+    background: transparent;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.cta-btn-secondary:hover {
+    border-color: #ff3131;
+    transform: translateY(-2px);
 }
 
 /* Footer */
@@ -321,7 +640,6 @@ footer {
     color: #ff3131;
 }
 
-/* Social Icons Links mit SVG Logos */
 .social-links {
     display: flex;
     gap: 12px;
@@ -368,27 +686,12 @@ footer {
     text-align: center;
 }
 
-.footer-bottom-links {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.footer-bottom-links a {
-    color: #777777;
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-.footer-bottom-links a:hover {
-    color: #ffffff;
-}
-
-@media(max-width:900px){
-    nav{ flex-direction:column; height: auto; gap:12px; padding:15px; }
+@media (max-width: 900px) {
+    nav { flex-direction: column; height: auto; gap: 12px; padding: 15px; }
     .nav-left { flex-direction: column; align-items: center; }
-    nav ul{ flex-wrap:wrap; justify-content:center; }
+    nav ul { flex-wrap: wrap; justify-content: center; }
+    .split-feature-row { grid-template-columns: 1fr; }
+    .about-content-card { padding: 22px; }
 }
 </style>
 </head>
@@ -396,12 +699,10 @@ footer {
 
 <nav>
     <div class="nav-left">
-        <!-- CPL Logo ganz links -->
         <a href="index.html">
             <img class="cpl-logo-img" src="images/cpl_logo_lizard.png" alt="CPL Logo">
         </a>
         
-        <!-- Menüpunkte -->
         <ul>
             <li><a href="kalendarz.html">Kalendarz</a></li>
             <li><a href="sezony.html">Sezony</a></li>
@@ -413,7 +714,6 @@ footer {
         </ul>
     </div>
     
-    <!-- Socials & Rechten Bereich -->
     <div class="nav-right">
         <div class="nav-socials">
             <a href="https://discord.com/invite/szt7rHnFSj" target="_blank" class="nav-social-icon" title="Discord">
@@ -441,31 +741,265 @@ footer {
 <div class="about-page-container">
     <div class="page-title">
         <h1>O nas – CPL F1 League</h1>
-        <p>Dowiedz się więcej o naszej społeczności, misji i pasji do simracingu</p>
+        <p>[PLATZHALTER PODTYTUŁ – Krótkie hasło przewodnie ligi i społeczności]</p>
     </div>
 
+    <!-- 1. Co to CPL + Bildplatzhalter -->
     <div class="about-content-card">
         <div class="team-card-bg-pattern"></div>
-        <h2>Kim jesteśmy?</h2>
-        <p><strong>CPL F1 League</strong> to profesjonalna i zarazem przyjazna liga simracingowa, dedykowana fanom Formuły 1. Naszym głównym celem jest dostarczanie niezapomnianych emocji, rywalizacji na najwyższym poziomie oraz budowanie zgranej społeczności graczy, którzy dzielą tę samą pasję do motorsportu.</p>
-        <p>Niezależnie od tego, czy jesteś doświadczonym kierowcą walczącym o podia, czy dopiero zaczynasz swoją przygodę z jazdą na kierownicy – w CPL każdy znajdzie swoje miejsce na torze.</p>
+        <div class="split-feature-row">
+            <div>
+                <div class="placeholder-tag">Platzhalter Text</div>
+                <h2>Co to CPL?</h2>
+                <p>[PLATZHALTER TEKST – Główny opis CPL F1 League: czym jest liga, dla kogo jest skierowana i jakie emocje oferuje na torze.]</p>
+                <p>[PLATZHALTER TEKST – Drugi akapit: podział na ligi/dywizje, atmosfera rywalizacji oraz miejsce dla początkujących i doświadczonych kierowców.]</p>
+            </div>
+            <div class="photo-placeholder">
+                <div class="placeholder-tag">Platzhalter Bild</div>
+                <strong>[ZDJĘCIE / BANNER CPL]</strong>
+                <span>np. ujęcie z wyścigu lub grafika ligowa (zalecane 16:9)</span>
+            </div>
+        </div>
     </div>
 
+    <!-- Statystyki / Liczby ligi -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="placeholder-tag">Platzhalter</div>
+            <div class="stat-value">[XX]</div>
+            <div class="stat-label">[PLATZHALTER – np. Aktualny sezon]</div>
+        </div>
+        <div class="stat-card">
+            <div class="placeholder-tag">Platzhalter</div>
+            <div class="stat-value">[XX]</div>
+            <div class="stat-label">[PLATZHALTER – np. Liczba lig / splitów]</div>
+        </div>
+        <div class="stat-card">
+            <div class="placeholder-tag">Platzhalter</div>
+            <div class="stat-value">[XX+]</div>
+            <div class="stat-label">[PLATZHALTER – np. Aktywnych kierowców]</div>
+        </div>
+        <div class="stat-card">
+            <div class="placeholder-tag">Platzhalter</div>
+            <div class="stat-value">[XX]</div>
+            <div class="stat-label">[PLATZHALTER – np. Rozegranych rund]</div>
+        </div>
+    </div>
+
+    <!-- 2. Co nas wyróżnia -->
     <div class="about-content-card">
         <div class="team-card-bg-pattern"></div>
+        <div class="placeholder-tag">Platzhalter Text</div>
         <h2>Co nas wyróżnia?</h2>
         <div class="features-grid">
             <div class="feature-box">
-                <h3>Profesjonalna oprawa</h3>
-                <p>Transmitowane wyścigi, profesjonalny komentarz, oficjalne statystyki i tabele wyników.</p>
+                <h3>[PLATZHALTER – Filary 1]</h3>
+                <p>[PLATZHALTER TEKST – Opis pierwszego wyróżnika ligi, np. transmisje, komentarz, statystyki.]</p>
             </div>
             <div class="feature-box">
-                <h3>Fair Play</h3>
-                <p>Kładziemy ogromny nacisk na kulturę jazdy, jasny regulamin oraz sprawiedliwe sędziowanie incydentów.</p>
+                <h3>[PLATZHALTER – Filary 2]</h3>
+                <p>[PLATZHALTER TEKST – Opis drugiego wyróżnika ligi, np. fair play, regulamin, sędziowanie.]</p>
             </div>
             <div class="feature-box">
-                <h3>Aktywna społeczność</h3>
-                <p>Wspólny serwer Discord, treningi, eventy specjalne oraz pomocna kadra organizatorska.</p>
+                <h3>[PLATZHALTER – Filary 3]</h3>
+                <p>[PLATZHALTER TEKST – Opis trzeciego wyróżnika ligi, np. społeczność, treningi, eventy.]</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Historia Ligi -->
+    <div class="about-content-card">
+        <div class="team-card-bg-pattern"></div>
+        <div class="placeholder-tag">Platzhalter Text</div>
+        <h2>Historia Ligi</h2>
+        <p>[PLATZHALTER TEKST – Wstęp do historii CPL: jak powstała liga, kto stał u jej początków i jak rozwijała się na przestrzeni sezonów.]</p>
+        <div class="history-grid">
+            <div class="history-step">
+                <div class="history-era">[PLATZHALTER – Etap 1 / Rok]</div>
+                <h3>[PLATZHALTER – Początki]</h3>
+                <p>[PLATZHALTER TEKST – Krótki opis pierwszych kroków i narodzin pomysłu na ligę.]</p>
+            </div>
+            <div class="history-step">
+                <div class="history-era">[PLATZHALTER – Etap 2 / Rok]</div>
+                <h3>[PLATZHALTER – Rozwój]</h3>
+                <p>[PLATZHALTER TEKST – Rozbudowa struktur, nowe ligi, transmisje i większa społeczność.]</p>
+            </div>
+            <div class="history-step">
+                <div class="history-era">[PLATZHALTER – Etap 3 / Dziś]</div>
+                <h3>[PLATZHALTER – Obecnym etap]</h3>
+                <p>[PLATZHALTER TEKST – Jak liga wygląda dzisiaj i jakie ma cele na kolejne sezony.]</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Jak wygląda weekend wyścigowy -->
+    <div class="about-content-card">
+        <div class="team-card-bg-pattern"></div>
+        <div class="placeholder-tag">Platzhalter Text</div>
+        <h2>Jak wygląda weekend wyścigowy?</h2>
+        <div class="schedule-grid">
+            <div class="schedule-item">
+                <div class="schedule-badge">[PLATZHALTER – Krok 1]</div>
+                <h3>[PLATZHALTER – Treningi]</h3>
+                <p>[PLATZHALTER TEKST – Przygotowania do GP, sesje testowe i ustawienia.]</p>
+            </div>
+            <div class="schedule-item">
+                <div class="schedule-badge">[PLATZHALTER – Krok 2]</div>
+                <h3>[PLATZHALTER – Kwalifikacje]</h3>
+                <p>[PLATZHALTER TEKST – Walka o pole position i kolejność na starcie.]</p>
+            </div>
+            <div class="schedule-item">
+                <div class="schedule-badge">[PLATZHALTER – Krok 3]</div>
+                <h3>[PLATZHALTER – Wyścig]</h3>
+                <p>[PLATZHALTER TEKST – Główna rywalizacja na torze i transmisja na żywo.]</p>
+            </div>
+            <div class="schedule-item">
+                <div class="schedule-badge">[PLATZHALTER – Krok 4]</div>
+                <h3>[PLATZHALTER – Wyniki i komisja]</h3>
+                <p>[PLATZHALTER TEKST – Analiza incydentów, kary oraz oficjalne klasyfikacje.]</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. Zespół / Kadra: Właściciel, Admini, Sędziowie, Komentatorzy -->
+    <div class="about-content-card">
+        <div class="team-card-bg-pattern"></div>
+        <div class="placeholder-tag">Platzhalter Text &amp; Zdjęcia</div>
+        <h2>Nasz Zespół</h2>
+        <p>[PLATZHALTER TEKST – Krótkie wprowadzenie do osób tworzących i obsługujących CPL F1 League.]</p>
+
+        <!-- Właściciel -->
+        <div class="staff-group">
+            <div class="staff-group-title">
+                <span>Właściciel</span>
+                <span class="role-hint">[PLATZHALTER – Zarządzanie projektem]</span>
+            </div>
+            <div class="staff-grid">
+                <div class="member-card">
+                    <div class="member-avatar-placeholder">[ZDJĘCIE]</div>
+                    <div class="member-name">[PLATZHALTER – Nick / Imię]</div>
+                    <div class="member-role">Właściciel</div>
+                    <p class="member-bio">[PLATZHALTER TEKST – Krótki opis roli i obowiązków.]</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admini -->
+        <div class="staff-group">
+            <div class="staff-group-title">
+                <span>Admini</span>
+                <span class="role-hint">[PLATZHALTER – Organizacja i wsparcie]</span>
+            </div>
+            <div class="staff-grid">
+                <div class="member-card">
+                    <div class="member-avatar-placeholder">[ZDJĘCIE]</div>
+                    <div class="member-name">[PLATZHALTER – Admin 1]</div>
+                    <div class="member-role">Admin</div>
+                    <p class="member-bio">[PLATZHALTER TEKST – Krótki opis roli.]</p>
+                </div>
+                <div class="member-card">
+                    <div class="member-avatar-placeholder">[ZDJĘCIE]</div>
+                    <div class="member-name">[PLATZHALTER – Admin 2]</div>
+                    <div class="member-role">Admin</div>
+                    <p class="member-bio">[PLATZHALTER TEKST – Krótki opis roli.]</p>
+                </div>
+                <div class="member-card">
+                    <div class="member-avatar-placeholder">[ZDJĘCIE]</div>
+                    <div class="member-name">[PLATZHALTER – Admin 3]</div>
+                    <div class="member-role">Admin</div>
+                    <p class="member-bio">[PLATZHALTER TEKST – Krótki opis roli.]</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sędziowie -->
+        <div class="staff-group">
+            <div class="staff-group-title">
+                <span>Sędziowie</span>
+                <span class="role-hint">[PLATZHALTER – Komisja sędziowska i regulamin]</span>
+            </div>
+            <div class="staff-grid">
+                <div class="member-card">
+                    <div class="member-avatar-placeholder">[ZDJĘCIE]</div>
+                    <div class="member-name">[PLATZHALTER – Sędzia 1]</div>
+                    <div class="member-role">Sędzia</div>
+                    <p class="member-bio">[PLATZHALTER TEKST – Krótki opis roli.]</p>
+                </div>
+                <div class="member-card">
+                    <div class="member-avatar-placeholder">[ZDJĘCIE]</div>
+                    <div class="member-name">[PLATZHALTER – Sędzia 2]</div>
+                    <div class="member-role">Sędzia</div>
+                    <p class="member-bio">[PLATZHALTER TEKST – Krótki opis roli.]</p>
+                </div>
+                <div class="member-card">
+                    <div class="member-avatar-placeholder">[ZDJĘCIE]</div>
+                    <div class="member-name">[PLATZHALTER – Sędzia 3]</div>
+                    <div class="member-role">Sędzia</div>
+                    <p class="member-bio">[PLATZHALTER TEKST – Krótki opis roli.]</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Komentatorzy -->
+        <div class="staff-group">
+            <div class="staff-group-title">
+                <span>Komentatorzy</span>
+                <span class="role-hint">[PLATZHALTER – Relacje i transmisje na żywo]</span>
+            </div>
+            <div class="staff-grid">
+                <div class="member-card">
+                    <div class="member-avatar-placeholder">[ZDJĘCIE]</div>
+                    <div class="member-name">[PLATZHALTER – Komentator 1]</div>
+                    <div class="member-role">Komentator</div>
+                    <p class="member-bio">[PLATZHALTER TEKST – Krótki opis roli.]</p>
+                </div>
+                <div class="member-card">
+                    <div class="member-avatar-placeholder">[ZDJĘCIE]</div>
+                    <div class="member-name">[PLATZHALTER – Komentator 2]</div>
+                    <div class="member-role">Komentator</div>
+                    <p class="member-bio">[PLATZHALTER TEKST – Krótki opis roli.]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Galeria / Klimat Ligi -->
+    <div class="about-content-card">
+        <div class="team-card-bg-pattern"></div>
+        <div class="placeholder-tag">Platzhalter Bilder</div>
+        <h2>Klimat CPL na torze i poza nim</h2>
+        <p>[PLATZHALTER TEKST – Krótki opis zdjęć z wyścigów, transmisji lub eventów społecznościowych.]</p>
+        <div class="gallery-grid">
+            <div class="photo-placeholder">
+                <div class="placeholder-tag">Platzhalter Bild 1</div>
+                <strong>[ZDJĘCIE Z WYŚCIGU]</strong>
+                <span>np. start lub walka koło w koło</span>
+            </div>
+            <div class="photo-placeholder">
+                <div class="placeholder-tag">Platzhalter Bild 2</div>
+                <strong>[ZDJĘCIE Z TRANSMISJI]</strong>
+                <span>np. studio / komentarz / podsumowanie</span>
+            </div>
+            <div class="photo-placeholder">
+                <div class="placeholder-tag">Platzhalter Bild 3</div>
+                <strong>[ZDJĘCIE SPOŁECZNOŚCI]</strong>
+                <span>np. event specjalny lub podium sezonu</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Box -->
+    <div class="about-content-card">
+        <div class="team-card-bg-pattern"></div>
+        <div class="cta-box">
+            <div>
+                <div class="placeholder-tag">Platzhalter Text</div>
+                <h2 style="margin-bottom: 8px;">Chcesz dołączyć do CPL F1 League?</h2>
+                <p style="margin-bottom: 0;">[PLATZHALTER TEKST – Zachęta do zapisów, wejścia na Discorda lub zapoznania się z regulaminem.]</p>
+            </div>
+            <div class="cta-actions">
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSfLSj3z30_t1cdEPyULm26suCN8jpB8NOT9JsXNYE8ikeVUZg/viewform" target="_blank" class="cta-btn-primary">Zapisy</a>
+                <a href="https://discord.com/invite/szt7rHnFSj" target="_blank" class="cta-btn-secondary">Discord</a>
             </div>
         </div>
     </div>
@@ -490,7 +1024,7 @@ footer {
             </ul>
         </div>
         <div class="footer-col">
-            <h4>Kontakt & Support</h4>
+            <h4>Kontakt &amp; Support</h4>
             <ul>
                 <li><a href="https://discord.com/invite/szt7rHnFSj" target="_blank">Discord</a></li>
                 <li>
@@ -526,7 +1060,6 @@ footer {
 </footer>
 
 <script>
-    // Theme Toggle Logik
     document.addEventListener('DOMContentLoaded', () => {
         const THEME_STORAGE_KEY = 'cpl_theme_mode';
         const themeToggleBtns = document.querySelectorAll('#theme-toggle, .theme-toggle-btn, [data-theme-toggle]');
